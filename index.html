@@ -56,19 +56,16 @@
 <script>
 
   /* ---------------------------------------------------------
-     1️⃣ LOAD PRODUCT LIST FROM GOOGLE SHEET
-     ---------------------------------------------------------
-     - Fetch product list from Google Apps Script (doGet)
-     - Populate dropdown <select> with the list
+     1️⃣ LOAD PRODUCT LIST FROM GOOGLE SHEET (Dropdown)
      --------------------------------------------------------- */
   window.onload = function() {
-    const url = "https://script.google.com/macros/s/AKfycbz0NSLR-EHUn3Dy_k-mOYlMkfRm_M7g0Ib8KuwoSONz629Gi6vZxy5o8JNBxhBrQYmXwg/exec?action=getitem";
+    const url = "https://script.google.com/macros/s/AKfycbyWWIJyD45VMSjMbY8pbJO9hHUmzgQMBVWLbHeLZjgc-tM9l751_uPz84JFiOj07r37CQ/exec?action=getitem";
 
     fetch(url)
       .then(response => response.json())
       .then(items => {
         const dropdown = document.getElementById("productProduced");
-        dropdown.innerHTML = ""; // clear existing
+        dropdown.innerHTML = "";
 
         items.forEach(item => {
           const opt = document.createElement("option");
@@ -81,13 +78,8 @@
   };
 
 
-
   /* ---------------------------------------------------------
-     2️⃣ SUBMIT FORM DATA TO GOOGLE SHEETS (POST ➜ Apps Script)
-     ---------------------------------------------------------
-     - Collect values from fields
-     - Send payload via POST
-     - no-cors mode → form always "looks successful"
+     2️⃣ SUBMIT FORM DATA TO GOOGLE SHEETS (via POST)
      --------------------------------------------------------- */
   function submitForm() {
 
@@ -98,7 +90,7 @@
       notes: document.getElementById("notes").value
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbz0NSLR-EHUn3Dy_k-mOYlMkfRm_M7g0Ib8KuwoSONz629Gi6vZxy5o8JNBxhBrQYmXwg/exec", {
+    fetch("https://script.google.com/macros/s/AKfycbyWWIJyD45VMSjMbY8pbJO9hHUmzgQMBVWLbHeLZjgc-tM9l751_uPz84JFiOj07r37CQ/exec", {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
