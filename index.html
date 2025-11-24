@@ -10,8 +10,9 @@
 
 body {
   margin: 0;
+  padding: 0;
+  background: #f5f8fc;
   font-family: Segoe UI, sans-serif;
-  background: #f5f7f9;
 }
 
 /* HEADER */
@@ -23,82 +24,72 @@ body {
   font-weight: 600;
 }
 
-/* PAGE */
+/* PAGE WRAPPER */
 .page {
-  max-width: 1100px;
-  margin: 35px auto;
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+  max-width: 1200px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
+/* SECTION TITLES */
 .section-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 15px;
-  color: #24425c;
+  margin-bottom: 20px;
+  color: #2b3d55;
 }
 
-/* PRODUCTION DATE */
-.top-input {
-  max-width: 300px;
-  margin-bottom: 30px;
-}
-
-.top-input label {
+/* PRODUCTION DATE INPUT */
+.date-wrapper label {
+  font-weight: 600;
   font-size: 14px;
-  font-weight: 600;
-  color: #3b4a5a;
+  margin-bottom: 6px;
+  display: block;
 }
 
-.top-input input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
+.date-wrapper input {
+  padding: 12px 14px;
+  border-radius: 8px;
   border: 1px solid #cfd8e3;
   font-size: 15px;
+  width: 250px;
+  box-sizing: border-box;
 }
 
 /* TABLE */
-.table-container {
-  margin-top: 20px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 15px;
 }
 
 th {
-  background: #eef1f4;
-  padding: 10px;
-  text-align: left;
+  background: #eef3fa;
+  padding: 12px;
   font-size: 14px;
   font-weight: 600;
-  color: #364b5c;
-  border-bottom: 1px solid #d8dde3;
+  color: #425a73;
+  border-bottom: 1px solid #d8dde5;
 }
 
 td {
-  padding: 10px;
-  border-bottom: 1px solid #e6e9ed;
+  padding: 12px;
+  border-bottom: 1px solid #eef2f6;
 }
 
-.row-handle {
-  width: 25px;
-  text-align: center;
-  color: #888;
-  cursor: grab;
-  font-size: 18px;
-}
-
-/* INPUT FIELDS */
+/* INPUTS */
 .table-input {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #cfd7e0;
+  background: #fff;
   font-size: 14px;
   box-sizing: border-box;
 }
@@ -109,29 +100,69 @@ td {
   outline: none;
 }
 
-/* DELETE BUTTON */
-.delete-btn {
-  cursor: pointer;
-  font-size: 20px;
-  color: #cc0000;
+.row-handle {
+  width: 25px;
   text-align: center;
+  color: #888;
+  font-size: 18px;
 }
 
-/* ADD ROW */
+.delete-btn {
+  text-align: center;
+  font-size: 18px;
+  color: #d11a2a;
+  cursor: pointer;
+}
+
+/* ADD ROW BUTTON */
 .add-row-btn {
-  margin-top: 15px;
-  background: #e7f2ff;
+  background: #e9f2ff;
   padding: 10px 18px;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: 8px;
   color: #0f80d9;
   font-weight: 600;
+  font-size: 14px;
+  border: 1px solid #c6dbf8;
+  margin-top: 15px;
   cursor: pointer;
-  border: 1px solid #bcd8f7;
 }
 
 .add-row-btn:hover {
-  background: #d9ebff;
+  background: #dceaff;
+}
+
+/* NOTES */
+textarea {
+  width: 100%;
+  height: 130px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cfd7e0;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  border-color: #0f80d9;
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  outline: none;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+  margin-top: 25px;
+  padding: 14px 35px;
+  background: #0f80d9;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #0d6fbb;
 }
 
 </style>
@@ -143,35 +174,38 @@ td {
 
 <div class="page">
 
+  <!---------------- PRODUCTION DATE ---------------->
   <div class="section-title">Production Date</div>
-
-  <div class="top-input">
+  <div class="date-wrapper">
     <label>Date</label>
     <input type="date" id="productionDate">
   </div>
 
-  <div class="section-title">Products Produced</div>
+  <!---------------- PRODUCTION ITEMS TABLE ---------------->
+  <div class="section-title" style="margin-top:40px;">Production Items</div>
 
-  <div class="table-container">
-    <table>
-      <thead>
-        <tr>
-          <th style="width:30px;"></th>
-          <th style="width:40%">Product Produced</th>
-          <th style="width:15%">Meter</th>
-          <th style="width:15%">Qty</th>
-          <th style="width:20%">Total (m)</th>
-          <th style="width:40px;"></th>
-        </tr>
-      </thead>
-
-      <tbody id="tableBody">
-      </tbody>
-
-    </table>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+        <th>Meter</th>
+        <th>Qty</th>
+        <th>Total (m)</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
+
+  <!---------------- NOTES ---------------->
+  <div class="section-title" style="margin-top:40px;">Additional Notes</div>
+  <textarea id="notes" placeholder="Optional notes here..."></textarea>
+
+  <!---------------- SUBMIT BUTTON ---------------->
+  <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
 
@@ -180,21 +214,21 @@ td {
 
 let itemList = [];
 
-/* LOAD PRODUCT LIST ON LOAD */
+/* LOAD PRODUCTS */
 window.onload = function () {
   fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec?action=getitem")
     .then(r => r.json())
     .then(list => {
       itemList = list;
-      addRow(); // first row
+      addRow();  // first row auto
     });
 };
 
-/* ADD ROW FUNCTION */
+/* ADD ROW */
 function addRow() {
   const tbody = document.getElementById("tableBody");
-
   const tr = document.createElement("tr");
+
   tr.innerHTML = `
     <td class="row-handle">⋮⋮</td>
 
@@ -204,17 +238,9 @@ function addRow() {
       </select>
     </td>
 
-    <td>
-      <input type="number" class="table-input meter" min="0" value="0">
-    </td>
-
-    <td>
-      <input type="number" class="table-input qty" min="0" value="0">
-    </td>
-
-    <td>
-      <input type="number" class="table-input total" readonly style="background:#f1f3f5;">
-    </td>
+    <td><input type="number" class="table-input meter" min="0" value="0"></td>
+    <td><input type="number" class="table-input qty" min="0" value="0"></td>
+    <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
@@ -233,34 +259,42 @@ function deleteRow(btn) {
 /* UPDATE TOTALS */
 function updateTotals() {
   const rows = document.querySelectorAll("#tableBody tr");
-
-  rows.forEach(row => {
-    const m = parseFloat(row.querySelector(".meter").value) || 0;
-    const q = parseFloat(row.querySelector(".qty").value) || 0;
-    row.querySelector(".total").value = m * q;
+  rows.forEach(r => {
+    const m = parseFloat(r.querySelector(".meter").value) || 0;
+    const q = parseFloat(r.querySelector(".qty").value) || 0;
+    r.querySelector(".total").value = m * q;
   });
 }
 
-/* EXPORT DATA FOR SUBMIT */
-function getProductionData() {
-  const rows = document.querySelectorAll("#tableBody tr");
-  const data = [];
+/* FINAL SUBMIT PAYLOAD */
+function submitForm() {
 
-  rows.forEach(row => {
-    data.push({
-      item: row.querySelector(".item").value,
-      meter: row.querySelector(".meter").value,
-      qty: row.querySelector(".qty").value,
-      total: row.querySelector(".total").value
+  const date = document.getElementById("productionDate").value;
+  const notes = document.getElementById("notes").value;
+
+  const rows = document.querySelectorAll("#tableBody tr");
+  const items = [];
+
+  rows.forEach(r => {
+    items.push({
+      item: r.querySelector(".item").value,
+      meter: r.querySelector(".meter").value,
+      qty: r.querySelector(".qty").value,
+      total: r.querySelector(".total").value
     });
   });
 
-  return {
-    productionDate: document.getElementById("productionDate").value,
-    items: data
+  const payload = {
+    productionDate: date,
+    notes: notes,
+    items: items
   };
+
+  console.log(payload);
+  alert("Submitted! (Check console payload)");
 }
 
 </script>
+
 </body>
 </html>
