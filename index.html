@@ -5,58 +5,129 @@
   <title>Production Form</title>
 
   <style>
+    /* -----------------------------
+       XERO STYLE UI
+    ----------------------------- */
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      max-width: 500px;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f5f7f9;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
     }
-    input, textarea, select, button {
+
+    .container {
+      background: white;
+      width: 480px;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #2d4860;
+      font-weight: 600;
+    }
+
+    label {
+      margin-top: 15px;
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #415466;
+    }
+
+    input, textarea, select {
       width: 100%;
-      margin: 8px 0;
-      padding: 10px;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: border 0.2s;
     }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #0093d0;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,147,208,0.20);
+    }
+
+    textarea {
+      height: 80px;
+      resize: vertical;
+    }
+
     button {
-      background: #007bff;
+      width: 100%;
+      margin-top: 25px;
+      padding: 14px;
+      background: #0d8bd9;
       color: white;
       border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
     }
+
     button:hover {
-      background: #0056b3;
+      background: #0b78bc;
     }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    #status {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #0d8bd9;
+    }
+
   </style>
 </head>
 
 <body>
 
-  <h2>Production Input Form</h2>
+  <div class="container">
 
-  <!-- Product Dropdown -->
-  <label>Product Produced</label>
-  <select id="productProduced"></select>
+    <h2>Production Input Form</h2>
 
-  <!-- Production Date -->
-  <label>Production Date</label>
-  <input type="date" id="productionDate">
+    <!-- Product Dropdown -->
+    <label>Product Produced</label>
+    <select id="productProduced"></select>
 
-  <!-- Quantity -->
-  <label>Quantity</label>
-  <input type="number" id="quantity">
+    <!-- Production Date -->
+    <label>Production Date</label>
+    <input type="date" id="productionDate">
 
-  <!-- Notes -->
-  <label>Notes</label>
-  <textarea id="notes"></textarea>
+    <!-- Quantity -->
+    <label>Quantity</label>
+    <input type="number" id="quantity" placeholder="Enter quantity">
 
-  <!-- Submit Button -->
-  <button onclick="submitForm()">Submit</button>
+    <!-- Notes -->
+    <label>Notes</label>
+    <textarea id="notes" placeholder="Optional notes..."></textarea>
 
-  <p id="status" style="margin-top: 20px; font-weight: bold;"></p>
+    <!-- Submit Button -->
+    <button onclick="submitForm()">Submit</button>
+
+    <p id="status"></p>
+
+  </div>
 
 
 <script>
 
   /* ---------------------------------------------------------
-     1️⃣ LOAD PRODUCT LIST FROM GOOGLE SHEET (Dropdown)
+     1️⃣ LOAD PRODUCT LIST (Dropdown)
      --------------------------------------------------------- */
   window.onload = function() {
     const url = "https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec?action=getitem";
@@ -79,7 +150,7 @@
 
 
   /* ---------------------------------------------------------
-     2️⃣ SUBMIT FORM DATA TO GOOGLE SHEETS (via POST)
+     2️⃣ SUBMIT FORM DATA TO GOOGLE SHEETS (POST)
      --------------------------------------------------------- */
   function submitForm() {
 
@@ -98,6 +169,7 @@
     });
 
     document.getElementById("status").innerText = "Submitted!";
+    setTimeout(() => { document.getElementById("status").innerText = ""; }, 2000);
   }
 
 </script>
