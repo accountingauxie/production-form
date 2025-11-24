@@ -1,176 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Production Form</title>
+<meta charset="UTF-8">
+<title>Production Input Form — Xero Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    /* -----------------------------
-       XERO STYLE UI
-    ----------------------------- */
-    body {
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: #f5f7f9;
-      margin: 0;
-      padding: 40px;
-      display: flex;
-      justify-content: center;
-    }
+<style>
 
-    .container {
-      background: white;
-      width: 480px;
-      padding: 35px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    }
+/* ---------------------------
+   GLOBAL BODY
+---------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Segoe UI, Tahoma, sans-serif;
+  background: #f5f7f9;
+}
 
-    h2 {
-      margin-top: 0;
-      font-size: 24px;
-      color: #2d4860;
-      font-weight: 600;
-    }
+/* ---------------------------
+   XERO BLUE HEADER BAR
+---------------------------- */
+.header {
+  background: #0066B8; /* Xero blue */
+  color: white;
+  padding: 18px 40px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
 
-    label {
-      margin-top: 15px;
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: #415466;
-    }
+/* ---------------------------
+   MAIN PAGE WRAPPER
+---------------------------- */
+.page {
+  max-width: 1050px;
+  margin: 35px auto;
+  background: white;
+  padding: 35px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
 
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border: 1px solid #d0d7de;
-      border-radius: 6px;
-      font-size: 14px;
-      box-sizing: border-box;
-      transition: border 0.2s;
-    }
+/* SECTION TITLE */
+.section-title {
+  font-size: 18px;
+  color: #2b4b68;
+  margin-bottom: 15px;
+  margin-top: 30px;
+  font-weight: 600;
+}
 
-    input:focus, textarea:focus, select:focus {
-      border-color: #0093d0;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(0,147,208,0.20);
-    }
+/* ---------------------------
+   GRID LIKE XERO
+---------------------------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
 
-    textarea {
-      height: 80px;
-      resize: vertical;
-    }
+.grid-1 {
+  margin-top: 10px;
+}
 
-    button {
-      width: 100%;
-      margin-top: 25px;
-      padding: 14px;
-      background: #0d8bd9;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
+/* ---------------------------
+   INPUT FIELDS
+---------------------------- */
+label {
+  font-size: 14px;
+  color: #3d556c;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
 
-    button:hover {
-      background: #0b78bc;
-    }
+input, select, textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  transition: all .2s;
+  box-sizing: border-box;
+}
 
-    button:active {
-      transform: scale(0.98);
-    }
+input:focus, select:focus, textarea:focus {
+  border-color: #0093D0;
+  box-shadow: 0 0 0 2px rgba(0,147,208,0.25);
+  outline: none;
+}
 
-    #status {
-      margin-top: 20px;
-      text-align: center;
-      font-weight: bold;
-      color: #0d8bd9;
-    }
+textarea {
+  height: 110px;
+  resize: vertical;
+}
 
-  </style>
+/* ---------------------------
+   XERO PRIMARY BUTTON
+---------------------------- */
+.button-primary {
+  padding: 14px 22px;
+  background: #0077CC;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 30px;
+  min-width: 160px;
+  transition: background .2s, transform .1s;
+}
+
+.button-primary:hover {
+  background: #005fa3;
+}
+
+.button-primary:active {
+  transform: scale(.97);
+}
+
+/* CENTER BUTTON */
+.button-row {
+  margin-top: 35px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* CONFIRMATION TEXT */
+#status {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #1a8d2c;
+  font-weight: bold;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 800px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    padding: 18px 20px;
+  }
+  .page {
+    padding: 25px 20px;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="header">
+  Production Entry
+</div>
 
-    <h2>Production Input Form</h2>
+<div class="page">
 
-    <!-- Product Dropdown -->
-    <label>Product Produced</label>
-    <select id="productProduced"></select>
+  <div class="section-title">Production Details</div>
 
-    <!-- Production Date -->
-    <label>Production Date</label>
-    <input type="date" id="productionDate">
+  <div class="grid-2">
 
-    <!-- Quantity -->
-    <label>Quantity</label>
-    <input type="number" id="quantity" placeholder="Enter quantity">
+      <div class="field">
+        <label>Product Produced</label>
+        <select id="productProduced"></select>
+      </div>
 
-    <!-- Notes -->
-    <label>Notes</label>
-    <textarea id="notes" placeholder="Optional notes..."></textarea>
-
-    <!-- Submit Button -->
-    <button onclick="submitForm()">Submit</button>
-
-    <p id="status"></p>
+      <div class="field">
+        <label>Production Date</label>
+        <input type="date" id="productionDate">
+      </div>
 
   </div>
+
+  <div class="grid-2">
+
+      <div class="field">
+        <label>Quantity</label>
+        <input type="number" id="quantity" placeholder="e.g. 5">
+      </div>
+
+      <div></div>
+
+  </div>
+
+  <div class="section-title">Additional Notes</div>
+
+  <div class="grid-1">
+      <textarea id="notes" placeholder="Optional notes about production..."></textarea>
+  </div>
+
+  <div class="button-row">
+      <button class="button-primary" onclick="submitForm()">Submit</button>
+  </div>
+
+  <p id="status"></p>
+
+</div>
 
 
 <script>
 
-  /* ---------------------------------------------------------
-     1️⃣ LOAD PRODUCT LIST (Dropdown)
-     --------------------------------------------------------- */
-  window.onload = function() {
-    const url = "https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec?action=getitem";
+/* -----------------------------------------
+   LOAD PRODUCT LIST FROM APPS SCRIPT
+------------------------------------------ */
+window.onload = function() {
+  fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec?action=getitem")
+    .then(r => r.json())
+    .then(items => {
+      const ddl = document.getElementById("productProduced");
+      ddl.innerHTML = "";
+      items.forEach(item => {
+        const opt = document.createElement("option");
+        opt.textContent = item;
+        opt.value = item;
+        ddl.appendChild(opt);
+      });
+    })
+    .catch(err => console.log("ERR loading items:", err));
+};
 
-    fetch(url)
-      .then(response => response.json())
-      .then(items => {
-        const dropdown = document.getElementById("productProduced");
-        dropdown.innerHTML = "";
 
-        items.forEach(item => {
-          const opt = document.createElement("option");
-          opt.value = item;
-          opt.textContent = item;
-          dropdown.appendChild(opt);
-        });
-      })
-      .catch(err => console.error("Error loading product list:", err));
+/* -----------------------------------------
+   SUBMIT PRODUCTION DATA TO SHEETS
+------------------------------------------ */
+function submitForm() {
+
+  const data = {
+    productProduced: productProduced.value,
+    productionDate: productionDate.value,
+    quantity: quantity.value,
+    notes: notes.value
   };
 
+  fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(data)
+  });
 
-  /* ---------------------------------------------------------
-     2️⃣ SUBMIT FORM DATA TO GOOGLE SHEETS (POST)
-     --------------------------------------------------------- */
-  function submitForm() {
-
-    const payload = {
-      productProduced: document.getElementById("productProduced").value,
-      productionDate: document.getElementById("productionDate").value,
-      quantity: document.getElementById("quantity").value,
-      notes: document.getElementById("notes").value
-    };
-
-    fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec", {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    document.getElementById("status").innerText = "Submitted!";
-    setTimeout(() => { document.getElementById("status").innerText = ""; }, 2000);
-  }
+  status.innerText = "✓ Form submitted successfully!";
+  setTimeout(() => status.innerText = "", 2500);
+}
 
 </script>
 
