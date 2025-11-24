@@ -215,14 +215,24 @@ textarea:focus {
 let itemList = [];
 
 /* LOAD PRODUCTS */
-window.onload = function () {
-  fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpFTP676n1ZlrUYRljQ8JZE3G0l8d41Oulag9FgxqGssfjVsbJXJ/exec?action=getitem")
-    .then(r => r.json())
-    .then(list => {
-      itemList = list;
-      addRow();  // first row auto
-    });
+window.onload = async function () {
+
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpTFp676n17IrUYR1jQ8JZE3G018d4lOuIag9FgxqGssfJy5bJXJ/exec?action=getitem");
+    itemList = await res.json();
+
+    // Prevent empty dropdown on first row
+    if (Array.isArray(itemList) && itemList.length > 0) {
+      addRow();
+    } else {
+      console.error("⚠ Item list kosong dari server (Apps Script)");
+    }
+
+  } catch (err) {
+    console.error("⚠ ERROR load items:", err);
+  }
 };
+
 
 /* ADD ROW */
 function addRow() {
