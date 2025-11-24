@@ -218,14 +218,13 @@ let itemList = [];
 window.onload = async function () {
 
   try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbx_3-dmL-ukasrrBpTFp676n17IrUYR1jQ8JZE3G018d4lOuIag9FgxqGssfJy5bJXJ/exec?action=getitem");
+    const res = await fetch("https://script.google.com/macros/s/AKfycbwqHqdeZV8OQIlcFSZ97-hRFRfyrEhcTmKJfU7X-JMuf7YYFDfSQ-jk2hmsxUyi3867vA/exec?action=getitem");
     itemList = await res.json();
 
-    // Prevent empty dropdown on first row
     if (Array.isArray(itemList) && itemList.length > 0) {
       addRow();
     } else {
-      console.error("⚠ Item list kosong dari server (Apps Script)");
+      console.error("⚠ Item list kosong dari server");
     }
 
   } catch (err) {
@@ -268,8 +267,7 @@ function deleteRow(btn) {
 
 /* UPDATE TOTALS */
 function updateTotals() {
-  const rows = document.querySelectorAll("#tableBody tr");
-  rows.forEach(r => {
+  document.querySelectorAll("#tableBody tr").forEach(r => {
     const m = parseFloat(r.querySelector(".meter").value) || 0;
     const q = parseFloat(r.querySelector(".qty").value) || 0;
     r.querySelector(".total").value = m * q;
@@ -300,8 +298,12 @@ function submitForm() {
     items: items
   };
 
-  console.log(payload);
-  alert("Submitted! (Check console payload)");
+  fetch("https://script.google.com/macros/s/AKfycbwqHqdeZV8OQIlcFSZ97-hRFRfyrEhcTmKJfU7X-JMuf7YYFDfSQ-jk2hmsxUyi3867vA/exec", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  alert("Submitted!");
 }
 
 </script>
