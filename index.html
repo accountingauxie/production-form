@@ -281,6 +281,12 @@ function submitForm() {
   const date = document.getElementById("productionDate").value;
   const notes = document.getElementById("notes").value;
 
+  // === VALIDASI DATE ===
+  if (!date || date.trim() === "") {
+    alert("⚠ Please select a Production Date before submitting.");
+    return;
+  }
+
   const rows = document.querySelectorAll("#tableBody tr");
   const items = [];
 
@@ -307,7 +313,3 @@ function submitForm() {
   alert("Submitted!");
 }
 
-</script>
-
-</body>
-</html>
