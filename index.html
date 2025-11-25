@@ -42,7 +42,7 @@ body {
   color: #2b3d55;
 }
 
-/* PRODUCTION DATE INPUT */
+/* DATE INPUT */
 .date-wrapper label {
   font-weight: 600;
   font-size: 14px;
@@ -63,9 +63,9 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
   border-radius: 10px;
   overflow: hidden;
+  background: #fff;
   margin-top: 15px;
 }
 
@@ -91,7 +91,6 @@ td {
   border: 1px solid #cfd7e0;
   background: #fff;
   font-size: 14px;
-  box-sizing: border-box;
 }
 
 .table-input:focus {
@@ -139,13 +138,11 @@ textarea {
   border-radius: 10px;
   border: 1px solid #cfd7e0;
   font-size: 15px;
-  box-sizing: border-box;
 }
 
 textarea:focus {
   border-color: #0f80d9;
   box-shadow: 0 0 0 2px rgba(15,128,217,.25);
-  outline: none;
 }
 
 /* SUBMIT BUTTON */
@@ -174,14 +171,12 @@ textarea:focus {
 
 <div class="page">
 
-  <!---------------- PRODUCTION DATE ---------------->
   <div class="section-title">Production Date</div>
   <div class="date-wrapper">
     <label>Date</label>
     <input type="date" id="productionDate">
   </div>
 
-  <!---------------- PRODUCTION ITEMS TABLE ---------------->
   <div class="section-title" style="margin-top:40px;">Production Items</div>
 
   <table>
@@ -200,41 +195,40 @@ textarea:focus {
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-  <!---------------- NOTES ---------------->
   <div class="section-title" style="margin-top:40px;">Additional Notes</div>
   <textarea id="notes" placeholder="Optional notes here..."></textarea>
 
-  <!---------------- SUBMIT BUTTON ---------------->
   <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
-
 
 <script>
 
 let itemList = [];
 
-/* LOAD ITEMS */
+/* LOAD ITEM LIST */
 window.onload = async function () {
   try {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem");
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem"
+    );
     itemList = await res.json();
 
     if (Array.isArray(itemList) && itemList.length > 0) {
 
-      // FIX: memberi jeda agar dropdown pertama tidak error
+      // Delay to ensure dropdown loads cleanly
       await new Promise(r => setTimeout(r, 80));
 
       addRow();
     }
 
   } catch (err) {
-    console.error("⚠ ERROR load items:", err);
+    console.error("⚠ ERROR loading items:", err);
   }
 };
 
 
-/* ADD ROW */
+/* ADD NEW ROW */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -266,7 +260,7 @@ function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
-/* UPDATE TOTALS */
+/* UPDATE TOTAL (m) */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const m = parseFloat(r.querySelector(".meter").value) || 0;
@@ -281,10 +275,10 @@ function submitForm() {
   const date = document.getElementById("productionDate").value;
   const notes = document.getElementById("notes").value;
 
-  // === VALIDASI DATE ===
-  if (!date || date.trim() === "") {
+  // === VALIDASI DATE (FINAL, 100% WORKING) ===
+  if (!date || date === "" || date.length < 8) {
     alert("⚠ Please select a Production Date before submitting.");
-    return false; 
+    return false;
   }
 
   const rows = document.querySelectorAll("#tableBody tr");
@@ -305,11 +299,13 @@ function submitForm() {
     items: items
   };
 
-  // === FETCH POST (JANGAN DIUBAH) ===
-  fetch("https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  })
+  return fetch(
+    "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec",
+    {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }
+  )
   .then(() => {
     alert("Submitted!");
   })
@@ -317,3 +313,8 @@ function submitForm() {
     alert("Error submitting: " + err);
   });
 }
+
+</script>
+
+</body>
+</html>
