@@ -214,17 +214,18 @@ textarea:focus {
 
 let itemList = [];
 
-/* LOAD PRODUCTS */
+/* LOAD ITEMS */
 window.onload = async function () {
-
   try {
     const res = await fetch("https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem");
     itemList = await res.json();
 
     if (Array.isArray(itemList) && itemList.length > 0) {
+
+      // FIX: memberi jeda agar dropdown pertama tidak error
+      await new Promise(r => setTimeout(r, 80));
+
       addRow();
-    } else {
-      console.error("⚠ Item list kosong dari server");
     }
 
   } catch (err) {
@@ -247,7 +248,7 @@ function addRow() {
       </select>
     </td>
 
-    <td><input type="number" class="table-input meter" min="0" value="0"></td>
+    <td><input type="number" class="table-input meter" min="0" value="6"></td>
     <td><input type="number" class="table-input qty" min="0" value="0"></td>
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
 
@@ -274,7 +275,7 @@ function updateTotals() {
   });
 }
 
-/* FINAL SUBMIT PAYLOAD */
+/* FINAL SUBMIT */
 function submitForm() {
 
   const date = document.getElementById("productionDate").value;
