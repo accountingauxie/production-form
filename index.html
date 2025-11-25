@@ -218,7 +218,7 @@ let itemList = [];
 window.onload = async function () {
 
   try {
-    const res = await fetch("?action=getitem");
+    const res = await fetch("https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem");
     itemList = await res.json();
 
     if (Array.isArray(itemList) && itemList.length > 0) {
@@ -298,7 +298,7 @@ function submitForm() {
     items: items
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbzsGFSbi1VTgQ4pyLeN7t6GyRxgtiCykUPWJYN9YEG9vNBbOmi40nQXZBKzHCm5rWoPgA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec", {
     method: "POST",
     body: JSON.stringify(payload)
   });
