@@ -6,9 +6,9 @@
 <title>Production Entry</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEARCHABLE DROPDOWN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<!-- TOM SELECT (Xero-like searchable dropdown) -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
 <style>
 
@@ -19,7 +19,7 @@ body {
   font-family: Segoe UI, sans-serif;
 }
 
-/* HEADER TOP */
+/* HEADER */
 .header {
   display: flex;
   justify-content: flex-end;
@@ -61,7 +61,7 @@ label {
   display: block;
 }
 
-/* FORM ROW */
+/* FLEX ROW */
 .row-flex {
   display: flex;
   gap: 30px;
@@ -76,12 +76,6 @@ label {
   font-size: 14px;
   width: 240px;
   background: #fff;
-}
-
-.input-box:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
-  outline: none;
 }
 
 /* TABLE */
@@ -99,7 +93,6 @@ th {
   font-weight: 600;
   color: #2b3d55;
   font-size: 14px;
-  border-bottom: 1px solid #d8dde2;
 }
 
 td {
@@ -107,13 +100,11 @@ td {
   border-bottom: 1px solid #f1f3f5;
 }
 
-/* ROW INPUTS */
 .table-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
-  background: #fff;
 }
 
 .row-handle {
@@ -130,7 +121,7 @@ td {
   cursor: pointer;
 }
 
-/* ADD ROW */
+/* ADD ROW BUTTON */
 .add-row-btn {
   margin-top: 18px;
   padding: 9px 16px;
@@ -138,8 +129,8 @@ td {
   background: #e9f2ff;
   color: #0f80d9;
   border: 1px solid #c6dbf8;
-  font-size: 14px;
   font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
 }
 
@@ -151,7 +142,6 @@ textarea {
   border: 1px solid #cfd7e0;
   border-radius: 10px;
   font-size: 15px;
-  background: #fff;
   margin-top: 20px;
 }
 
@@ -168,16 +158,28 @@ textarea {
   cursor: pointer;
 }
 
-/* SEARCH DROPDOWN (Choices.js) */
-.choices__inner {
-  min-height: 42px !important;
-  padding: 8px 10px !important;
-  border-radius: 8px !important;
-  border: 1px solid #cfd7e0 !important;
+/* TOM SELECT (XERO STYLE) */
+.ts-wrapper {
+    width: 100%;
 }
 
-.choices__list--dropdown {
-  border-radius: 8px !important;
+.ts-control {
+    border-radius: 8px !important;
+    border: 1px solid #cfd7e0 !important;
+    min-height: 42px !important;
+    padding: 8px 10px !important;
+    font-size: 14px !important;
+    background: #fff !important;
+}
+
+.ts-dropdown {
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+
+.ts-dropdown .option {
+    padding: 6px 10px !important;
 }
 
 </style>
@@ -190,14 +192,13 @@ textarea {
   <span>UXILIUM Accounting Management Services</span>
 </div>
 
-<!-- CARD -->
+<!-- MAIN CARD -->
 <div class="card">
 
   <div class="card-title">Production Entry</div>
 
   <!-- TOP FORM -->
   <div class="row-flex">
-
     <div>
       <label>Date</label>
       <input type="date" id="productionDate" class="input-box">
@@ -211,10 +212,9 @@ textarea {
         <option value="TRUSS010">TRUSS010</option>
       </select>
     </div>
-
   </div>
 
-  <!-- ITEMS TABLE -->
+  <!-- TABLE -->
   <table>
     <thead>
       <tr>
@@ -239,12 +239,11 @@ textarea {
 </div>
 
 
-
 <script>
 
 let itemList = [];
 
-/* ===== LOAD ITEMS FROM APPS SCRIPT ===== */
+/* LOAD ITEMS */
 window.onload = async function () {
   try {
     const res = await fetch(
@@ -265,7 +264,7 @@ window.onload = async function () {
 
 
 
-/* ===== ADD NEW ROW (WITH SEARCH DROPDOWN) ===== */
+/* ADD ROW */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -281,7 +280,9 @@ function addRow() {
 
     <td><input type="number" class="table-input meter" value="6"></td>
     <td><input type="number" class="table-input qty" value="0"></td>
+
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
+
     <td><input type="text" class="table-input kpc"></td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
@@ -289,11 +290,13 @@ function addRow() {
 
   tbody.appendChild(tr);
 
-  /* APPLY SEARCH DROPDOWN HERE */
-  new Choices(tr.querySelector(".item"), {
-    searchEnabled: true,
-    shouldSort: false,
-    searchPlaceholderValue: "Search item..."
+  /* APPLY XERO-STYLE SEARCH DROPDOWN */
+  new TomSelect(tr.querySelector(".item"), {
+      maxOptions: 2000,
+      create: false,
+      allowEmptyOption: true,
+      sortField: { field: "text", direction: "asc" },
+      placeholder: "Search item..."
   });
 
   tr.querySelector(".meter").addEventListener("input", updateTotals);
@@ -302,14 +305,14 @@ function addRow() {
 
 
 
-/* ===== DELETE ROW ===== */
+/* DELETE ROW */
 function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
 
 
-/* ===== UPDATE TOTAL ===== */
+/* UPDATE TOTAL */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const meter = parseFloat(r.querySelector(".meter").value) || 0;
@@ -320,7 +323,7 @@ function updateTotals() {
 
 
 
-/* ===== SUBMIT FORM ===== */
+/* SUBMIT */
 function submitForm() {
 
   const date = document.getElementById("productionDate").value;
