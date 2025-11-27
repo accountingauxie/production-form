@@ -4,48 +4,38 @@
 <head>
 <meta charset="UTF-8">
 <title>Production Entry</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
 body {
   margin: 0;
   padding: 0;
-  background: #f4f6f8;
+  background: #eef3f9;
   font-family: Segoe UI, sans-serif;
 }
 
 /* HEADER */
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  background: #ffffff;
-  padding: 18px 40px;
-  border-bottom: 1px solid #e3e7ec;
-}
-
-.header span {
-  font-size: 15px;
-  font-weight: 600;
-  color: #000;
-  opacity: .85;
-}
-
-/* CARD */
-.card {
-  max-width: 1150px;
-  margin: 35px auto;
-  background: #ffffff;
-  padding: 35px;
-  border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-}
-
-.card-title {
+  background: #0f80d9;
+  color: white;
+  padding: 18px 35px;
   font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 25px;
-  color: #2b3d55;
+  font-weight: 600;
+}
+
+.header-right {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: .9;
+}
+
+/* PAGE */
+.page {
+  max-width: 1200px;
+  margin: 25px auto;
 }
 
 /* LABEL */
@@ -56,20 +46,13 @@ label {
   display: block;
 }
 
-/* FORM ROW */
-.row-flex {
-  display: flex;
-  gap: 30px;
-  margin-bottom: 30px;
-}
-
-/* INPUT BOX */
+/* INPUT */
 .input-box {
-  padding: 12px 13px;
-  border: 1px solid #cfd7e0;
+  padding: 11px 13px;
+  border: 1px solid #cfd8e3;
   border-radius: 8px;
   font-size: 14px;
-  width: 240px;
+  width: 220px;
   background: #fff;
 }
 
@@ -79,36 +62,45 @@ label {
   outline: none;
 }
 
+/* TWO-COLUMN ROW */
+.row-flex {
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+  margin-bottom: 25px;
+}
+
 /* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
 }
 
 th {
-  background: #eef2f6;
+  background: #e9f0f9;
   padding: 12px;
-  font-weight: 600;
-  color: #2b3d55;
   font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid #d8dfe8;
+  color: #2b3d55;
 }
 
 td {
   padding: 12px;
-  border-bottom: 1px solid #f1f3f5;
+  border-bottom: 1px solid #f0f3f7;
 }
 
-/* TABLE INPUT */
+/* TABLE INPUTS */
 .table-input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #cfd7e0;
+  padding: 9px 10px;
   border-radius: 8px;
+  border: 1px solid #cfd7e0;
   font-size: 14px;
-  background: #fff;
 }
 
 .table-input:focus {
@@ -120,8 +112,8 @@ td {
 .row-handle {
   width: 25px;
   text-align: center;
-  font-size: 18px;
   color: #888;
+  font-size: 18px;
 }
 
 .delete-btn {
@@ -133,14 +125,13 @@ td {
 
 /* ADD ROW */
 .add-row-btn {
-  margin-top: 18px;
+  margin-top: 15px;
   padding: 9px 16px;
   border-radius: 8px;
   background: #e9f2ff;
   color: #0f80d9;
   border: 1px solid #c6dbf8;
   font-weight: 600;
-  font-size: 14px;
   cursor: pointer;
 }
 
@@ -153,89 +144,41 @@ textarea {
   width: 100%;
   height: 130px;
   padding: 12px;
-  border: 1px solid #cfd7e0;
   border-radius: 10px;
+  border: 1px solid #cfd7e0;
   font-size: 15px;
   background: #fff;
-  margin-top: 20px;
 }
 
 /* SUBMIT */
 .submit-btn {
   margin-top: 30px;
-  padding: 12px 32px;
+  padding: 14px 35px;
   background: #0f80d9;
   color: white;
+  border: none;
   border-radius: 10px;
   font-size: 16px;
-  border: none;
   font-weight: 600;
   cursor: pointer;
 }
 
 .submit-btn:hover {
-  background: #0d6fbf;
-}
-
-/* ===== AUTOCOMPLETE ===== */
-.autocomplete-wrapper {
-  position: relative;
-}
-
-.autocomplete-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 4px;
-  background: #fff;
-  border: 1px solid #cfd7e0;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-  max-height: 240px;
-  overflow-y: auto;
-  z-index: 9999 !important;
-}
-
-.autocomplete-item {
-  padding: 8px 12px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.autocomplete-item:hover {
-  background: #eef3fd;
-}
-
-.autocomplete-empty {
-  padding: 8px 12px;
-  font-size: 13px;
-  color: #999;
-}
-
-.item-input {
-  caret-color: transparent;
-}
-
-.item-input::placeholder {
-  color: #bbb;
+  background: #0d6fbb;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div class="header">
-  <span>UXILIUM Accounting Management Services</span>
+  Production Entry
+  <div class="header-right">UXILIUM Accounting Management Services</div>
 </div>
 
-<!-- MAIN CARD -->
-<div class="card">
+<div class="page">
 
-  <div class="card-title">Production Entry</div>
-
-  <!-- FORM TOP -->
+  <!-- DATE + MACHINE ROW -->
   <div class="row-flex">
     <div>
       <label>Date</label>
@@ -244,7 +187,7 @@ textarea {
 
     <div>
       <label>Production Machine</label>
-      <select id="machineUsed" class="input-box">
+      <select id="machineUsed" class="input-box" style="width:220px;">
         <option value="">— Select Machine —</option>
         <option value="RENG__009_MX">RENG__009_MX</option>
         <option value="TRUSS010">TRUSS010</option>
@@ -270,17 +213,18 @@ textarea {
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-  <textarea id="notes" placeholder="Additional notes..."></textarea>
+  <div style="margin-top:35px; font-size:18px; font-weight:600;">Additional Notes</div>
+  <textarea id="notes"></textarea>
 
   <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
 
-
 <script>
+
 let itemList = [];
 
-/* LOAD MASTER ITEM */
+/* LOAD ITEM LIST */
 window.onload = async function () {
   try {
     const res = await fetch(
@@ -288,68 +232,18 @@ window.onload = async function () {
     );
     itemList = await res.json();
 
-    if (itemList.length > 0) {
+    if (Array.isArray(itemList) && itemList.length > 0) {
+      await new Promise(r => setTimeout(r, 80));
       addRow();
     }
 
   } catch (err) {
-    console.error("Error loading items:", err);
+    console.error("ERROR loading items:", err);
   }
 };
 
-/* ===== AUTOCOMPLETE ===== */
-function attachAutocomplete(wrapper, sourceItems) {
-  const input = wrapper.querySelector(".item-input");
-  const list = wrapper.querySelector(".autocomplete-list");
-  let lastValid = "";
 
-  // Close when clicking outside
-  document.addEventListener("click", (e) => {
-    if (!wrapper.contains(e.target)) list.style.display = "none";
-  });
-
-  // Input search behavior
-  input.addEventListener("input", () => {
-    const term = input.value.trim().toLowerCase();
-    list.innerHTML = "";
-
-    if (!term) {
-      input.value = lastValid;
-      list.style.display = "none";
-      return;
-    }
-
-    const matches = sourceItems
-      .filter(name => name.toLowerCase().includes(term))
-      .slice(0, 10);
-
-    if (matches.length === 0) {
-      list.innerHTML = `<div class="autocomplete-empty">No results found</div>`;
-    } else {
-      matches.forEach(name => {
-        const div = document.createElement("div");
-        div.classList.add("autocomplete-item");
-        div.textContent = name;
-
-        div.addEventListener("mousedown", () => {
-          input.value = name;
-          lastValid = name;
-          list.style.display = "none";
-        });
-
-        list.appendChild(div);
-      });
-    }
-
-    list.style.display = "block";
-  });
-
-  input.addEventListener("blur", () => {
-    input.value = lastValid;
-  });
-}
-
-/* ADD ROW FUNCTION */
+/* ADD NEW ROW */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -358,23 +252,22 @@ function addRow() {
     <td class="row-handle">⋮⋮</td>
 
     <td>
-      <div class="autocomplete-wrapper">
-        <input type="text" class="table-input item-input" placeholder="Search item..." autocomplete="off">
-        <div class="autocomplete-list"></div>
-      </div>
+      <select class="table-input item">
+        ${itemList.map(i => `<option value="${i}">${i}</option>`).join("")}
+      </select>
     </td>
 
-    <td><input type="number" class="table-input meter" value="6"></td>
-    <td><input type="number" class="table-input qty" value="0"></td>
+    <td><input type="number" class="table-input meter" value="6" min="0"></td>
+    <td><input type="number" class="table-input qty" value="0" min="0"></td>
+
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
-    <td><input type="text" class="table-input kpc"></td>
+
+    <td><input type="text" class="table-input kpc" placeholder=""></td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
 
   tbody.appendChild(tr);
-
-  attachAutocomplete(tr.querySelector(".autocomplete-wrapper"), itemList);
 
   tr.querySelector(".meter").addEventListener("input", updateTotals);
   tr.querySelector(".qty").addEventListener("input", updateTotals);
@@ -396,16 +289,22 @@ function updateTotals() {
 
 /* SUBMIT */
 function submitForm() {
+
   const date = document.getElementById("productionDate").value;
   const machine = document.getElementById("machineUsed").value;
   const notes = document.getElementById("notes").value;
 
-  if (!date) return alert("⚠ Please select a Production Date.");
+  if (!date) {
+    alert("⚠ Please select a Production Date.");
+    return;
+  }
 
+  const rows = document.querySelectorAll("#tableBody tr");
   const items = [];
-  document.querySelectorAll("#tableBody tr").forEach(r => {
+
+  rows.forEach(r => {
     items.push({
-      item: r.querySelector(".item-input").value,
+      item: r.querySelector(".item").value,
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
       total: r.querySelector(".total").value,
@@ -415,9 +314,9 @@ function submitForm() {
 
   const payload = {
     productionDate: date,
-    machine,
-    notes,
-    items
+    machine: machine,
+    notes: notes,
+    items: items
   };
 
   fetch(
@@ -427,6 +326,7 @@ function submitForm() {
   .then(() => alert("Submitted!"))
   .catch(err => alert("Error submitting: " + err));
 }
+
 </script>
 
 </body>
