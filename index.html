@@ -4,38 +4,50 @@
 <head>
 <meta charset="UTF-8">
 <title>Production Entry</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
 body {
   margin: 0;
   padding: 0;
-  background: #eef3f9;
+  background: #f4f6f8;  /* light grey like screenshot */
   font-family: Segoe UI, sans-serif;
 }
 
 /* HEADER */
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  background: #0f80d9;
-  color: white;
-  padding: 18px 35px;
-  font-size: 22px;
+  background: #ffffff;
+  padding: 18px 40px;
+  font-size: 15px;
   font-weight: 600;
+  border-bottom: 1px solid #e3e7ec;
 }
 
-.header-right {
-  font-size: 14px;
-  font-weight: 500;
-  opacity: .9;
+.header span {
+  color: #000;
+  opacity: .85;
 }
 
-/* PAGE */
-.page {
-  max-width: 1200px;
-  margin: 25px auto;
+/* PAGE CARD */
+.card {
+  max-width: 1150px;
+  margin: 35px auto;
+  background: #ffffff;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+/* FORM TITLE */
+.card-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #2b3d55;
 }
 
 /* LABEL */
@@ -46,61 +58,59 @@ label {
   display: block;
 }
 
+/* TOP FORM ROW */
+.row-flex {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
 /* INPUT */
 .input-box {
-  padding: 11px 13px;
-  border: 1px solid #cfd8e3;
+  padding: 12px 13px;
+  border: 1px solid #cfd7e0;
   border-radius: 8px;
   font-size: 14px;
-  width: 220px;
+  width: 240px;
   background: #fff;
 }
 
 .input-box:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  box-shadow: 0 0 0 2px rgba(15, 128, 217, .25);
   outline: none;
-}
-
-/* TWO-COLUMN ROW */
-.row-flex {
-  display: flex;
-  gap: 30px;
-  align-items: flex-end;
-  margin-bottom: 25px;
 }
 
 /* TABLE */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
 }
 
 th {
-  background: #e9f0f9;
+  background: #eef2f6;
   padding: 12px;
-  font-size: 14px;
   font-weight: 600;
-  border-bottom: 1px solid #d8dfe8;
   color: #2b3d55;
+  font-size: 14px;
+  border-bottom: 1px solid #d8dde2;
 }
 
 td {
   padding: 12px;
-  border-bottom: 1px solid #f0f3f7;
+  border-bottom: 1px solid #f1f3f5;
 }
 
 /* TABLE INPUTS */
 .table-input {
   width: 100%;
-  padding: 9px 10px;
-  border-radius: 8px;
+  padding: 10px;
   border: 1px solid #cfd7e0;
-  font-size: 14px;
+  border-radius: 8px;
+  background: #fff;
 }
 
 .table-input:focus {
@@ -112,8 +122,8 @@ td {
 .row-handle {
   width: 25px;
   text-align: center;
-  color: #888;
   font-size: 18px;
+  color: #888;
 }
 
 .delete-btn {
@@ -125,12 +135,13 @@ td {
 
 /* ADD ROW */
 .add-row-btn {
-  margin-top: 15px;
+  margin-top: 18px;
   padding: 9px 16px;
   border-radius: 8px;
   background: #e9f2ff;
   color: #0f80d9;
   border: 1px solid #c6dbf8;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -144,41 +155,45 @@ textarea {
   width: 100%;
   height: 130px;
   padding: 12px;
-  border-radius: 10px;
   border: 1px solid #cfd7e0;
+  border-radius: 10px;
   font-size: 15px;
   background: #fff;
+  margin-top: 20px;
 }
 
-/* SUBMIT */
+/* SUBMIT BUTTON */
 .submit-btn {
   margin-top: 30px;
-  padding: 14px 35px;
+  padding: 12px 32px;
   background: #0f80d9;
   color: white;
-  border: none;
   border-radius: 10px;
   font-size: 16px;
+  border: none;
   font-weight: 600;
   cursor: pointer;
 }
 
 .submit-btn:hover {
-  background: #0d6fbb;
+  background: #0d6fbf;
 }
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  Production Entry
-  <div class="header-right">UXILIUM Accounting Management Services</div>
+  <span>UXILIUM Accounting Management Services</span>
 </div>
 
-<div class="page">
+<!-- WHITE CARD -->
+<div class="card">
 
-  <!-- DATE + MACHINE ROW -->
+  <div class="card-title">Production Entry</div>
+
+  <!-- TOP ROW -->
   <div class="row-flex">
     <div>
       <label>Date</label>
@@ -187,7 +202,7 @@ textarea {
 
     <div>
       <label>Production Machine</label>
-      <select id="machineUsed" class="input-box" style="width:220px;">
+      <select id="machineUsed" class="input-box">
         <option value="">— Select Machine —</option>
         <option value="RENG__009_MX">RENG__009_MX</option>
         <option value="TRUSS010">TRUSS010</option>
@@ -213,32 +228,33 @@ textarea {
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-  <div style="margin-top:35px; font-size:18px; font-weight:600;">Additional Notes</div>
-  <textarea id="notes"></textarea>
+  <textarea id="notes" placeholder="Additional notes..."></textarea>
 
   <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
 
+
 <script>
 
 let itemList = [];
 
-/* LOAD ITEM LIST */
+/* LOAD ITEM LIST FROM APPS SCRIPT */
 window.onload = async function () {
   try {
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem"
     );
+
     itemList = await res.json();
 
-    if (Array.isArray(itemList) && itemList.length > 0) {
+    if (itemList.length > 0) {
       await new Promise(r => setTimeout(r, 80));
       addRow();
     }
 
   } catch (err) {
-    console.error("ERROR loading items:", err);
+    console.error("Error loading items:", err);
   }
 };
 
@@ -262,7 +278,7 @@ function addRow() {
 
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
 
-    <td><input type="text" class="table-input kpc" placeholder=""></td>
+    <td><input type="text" class="table-input kpc"></td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
@@ -281,9 +297,9 @@ function deleteRow(btn) {
 /* UPDATE TOTAL */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
-    const m = parseFloat(r.querySelector(".meter").value) || 0;
-    const q = parseFloat(r.querySelector(".qty").value) || 0;
-    r.querySelector(".total").value = m * q;
+    const meter = parseFloat(r.querySelector(".meter").value) || 0;
+    const qty = parseFloat(r.querySelector(".qty").value) || 0;
+    r.querySelector(".total").value = meter * qty;
   });
 }
 
