@@ -6,33 +6,37 @@
 <title>Production Entry</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- SEARCHABLE DROPDOWN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
 <style>
 
 body {
   margin: 0;
   padding: 0;
-  background: #f4f6f8;  /* light grey like screenshot */
+  background: #f4f6f8;
   font-family: Segoe UI, sans-serif;
 }
 
-/* HEADER */
+/* HEADER TOP */
 .header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   background: #ffffff;
   padding: 18px 40px;
-  font-size: 15px;
-  font-weight: 600;
   border-bottom: 1px solid #e3e7ec;
 }
 
 .header span {
+  font-size: 15px;
+  font-weight: 600;
   color: #000;
   opacity: .85;
 }
 
-/* PAGE CARD */
+/* CARD */
 .card {
   max-width: 1150px;
   margin: 35px auto;
@@ -42,7 +46,6 @@ body {
   box-shadow: 0 4px 18px rgba(0,0,0,0.08);
 }
 
-/* FORM TITLE */
 .card-title {
   font-size: 22px;
   font-weight: 700;
@@ -58,14 +61,14 @@ label {
   display: block;
 }
 
-/* TOP FORM ROW */
+/* FORM ROW */
 .row-flex {
   display: flex;
   gap: 30px;
   margin-bottom: 30px;
 }
 
-/* INPUT */
+/* INPUT BOX */
 .input-box {
   padding: 12px 13px;
   border: 1px solid #cfd7e0;
@@ -77,7 +80,7 @@ label {
 
 .input-box:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15, 128, 217, .25);
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
   outline: none;
 }
 
@@ -104,19 +107,13 @@ td {
   border-bottom: 1px solid #f1f3f5;
 }
 
-/* TABLE INPUTS */
+/* ROW INPUTS */
 .table-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
   background: #fff;
-}
-
-.table-input:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
-  outline: none;
 }
 
 .row-handle {
@@ -146,10 +143,6 @@ td {
   cursor: pointer;
 }
 
-.add-row-btn:hover {
-  background: #dceaff;
-}
-
 /* NOTES */
 textarea {
   width: 100%;
@@ -162,7 +155,7 @@ textarea {
   margin-top: 20px;
 }
 
-/* SUBMIT BUTTON */
+/* SUBMIT */
 .submit-btn {
   margin-top: 30px;
   padding: 12px 32px;
@@ -175,9 +168,18 @@ textarea {
   cursor: pointer;
 }
 
-.submit-btn:hover {
-  background: #0d6fbf;
+/* SEARCH DROPDOWN (Choices.js) */
+.choices__inner {
+  min-height: 42px !important;
+  padding: 8px 10px !important;
+  border-radius: 8px !important;
+  border: 1px solid #cfd7e0 !important;
 }
+
+.choices__list--dropdown {
+  border-radius: 8px !important;
+}
+
 </style>
 </head>
 
@@ -188,13 +190,14 @@ textarea {
   <span>UXILIUM Accounting Management Services</span>
 </div>
 
-<!-- WHITE CARD -->
+<!-- CARD -->
 <div class="card">
 
   <div class="card-title">Production Entry</div>
 
-  <!-- TOP ROW -->
+  <!-- TOP FORM -->
   <div class="row-flex">
+
     <div>
       <label>Date</label>
       <input type="date" id="productionDate" class="input-box">
@@ -208,9 +211,10 @@ textarea {
         <option value="TRUSS010">TRUSS010</option>
       </select>
     </div>
+
   </div>
 
-  <!-- TABLE -->
+  <!-- ITEMS TABLE -->
   <table>
     <thead>
       <tr>
@@ -235,11 +239,12 @@ textarea {
 </div>
 
 
+
 <script>
 
 let itemList = [];
 
-/* LOAD ITEM LIST FROM APPS SCRIPT */
+/* ===== LOAD ITEMS FROM APPS SCRIPT ===== */
 window.onload = async function () {
   try {
     const res = await fetch(
@@ -259,7 +264,8 @@ window.onload = async function () {
 };
 
 
-/* ADD NEW ROW */
+
+/* ===== ADD NEW ROW (WITH SEARCH DROPDOWN) ===== */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -273,11 +279,9 @@ function addRow() {
       </select>
     </td>
 
-    <td><input type="number" class="table-input meter" value="6" min="0"></td>
-    <td><input type="number" class="table-input qty" value="0" min="0"></td>
-
+    <td><input type="number" class="table-input meter" value="6"></td>
+    <td><input type="number" class="table-input qty" value="0"></td>
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
-
     <td><input type="text" class="table-input kpc"></td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
@@ -285,16 +289,27 @@ function addRow() {
 
   tbody.appendChild(tr);
 
+  /* APPLY SEARCH DROPDOWN HERE */
+  new Choices(tr.querySelector(".item"), {
+    searchEnabled: true,
+    shouldSort: false,
+    searchPlaceholderValue: "Search item..."
+  });
+
   tr.querySelector(".meter").addEventListener("input", updateTotals);
   tr.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
-/* DELETE ROW */
+
+
+/* ===== DELETE ROW ===== */
 function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
-/* UPDATE TOTAL */
+
+
+/* ===== UPDATE TOTAL ===== */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const meter = parseFloat(r.querySelector(".meter").value) || 0;
@@ -303,7 +318,9 @@ function updateTotals() {
   });
 }
 
-/* SUBMIT */
+
+
+/* ===== SUBMIT FORM ===== */
 function submitForm() {
 
   const date = document.getElementById("productionDate").value;
