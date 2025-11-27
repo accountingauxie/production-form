@@ -103,7 +103,6 @@ td {
   box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
 }
 
-/* KPC, TOTAL fields */
 .table-disabled {
   background: #f4f6f9;
 }
@@ -139,12 +138,25 @@ td {
   cursor: pointer;
 }
 
-/* ========== XERO COMBOBOX STYLE ========== */
-.combo {
+/* ====== XERO COMBOBOX ====== */
+.combo, .combo-kpc {
   position: relative;
 }
 
-.combo-display {
+.combo-panel, .combo-panel-kpc {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #cfd7e0;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 999999;
+  display: none;
+}
+
+.combo-display, .combo-display-kpc {
   padding: 10px 12px;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
@@ -155,38 +167,17 @@ td {
   justify-content: space-between;
   align-items: center;
 }
-.combo-display:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
+
+.combo-text, .combo-text-kpc {
+  opacity: 0.7;
 }
 
-.combo-arrow {
-  margin-left: 10px;
-  border-width: 6px 5px 0 5px;
-  border-style: solid;
-  border-color: #999 transparent transparent transparent;
-}
-
-.combo-panel {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  background: #fff;
-  border: 1px solid #cfd7e0;
-  border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  z-index: 99999;
-  display: none;
-}
-
-.combo-search {
+.combo-search, .combo-search-kpc {
   width: 100%;
   padding: 10px;
   border: none;
   border-bottom: 1px solid #e2e6eb;
   font-size: 14px;
-  outline: none;
 }
 
 .combo-item {
@@ -197,7 +188,6 @@ td {
 .combo-item:hover {
   background: #eef3fd;
 }
-
 .combo-empty {
   padding: 10px 14px;
   font-size: 13px;
@@ -259,71 +249,62 @@ td {
 
 <script>
 let itemList = [];
+let kpcList = [];
 
-/* Load Items */
+/* Load both lists */
 window.onload = async () => {
-  const res = await fetch(
+  const itemRes = await fetch(
     "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem"
   );
-  itemList = await res.json();
+  itemList = await itemRes.json();
+
+  const kpcRes = await fetch(
+    "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getkpc"
+  );
+  kpcList = await kpcRes.json();
+
   addRow();
 };
 
-/* Create ComboBox (Xero Style) */
-function attachCombo(combo, itemList) {
-  const display = combo.querySelector(".combo-display");
-  const arrow = combo.querySelector(".combo-arrow");
-  const panel = combo.querySelector(".combo-panel");
-  const search = combo.querySelector(".combo-search");
-  const list = combo.querySelector(".combo-list");
+/* ===== GENERIC COMBOBOX ===== */
+function attachCombo(combo, list, isKPC = false) {
+  const display = combo.querySelector(isKPC ? ".combo-display-kpc" : ".combo-display");
+  const panel = combo.querySelector(isKPC ? ".combo-panel-kpc" : ".combo-panel");
+  const search = combo.querySelector(isKPC ? ".combo-search-kpc" : ".combo-search");
+  const listBox = combo.querySelector(".combo-list");
 
-  let selected = "";
-
-  function closePanel() {
-    panel.style.display = "none";
-  }
-
+  function closePanel() { panel.style.display = "none"; }
   function openPanel() {
     panel.style.display = "block";
     search.value = "";
-    renderList(itemList);
+    render(list);
     search.focus();
   }
 
-  function renderList(arr) {
-    list.innerHTML = "";
+  function render(arr) {
+    listBox.innerHTML = "";
     if (arr.length === 0) {
-      list.innerHTML = `<div class="combo-empty">No results found</div>`;
+      listBox.innerHTML = `<div class="combo-empty">No results found</div>`;
       return;
     }
-    arr.forEach(it => {
-      let div = document.createElement("div");
+    arr.forEach(v => {
+      const div = document.createElement("div");
       div.className = "combo-item";
-      div.textContent = it;
+      div.textContent = v;
       div.onclick = () => {
-        selected = it;
-        display.dataset.value = it;
-        display.querySelector(".combo-text").textContent = it;
+        display.dataset.value = v;
+        display.querySelector(isKPC ? ".combo-text-kpc" : ".combo-text").textContent = v;
         closePanel();
       };
-      list.appendChild(div);
+      listBox.appendChild(div);
     });
   }
 
   display.onclick = openPanel;
-
-  arrow.onclick = e => {
-    e.stopPropagation();
-    if (panel.style.display === "block") closePanel();
-    else openPanel();
-  };
-
   search.oninput = () => {
     const term = search.value.toLowerCase();
-    const matches = itemList.filter(v => v.toLowerCase().includes(term));
-    renderList(matches.slice(0, 10));
+    render(list.filter(v => v.toLowerCase().includes(term)));
   };
-
   document.addEventListener("click", e => {
     if (!combo.contains(e.target)) closePanel();
   });
@@ -335,12 +316,12 @@ function addRow() {
 
   const tr = document.createElement("tr");
   tr.innerHTML = `
-    <td class="row-handle">⋮⋮</td>
+    <td>⋮⋮</td>
 
     <td>
       <div class="combo">
         <div class="combo-display" data-value="">
-          <span class="combo-text" style="opacity:.6">Select item…</span>
+          <span class="combo-text">Select item…</span>
           <div class="combo-arrow"></div>
         </div>
         <div class="combo-panel">
@@ -353,13 +334,27 @@ function addRow() {
     <td><input type="number" class="table-input meter" value="6"></td>
     <td><input type="number" class="table-input qty" value="0"></td>
     <td><input type="number" class="table-input total table-disabled" readonly></td>
-    <td><input type="text" class="table-input kpc"></td>
+
+    <td>
+      <div class="combo-kpc">
+        <div class="combo-display-kpc" data-value="">
+          <span class="combo-text-kpc">Select KPC…</span>
+          <div class="combo-arrow"></div>
+        </div>
+        <div class="combo-panel-kpc">
+          <input class="combo-search-kpc" placeholder="Search KPC..." />
+          <div class="combo-list"></div>
+        </div>
+      </div>
+    </td>
+
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
 
   tbody.appendChild(tr);
 
   attachCombo(tr.querySelector(".combo"), itemList);
+  attachCombo(tr.querySelector(".combo-kpc"), kpcList, true);
 
   tr.querySelector(".meter").oninput = updateTotals;
   tr.querySelector(".qty").oninput = updateTotals;
@@ -370,7 +365,7 @@ function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
-/* Update total */
+/* Totals */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const m = parseFloat(r.querySelector(".meter").value) || 0;
@@ -394,7 +389,7 @@ function submitForm() {
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
       total: r.querySelector(".total").value,
-      kpc: r.querySelector(".kpc").value
+      kpc: r.querySelector(".combo-display-kpc").dataset.value
     });
   });
 
