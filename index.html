@@ -6,12 +6,7 @@
 <title>Production Entry</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- TOM SELECT (Xero-like searchable dropdown) -->
-<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
-
 <style>
-
 body {
   margin: 0;
   padding: 0;
@@ -68,7 +63,7 @@ label {
   margin-bottom: 30px;
 }
 
-/* INPUT BOX */
+/* INPUT BOX (top form) */
 .input-box {
   padding: 12px 13px;
   border: 1px solid #cfd7e0;
@@ -76,6 +71,12 @@ label {
   font-size: 14px;
   width: 240px;
   background: #fff;
+}
+
+.input-box:focus {
+  border-color: #0f80d9;
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  outline: none;
 }
 
 /* TABLE */
@@ -100,11 +101,20 @@ td {
   border-bottom: 1px solid #f1f3f5;
 }
 
+/* TABLE INPUTS */
 .table-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.table-input:focus {
+  border-color: #0f80d9;
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  outline: none;
 }
 
 .row-handle {
@@ -134,6 +144,10 @@ td {
   cursor: pointer;
 }
 
+.add-row-btn:hover {
+  background: #dceaff;
+}
+
 /* NOTES */
 textarea {
   width: 100%;
@@ -142,6 +156,7 @@ textarea {
   border: 1px solid #cfd7e0;
   border-radius: 10px;
   font-size: 15px;
+  background: #fff;
   margin-top: 20px;
 }
 
@@ -158,28 +173,48 @@ textarea {
   cursor: pointer;
 }
 
-/* TOM SELECT (XERO STYLE) */
-.ts-wrapper {
-    width: 100%;
+.submit-btn:hover {
+  background: #0d6fbf;
 }
 
-.ts-control {
-    border-radius: 8px !important;
-    border: 1px solid #cfd7e0 !important;
-    min-height: 42px !important;
-    padding: 8px 10px !important;
-    font-size: 14px !important;
-    background: #fff !important;
+/* AUTOCOMPLETE (Xero-style) */
+.autocomplete-wrapper {
+  position: relative;
 }
 
-.ts-dropdown {
-    border-radius: 8px !important;
-    font-size: 14px !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #cfd7e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+  display: none;
 }
 
-.ts-dropdown .option {
-    padding: 6px 10px !important;
+.autocomplete-item {
+  padding: 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.autocomplete-item:hover {
+  background: #f2f6fd;
+}
+
+.autocomplete-empty {
+  padding: 6px 10px;
+  font-size: 13px;
+  color: #999;
 }
 
 </style>
@@ -240,31 +275,83 @@ textarea {
 
 
 <script>
-
 let itemList = [];
 
-/* LOAD ITEMS */
+/* ===== LOAD ITEMS FROM APPS SCRIPT ===== */
 window.onload = async function () {
   try {
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem"
     );
-
     itemList = await res.json();
 
-    if (itemList.length > 0) {
+    if (Array.isArray(itemList) && itemList.length > 0) {
       await new Promise(r => setTimeout(r, 80));
       addRow();
     }
-
   } catch (err) {
     console.error("Error loading items:", err);
   }
 };
 
+/* ===== AUTOCOMPLETE HELPER ===== */
+function attachAutocomplete(wrapper, sourceItems) {
+  const input = wrapper.querySelector(".item-input");
+  const list = wrapper.querySelector(".autocomplete-list");
 
+  // close when click outside
+  document.addEventListener("click", (e) => {
+    if (!wrapper.contains(e.target)) {
+      list.style.display = "none";
+    }
+  });
 
-/* ADD ROW */
+  input.addEventListener("input", () => {
+    const term = input.value.trim().toLowerCase();
+    list.innerHTML = "";
+
+    if (!term) {
+      list.style.display = "none";
+      return;
+    }
+
+    const matches = sourceItems
+      .filter(name => name.toLowerCase().includes(term))
+      .slice(0, 10); // limit results
+
+    if (matches.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "autocomplete-empty";
+      empty.textContent = "No results found";
+      list.appendChild(empty);
+    } else {
+      matches.forEach(name => {
+        const item = document.createElement("div");
+        item.className = "autocomplete-item";
+        item.textContent = name;
+        item.addEventListener("mousedown", (e) => {
+          // mousedown supaya tidak ketutup sebelum klik diproses
+          e.preventDefault();
+          input.value = name;
+          list.style.display = "none";
+        });
+        list.appendChild(item);
+      });
+    }
+
+    list.style.display = "block";
+  });
+
+  // optional: arrow down opens list
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" && list.children.length > 0) {
+      e.preventDefault();
+      list.firstChild.focus?.();
+    }
+  });
+}
+
+/* ===== ADD NEW ROW ===== */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -273,9 +360,10 @@ function addRow() {
     <td class="row-handle">⋮⋮</td>
 
     <td>
-      <select class="table-input item">
-        ${itemList.map(i => `<option value="${i}">${i}</option>`).join("")}
-      </select>
+      <div class="autocomplete-wrapper">
+        <input type="text" class="table-input item-input" placeholder="Search item..." autocomplete="off">
+        <div class="autocomplete-list"></div>
+      </div>
     </td>
 
     <td><input type="number" class="table-input meter" value="6"></td>
@@ -290,29 +378,18 @@ function addRow() {
 
   tbody.appendChild(tr);
 
-  /* APPLY XERO-STYLE SEARCH DROPDOWN */
-  new TomSelect(tr.querySelector(".item"), {
-      maxOptions: 2000,
-      create: false,
-      allowEmptyOption: true,
-      sortField: { field: "text", direction: "asc" },
-      placeholder: "Search item..."
-  });
+  attachAutocomplete(tr.querySelector(".autocomplete-wrapper"), itemList);
 
   tr.querySelector(".meter").addEventListener("input", updateTotals);
   tr.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
-
-
-/* DELETE ROW */
+/* ===== DELETE ROW ===== */
 function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
-
-
-/* UPDATE TOTAL */
+/* ===== UPDATE TOTAL ===== */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const meter = parseFloat(r.querySelector(".meter").value) || 0;
@@ -321,9 +398,7 @@ function updateTotals() {
   });
 }
 
-
-
-/* SUBMIT */
+/* ===== SUBMIT FORM ===== */
 function submitForm() {
 
   const date = document.getElementById("productionDate").value;
@@ -340,7 +415,7 @@ function submitForm() {
 
   rows.forEach(r => {
     items.push({
-      item: r.querySelector(".item").value,
+      item: r.querySelector(".item-input").value,
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
       total: r.querySelector(".total").value,
@@ -362,7 +437,6 @@ function submitForm() {
   .then(() => alert("Submitted!"))
   .catch(err => alert("Error submitting: " + err));
 }
-
 </script>
 
 </body>
