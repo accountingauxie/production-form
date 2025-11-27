@@ -1,184 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <title>Production Entry</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
-  margin: 0;
-  padding: 0;
-  background: #eef3f9;
+  margin: 0; padding: 0;
+  background: #f4f6f8;
   font-family: Segoe UI, sans-serif;
 }
 
-/* HEADER */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0f80d9;
-  color: white;
-  padding: 18px 35px;
-  font-size: 22px;
-  font-weight: 600;
+  display: flex; justify-content: flex-end; align-items: center;
+  background: #ffffff;
+  padding: 18px 40px;
+  border-bottom: 1px solid #e3e7ec;
+}
+.header span {
+  font-size: 15px; font-weight: 600; opacity: .85;
 }
 
-.header-right {
-  font-size: 14px;
-  font-weight: 500;
-  opacity: .9;
+.card {
+  max-width: 1150px;
+  margin: 35px auto;
+  background: #fff;
+  padding: 35px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
 }
 
-/* PAGE */
-.page {
-  max-width: 1200px;
-  margin: 25px auto;
+.card-title {
+  font-size: 22px; font-weight: 700; margin-bottom: 25px;
 }
 
-/* LABEL */
 label {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
+  font-size: 14px; font-weight: 600; margin-bottom: 6px;
 }
 
-/* INPUT */
+.row-flex {
+  display: flex; gap: 30px; margin-bottom: 30px;
+}
+
 .input-box {
-  padding: 11px 13px;
-  border: 1px solid #cfd8e3;
+  padding: 12px 13px;
+  border: 1px solid #cfd7e0;
   border-radius: 8px;
+  width: 240px;
   font-size: 14px;
-  width: 220px;
   background: #fff;
 }
-
 .input-box:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
-  outline: none;
+  box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
 }
 
-/* TWO-COLUMN ROW */
-.row-flex {
-  display: flex;
-  gap: 30px;
-  align-items: flex-end;
-  margin-bottom: 25px;
-}
-
-/* TABLE */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
+  width: 100%; border-collapse: collapse;
 }
-
 th {
-  background: #e9f0f9;
+  background: #eef2f6;
   padding: 12px;
   font-size: 14px;
   font-weight: 600;
-  border-bottom: 1px solid #d8dfe8;
-  color: #2b3d55;
 }
+td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
 
-td {
-  padding: 12px;
-  border-bottom: 1px solid #f0f3f7;
-}
-
-/* TABLE INPUTS */
 .table-input {
-  width: 100%;
-  padding: 9px 10px;
-  border-radius: 8px;
+  width: 100%; padding: 10px;
   border: 1px solid #cfd7e0;
+  border-radius: 8px;
   font-size: 14px;
 }
-
 .table-input:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
-  outline: none;
+  box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
 }
 
-.row-handle {
-  width: 25px;
-  text-align: center;
-  color: #888;
-  font-size: 18px;
-}
+.table-disabled { background: #f4f6f9; }
 
 .delete-btn {
-  text-align: center;
+  cursor: pointer;
   font-size: 18px;
   color: #d11a2a;
-  cursor: pointer;
 }
 
-/* ADD ROW */
 .add-row-btn {
-  margin-top: 15px;
+  margin-top: 18px;
   padding: 9px 16px;
   border-radius: 8px;
+  border: 1px solid #c6dbf8;
   background: #e9f2ff;
   color: #0f80d9;
-  border: 1px solid #c6dbf8;
   font-weight: 600;
   cursor: pointer;
 }
 
-.add-row-btn:hover {
-  background: #dceaff;
-}
-
-/* NOTES */
-textarea {
-  width: 100%;
-  height: 130px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #cfd7e0;
-  font-size: 15px;
-  background: #fff;
-}
-
-/* SUBMIT */
 .submit-btn {
-  margin-top: 30px;
-  padding: 14px 35px;
+  padding: 12px 32px;
   background: #0f80d9;
-  color: white;
-  border: none;
+  color: #fff;
   border-radius: 10px;
-  font-size: 16px;
   font-weight: 600;
+  border: none;
   cursor: pointer;
 }
 
-.submit-btn:hover {
-  background: #0d6fbb;
+/* ComboBox Style */
+.combo, .combo-kpc { position: relative; }
+
+.combo-display, .combo-display-kpc {
+  padding: 10px 12px;
+  border: 1px solid #cfd7e0;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.combo-panel, .combo-panel-kpc {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: #fff;
+  border: 1px solid #cfd7e0;
+  border-radius: 8px;
+  z-index: 999999;
+  display: none;
+}
+
+.combo-search, .combo-search-kpc {
+  width: 100%; padding: 10px;
+  border: none;
+  border-bottom: 1px solid #e2e6eb;
+  font-size: 14px;
+}
+
+.combo-list, .combo-list-kpc {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.combo-item {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+.combo-item:hover { background: #eef3fd; }
+.combo-empty {
+  padding: 10px 14px; font-size: 13px; color: #888;
 }
 </style>
 </head>
 
+
 <body>
 
 <div class="header">
-  Production Entry
-  <div class="header-right">UXILIUM Accounting Management Services</div>
+  <span>UXILIUM Accounting Management Services</span>
 </div>
 
-<div class="page">
+<div class="card">
 
-  <!-- DATE + MACHINE ROW -->
+  <div class="card-title">Production Entry</div>
+
   <div class="row-flex">
     <div>
       <label>Date</label>
@@ -187,7 +173,7 @@ textarea {
 
     <div>
       <label>Production Machine</label>
-      <select id="machineUsed" class="input-box" style="width:220px;">
+      <select id="machineUsed" class="input-box">
         <option value="">— Select Machine —</option>
         <option value="RENG__009_MX">RENG__009_MX</option>
         <option value="TRUSS010">TRUSS010</option>
@@ -195,7 +181,6 @@ textarea {
     </div>
   </div>
 
-  <!-- TABLE -->
   <table>
     <thead>
       <tr>
@@ -213,120 +198,164 @@ textarea {
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-  <div style="margin-top:35px; font-size:18px; font-weight:600;">Additional Notes</div>
-  <textarea id="notes"></textarea>
+  <textarea id="notes" placeholder="Additional notes..." style="width:100%; height:130px;"></textarea>
 
+  <br><br>
   <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
 
+
 <script>
-
 let itemList = [];
+let kpcList = [];
 
-/* LOAD ITEM LIST */
-window.onload = async function () {
-  try {
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec?action=getitem"
-    );
-    itemList = await res.json();
+const API_URL = "https://script.google.com/macros/s/AKfycbznL5zYVNMmcXy-7-ugvOJFRcHOs1ranuUApVW36Y4xifM6Wbb0jR97jekSSdJXtHeAWA/exec";
 
-    if (Array.isArray(itemList) && itemList.length > 0) {
-      await new Promise(r => setTimeout(r, 80));
-      addRow();
-    }
+/* LOAD BOTH LISTS */
+window.onload = async () => {
+  const items = await fetch(API_URL + "?action=getitem").then(r=>r.json());
+  const kpcs  = await fetch(API_URL + "?action=getkpc").then(r=>r.json());
 
-  } catch (err) {
-    console.error("ERROR loading items:", err);
-  }
+  itemList = items;
+  kpcList = kpcs;
+
+  addRow();
 };
 
+/* GENERIC COMBOBOX */
+function attachCombo(combo, list, isKPC=false) {
 
-/* ADD NEW ROW */
-function addRow() {
+  const display = combo.querySelector(isKPC ? ".combo-display-kpc" : ".combo-display");
+  const panel   = combo.querySelector(isKPC ? ".combo-panel-kpc" : ".combo-panel");
+  const search  = combo.querySelector(isKPC ? ".combo-search-kpc" : ".combo-search");
+  const listBox = combo.querySelector(isKPC ? ".combo-list-kpc" : ".combo-list");
+
+  function closePanel(){ panel.style.display = "none"; }
+  function openPanel(){
+    panel.style.display = "block";
+    search.value = "";
+    render(list);
+    search.focus();
+  }
+
+  function render(arr){
+    listBox.innerHTML = "";
+    if(arr.length===0){
+      listBox.innerHTML = `<div class="combo-empty">No results found</div>`;
+      return;
+    }
+    arr.forEach(v=>{
+      const d = document.createElement("div");
+      d.className = "combo-item";
+      d.textContent = v;
+      d.onclick = () => {
+        display.dataset.value = v;
+        display.querySelector(isKPC?".combo-text-kpc":".combo-text").textContent = v;
+        closePanel();
+      };
+      listBox.appendChild(d);
+    });
+  }
+
+  display.onclick = openPanel;
+  search.oninput = () => {
+    const t = search.value.toLowerCase();
+    render(list.filter(v=>v.toLowerCase().includes(t)));
+  };
+
+  document.addEventListener("click", e => {
+    if (!combo.contains(e.target)) closePanel();
+  });
+}
+
+/* ADD ROW */
+function addRow(){
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
 
   tr.innerHTML = `
-    <td class="row-handle">⋮⋮</td>
+    <td>⋮⋮</td>
 
     <td>
-      <select class="table-input item">
-        ${itemList.map(i => `<option value="${i}">${i}</option>`).join("")}
-      </select>
+      <div class="combo">
+        <div class="combo-display" data-value="">
+          <span class="combo-text">Select item…</span>
+        </div>
+        <div class="combo-panel">
+          <input class="combo-search" placeholder="Search item...">
+          <div class="combo-list"></div>
+        </div>
+      </div>
     </td>
 
-    <td><input type="number" class="table-input meter" value="6" min="0"></td>
-    <td><input type="number" class="table-input qty" value="0" min="0"></td>
+    <td><input type="number" class="table-input meter" value="6"></td>
+    <td><input type="number" class="table-input qty" value="0"></td>
+    <td><input type="number" class="table-input total table-disabled" readonly></td>
 
-    <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
-
-    <td><input type="text" class="table-input kpc" placeholder=""></td>
+    <td>
+      <div class="combo-kpc">
+        <div class="combo-display-kpc" data-value="">
+          <span class="combo-text-kpc">Select KPC…</span>
+        </div>
+        <div class="combo-panel-kpc">
+          <input class="combo-search-kpc" placeholder="Search KPC...">
+          <div class="combo-list-kpc"></div>
+        </div>
+      </div>
+    </td>
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
 
   tbody.appendChild(tr);
 
-  tr.querySelector(".meter").addEventListener("input", updateTotals);
-  tr.querySelector(".qty").addEventListener("input", updateTotals);
+  attachCombo(tr.querySelector(".combo"), itemList, false);
+  attachCombo(tr.querySelector(".combo-kpc"), kpcList, true);
+
+  tr.querySelector(".meter").oninput = updateTotals;
+  tr.querySelector(".qty").oninput = updateTotals;
 }
 
-/* DELETE ROW */
-function deleteRow(btn) {
-  btn.parentElement.remove();
-}
+function deleteRow(btn){ btn.parentElement.remove(); }
 
-/* UPDATE TOTAL */
-function updateTotals() {
-  document.querySelectorAll("#tableBody tr").forEach(r => {
-    const m = parseFloat(r.querySelector(".meter").value) || 0;
-    const q = parseFloat(r.querySelector(".qty").value) || 0;
-    r.querySelector(".total").value = m * q;
+function updateTotals(){
+  document.querySelectorAll("#tableBody tr").forEach(r=>{
+    const m = parseFloat(r.querySelector(".meter").value)||0;
+    const q = parseFloat(r.querySelector(".qty").value)||0;
+    r.querySelector(".total").value = m*q;
   });
 }
 
 /* SUBMIT */
-function submitForm() {
-
+function submitForm(){
   const date = document.getElementById("productionDate").value;
   const machine = document.getElementById("machineUsed").value;
   const notes = document.getElementById("notes").value;
 
-  if (!date) {
-    alert("⚠ Please select a Production Date.");
-    return;
-  }
+  if(!date){ alert("Please choose a date."); return; }
 
-  const rows = document.querySelectorAll("#tableBody tr");
   const items = [];
-
-  rows.forEach(r => {
+  document.querySelectorAll("#tableBody tr").forEach(r=>{
     items.push({
-      item: r.querySelector(".item").value,
+      item: r.querySelector(".combo-display").dataset.value,
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
       total: r.querySelector(".total").value,
-      kpc: r.querySelector(".kpc").value
+      kpc: r.querySelector(".combo-display-kpc").dataset.value
     });
   });
 
-  const payload = {
-    productionDate: date,
-    machine: machine,
-    notes: notes,
-    items: items
-  };
-
-  fetch(
-    "https://script.google.com/macros/s/AKfycbxxzisEzNtMxXEldQX2D7NxDI4ewWFLDBgYIzMyXGdhA3SI_e6dLmjrorAoPvCcxKMOjg/exec",
-    { method: "POST", body: JSON.stringify(payload) }
-  )
-  .then(() => alert("Submitted!"))
-  .catch(err => alert("Error submitting: " + err));
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      productionDate: date,
+      machine,
+      notes,
+      items
+    })
+  }).then(()=> alert("Submitted!"));
 }
-
 </script>
 
 </body>
