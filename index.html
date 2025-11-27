@@ -271,7 +271,7 @@ function attachCombo(combo, list, isKPC = false) {
   const display = combo.querySelector(isKPC ? ".combo-display-kpc" : ".combo-display");
   const panel = combo.querySelector(isKPC ? ".combo-panel-kpc" : ".combo-panel");
   const search = combo.querySelector(isKPC ? ".combo-search-kpc" : ".combo-search");
-  const listBox = combo.querySelector(".combo-list");
+  const listBox = combo.querySelector(isKPC ? ".combo-list-kpc" : ".combo-list");
 
   function closePanel() { panel.style.display = "none"; }
   function openPanel() {
@@ -335,18 +335,19 @@ function addRow() {
     <td><input type="number" class="table-input qty" value="0"></td>
     <td><input type="number" class="table-input total table-disabled" readonly></td>
 
-    <td>
-      <div class="combo-kpc">
-        <div class="combo-display-kpc" data-value="">
-          <span class="combo-text-kpc">Select KPC…</span>
-          <div class="combo-arrow"></div>
-        </div>
-        <div class="combo-panel-kpc">
-          <input class="combo-search-kpc" placeholder="Search KPC..." />
-          <div class="combo-list"></div>
-        </div>
-      </div>
-    </td>
+ <td>
+  <div class="combo-kpc">
+    <div class="combo-display-kpc" data-value="">
+      <span class="combo-text-kpc">Select KPC…</span>
+      <div class="combo-arrow"></div>
+    </div>
+    <div class="combo-panel-kpc">
+      <input class="combo-search-kpc" placeholder="Search KPC..." />
+      <div class="combo-list-kpc"></div>  <!-- FIX -->
+    </div>
+  </div>
+</td>
+
 
     <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
   `;
