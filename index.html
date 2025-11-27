@@ -1,11 +1,17 @@
-<style>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+<meta charset="UTF-8">
+<title>Production Entry</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
 body {
   margin: 0;
   padding: 0;
-  background: #f4f6f9;
+  background: #eef3f9;
   font-family: Segoe UI, sans-serif;
-  color: #1e2a3b;
 }
 
 /* HEADER */
@@ -14,11 +20,10 @@ body {
   justify-content: space-between;
   align-items: center;
   background: #0f80d9;
-  color: #fff;
+  color: white;
   padding: 18px 35px;
   font-size: 22px;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 .header-right {
@@ -30,37 +35,34 @@ body {
 /* PAGE */
 .page {
   max-width: 1200px;
-  margin: 35px auto;
-  padding: 0 20px;
+  margin: 25px auto;
 }
 
 /* LABEL */
 label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
   display: block;
-  color: #5a6b82;
 }
 
 /* INPUT */
 .input-box {
   padding: 11px 13px;
-  border: 1px solid #d4dbe5;
+  border: 1px solid #cfd8e3;
   border-radius: 8px;
   font-size: 14px;
   width: 220px;
   background: #fff;
-  transition: .15s;
 }
 
 .input-box:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 3px rgba(15,128,217,.22);
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
   outline: none;
 }
 
-/* FLEX ROW */
+/* TWO-COLUMN ROW */
 .row-flex {
   display: flex;
   gap: 30px;
@@ -76,49 +78,41 @@ table {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
 }
 
 th {
-  background: #ebf2fa;
+  background: #e9f0f9;
   padding: 12px;
-  font-size: 13px;
-  font-weight: 700;
-  border-bottom: 1px solid #d6dee9;
-  color: #3b4c63;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid #d8dfe8;
+  color: #2b3d55;
 }
 
 td {
   padding: 12px;
-  border-bottom: 1px solid #f1f3f7;
+  border-bottom: 1px solid #f0f3f7;
 }
 
-tr:hover td {
-  background: #f8fbff;
-}
-
-/* TABLE INPUT */
+/* TABLE INPUTS */
 .table-input {
   width: 100%;
-  padding: 9px 11px;
+  padding: 9px 10px;
   border-radius: 8px;
-  border: 1px solid #d4dbe5;
+  border: 1px solid #cfd7e0;
   font-size: 14px;
-  transition: .15s;
-  background: #fff;
 }
 
 .table-input:focus {
   border-color: #0f80d9;
-  box-shadow: 0 0 0 3px rgba(15,128,217,.22);
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
   outline: none;
 }
 
-/* ICONS */
 .row-handle {
   width: 25px;
   text-align: center;
-  color: #9aa5b1;
+  color: #888;
   font-size: 18px;
 }
 
@@ -132,18 +126,17 @@ tr:hover td {
 /* ADD ROW */
 .add-row-btn {
   margin-top: 15px;
-  padding: 10px 16px;
+  padding: 9px 16px;
   border-radius: 8px;
-  background: #eaf3ff;
+  background: #e9f2ff;
   color: #0f80d9;
-  border: 1px solid #c7ddfa;
+  border: 1px solid #c6dbf8;
   font-weight: 600;
   cursor: pointer;
-  transition: .15s;
 }
 
 .add-row-btn:hover {
-  background: #dcedff;
+  background: #dceaff;
 }
 
 /* NOTES */
@@ -152,15 +145,9 @@ textarea {
   height: 130px;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid #d4dbe5;
+  border: 1px solid #cfd7e0;
   font-size: 15px;
   background: #fff;
-  margin-top: 10px;
-}
-
-textarea:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 3px rgba(15,128,217,.22);
 }
 
 /* SUBMIT */
@@ -174,13 +161,182 @@ textarea:focus {
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: .2s;
-  box-shadow: 0 4px 10px rgba(15,128,217,0.25);
 }
 
 .submit-btn:hover {
   background: #0d6fbb;
-  transform: translateY(-1px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Production Entry
+  <div class="header-right">UXILIUM Accounting Management Services</div>
+</div>
+
+<div class="page">
+
+  <!-- DATE + MACHINE ROW -->
+  <div class="row-flex">
+    <div>
+      <label>Date</label>
+      <input type="date" id="productionDate" class="input-box">
+    </div>
+
+    <div>
+      <label>Production Machine</label>
+      <select id="machineUsed" class="input-box" style="width:220px;">
+        <option value="">— Select Machine —</option>
+        <option value="RENG__009_MX">RENG__009_MX</option>
+        <option value="TRUSS010">TRUSS010</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+        <th>Meter</th>
+        <th>Qty</th>
+        <th>Total (m)</th>
+        <th>KPC</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <button class="add-row-btn" onclick="addRow()">+ Add row</button>
+
+  <div style="margin-top:35px; font-size:18px; font-weight:600;">Additional Notes</div>
+  <textarea id="notes"></textarea>
+
+  <button class="submit-btn" onclick="submitForm()">Submit</button>
+
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5zN2iAdcI-x8PBVYar2QRAECKQm40oAn_XOq98gN6sUHog_EkZxinGzi4iG4-IEAB/exec";
+
+let itemList = [];
+let kpcList = [];
+
+/* LOAD ITEM + KPC LIST */
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const [itemsRes, kpcRes] = await Promise.all([
+      fetch(`${SCRIPT_URL}?action=getitem`),
+      fetch(`${SCRIPT_URL}?action=getkpc`)
+    ]);
+
+    itemList = await itemsRes.json();
+    kpcList = await kpcRes.json();
+
+    console.log("Item list loaded:", itemList);
+    console.log("KPC list loaded:", kpcList);
+
+    addRow();
+
+  } catch (err) {
+    console.error("ERROR loading lists:", err);
+    alert("Error loading Item/KPC list. Please check Apps Script deployment.");
+  }
+});
+
+/* ADD NEW ROW */
+function addRow() {
+  const tbody = document.getElementById("tableBody");
+  const tr = document.createElement("tr");
+
+  tr.innerHTML = `
+    <td class="row-handle">⋮⋮</td>
+
+    <td>
+      <select class="table-input item">
+        <option value="">— Select Item —</option>
+        ${itemList.map(i => `<option value="${i}">${i}</option>`).join("")}
+      </select>
+    </td>
+
+    <td><input type="number" class="table-input meter" value="6" min="0"></td>
+    <td><input type="number" class="table-input qty" value="0" min="0"></td>
+
+    <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
+
+    <td>
+      <select class="table-input kpc">
+        <option value="">— Select KPC —</option>
+        ${kpcList.map(k => `<option value="${k}">${k}</option>`).join("")}
+      </select>
+    </td>
+
+    <td class="delete-btn" onclick="deleteRow(this)">🗑</td>
+  `;
+
+  tbody.appendChild(tr);
+
+  tr.querySelector(".meter").addEventListener("input", updateTotals);
+  tr.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
-</style>
+/* DELETE ROW */
+function deleteRow(btn) {
+  btn.parentElement.remove();
+}
+
+/* UPDATE TOTAL */
+function updateTotals() {
+  document.querySelectorAll("#tableBody tr").forEach(r => {
+    const m = parseFloat(r.querySelector(".meter").value) || 0;
+    const q = parseFloat(r.querySelector(".qty").value) || 0;
+    r.querySelector(".total").value = m * q;
+  });
+}
+
+/* SUBMIT */
+function submitForm() {
+  const date = document.getElementById("productionDate").value;
+  const machine = document.getElementById("machineUsed").value;
+  const notes = document.getElementById("notes").value;
+
+  if (!date) {
+    alert("⚠ Please select a Production Date.");
+    return;
+  }
+
+  const rows = document.querySelectorAll("#tableBody tr");
+  const items = [];
+
+  rows.forEach(r => {
+    items.push({
+      item:  r.querySelector(".item").value,
+      meter: r.querySelector(".meter").value,
+      qty:   r.querySelector(".qty").value,
+      total: r.querySelector(".total").value,
+      kpc:   r.querySelector(".kpc").value
+    });
+  });
+
+  const payload = {
+    productionDate: date,
+    machine: machine,
+    notes: notes,
+    items: items
+  };
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  })
+  .then(() => alert("Submitted!"))
+  .catch(err => alert("Error submitting: " + err));
+}
+</script>
+
+</body>
+</html>
