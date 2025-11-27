@@ -18,9 +18,6 @@ body {
   padding: 18px 40px;
   border-bottom: 1px solid #e3e7ec;
 }
-.header span {
-  font-size: 15px; font-weight: 600; opacity: .85;
-}
 
 .card {
   max-width: 1150px;
@@ -32,11 +29,9 @@ body {
 }
 
 .card-title {
-  font-size: 22px; font-weight: 700; margin-bottom: 25px;
-}
-
-label {
-  font-size: 14px; font-weight: 600; margin-bottom: 6px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 25px;
 }
 
 .row-flex {
@@ -47,17 +42,13 @@ label {
   padding: 12px 13px;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
-  width: 240px;
   font-size: 14px;
-  background: #fff;
-}
-.input-box:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
+  width: 240px;
 }
 
 table {
-  width: 100%; border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 th {
   background: #eef2f6;
@@ -65,35 +56,28 @@ th {
   font-size: 14px;
   font-weight: 600;
 }
-td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
+td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f3f5;
+}
 
 .table-input {
-  width: 100%; padding: 10px;
-  border: 1px solid #cfd7e0;
+  width: 100%;
+  padding: 10px;
   border-radius: 8px;
-  font-size: 14px;
-}
-.table-input:focus {
-  border-color: #0f80d9;
-  box-shadow: 0 0 0 2px rgba(15,128,217,0.25);
+  border: 1px solid #cfd7e0;
 }
 
 .table-disabled { background: #f4f6f9; }
 
-.delete-btn {
-  cursor: pointer;
-  font-size: 18px;
-  color: #d11a2a;
-}
-
 .add-row-btn {
   margin-top: 18px;
   padding: 9px 16px;
+  background: #e9f2ff;
   border-radius: 8px;
   border: 1px solid #c6dbf8;
-  background: #e9f2ff;
-  color: #0f80d9;
   font-weight: 600;
+  color: #0f80d9;
   cursor: pointer;
 }
 
@@ -107,7 +91,7 @@ td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
   cursor: pointer;
 }
 
-/* ComboBox Style */
+/* COMBOBOX */
 .combo, .combo-kpc { position: relative; }
 
 .combo-display, .combo-display-kpc {
@@ -117,7 +101,9 @@ td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
   background: #fff;
   cursor: pointer;
   font-size: 14px;
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .combo-panel, .combo-panel-kpc {
@@ -127,15 +113,15 @@ td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
   background: #fff;
   border: 1px solid #cfd7e0;
   border-radius: 8px;
-  z-index: 999999;
   display: none;
+  z-index: 999999;
 }
 
 .combo-search, .combo-search-kpc {
-  width: 100%; padding: 10px;
+  width: 100%;
+  padding: 10px;
   border: none;
   border-bottom: 1px solid #e2e6eb;
-  font-size: 14px;
 }
 
 .combo-list, .combo-list-kpc {
@@ -148,18 +134,18 @@ td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
   cursor: pointer;
 }
 .combo-item:hover { background: #eef3fd; }
+
 .combo-empty {
-  padding: 10px 14px; font-size: 13px; color: #888;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #888;
 }
 </style>
 </head>
 
-
 <body>
 
-<div class="header">
-  <span>UXILIUM Accounting Management Services</span>
-</div>
+<div class="header">UXILIUM – Accounting Management Services</div>
 
 <div class="card">
 
@@ -200,77 +186,73 @@ td { padding: 12px; border-bottom: 1px solid #f1f3f5; }
 
   <textarea id="notes" placeholder="Additional notes..." style="width:100%; height:130px;"></textarea>
 
-  <br><br>
   <button class="submit-btn" onclick="submitForm()">Submit</button>
 
 </div>
 
-
 <script>
+
+const API = "https://script.google.com/macros/s/AKfycbwhr4ImkELoIALJktapPJFP6ec1UeIO34-aACpMOepUSk72DtV3HK2J1c-XbWChXuc8/exec";
+
 let itemList = [];
 let kpcList = [];
 
-const API_URL = "https://script.google.com/macros/s/AKfycbznL5zYVNMmcXy-7-ugvOJFRcHOs1ranuUApVW36Y4xifM6Wbb0jR97jekSSdJXtHeAWA/exec";
 
-/* LOAD BOTH LISTS */
+/* LOAD DATA */
 window.onload = async () => {
-  const items = await fetch(API_URL + "?action=getitem").then(r=>r.json());
-  const kpcs  = await fetch(API_URL + "?action=getkpc").then(r=>r.json());
-
-  itemList = items;
-  kpcList = kpcs;
-
+  itemList = await fetch(API + "?action=getitem").then(r => r.json());
+  kpcList  = await fetch(API + "?action=getkpc").then(r => r.json());
   addRow();
 };
 
-/* GENERIC COMBOBOX */
-function attachCombo(combo, list, isKPC=false) {
+
+/* COMBOBOX */
+function attachCombo(combo, list, isKPC = false) {
 
   const display = combo.querySelector(isKPC ? ".combo-display-kpc" : ".combo-display");
   const panel   = combo.querySelector(isKPC ? ".combo-panel-kpc" : ".combo-panel");
   const search  = combo.querySelector(isKPC ? ".combo-search-kpc" : ".combo-search");
   const listBox = combo.querySelector(isKPC ? ".combo-list-kpc" : ".combo-list");
 
-  function closePanel(){ panel.style.display = "none"; }
-  function openPanel(){
+  display.onclick = () => {
     panel.style.display = "block";
     search.value = "";
     render(list);
     search.focus();
-  }
+  };
 
-  function render(arr){
+  function render(arr) {
     listBox.innerHTML = "";
-    if(arr.length===0){
+    if (arr.length === 0) {
       listBox.innerHTML = `<div class="combo-empty">No results found</div>`;
       return;
     }
-    arr.forEach(v=>{
+    arr.forEach(v => {
       const d = document.createElement("div");
       d.className = "combo-item";
       d.textContent = v;
       d.onclick = () => {
         display.dataset.value = v;
-        display.querySelector(isKPC?".combo-text-kpc":".combo-text").textContent = v;
-        closePanel();
+        display.querySelector(isKPC ? ".combo-text-kpc" : ".combo-text").textContent = v;
+        panel.style.display = "none";
       };
       listBox.appendChild(d);
     });
   }
 
-  display.onclick = openPanel;
   search.oninput = () => {
-    const t = search.value.toLowerCase();
-    render(list.filter(v=>v.toLowerCase().includes(t)));
+    const term = search.value.toLowerCase();
+    render(list.filter(v => v.toLowerCase().includes(term)));
   };
 
   document.addEventListener("click", e => {
-    if (!combo.contains(e.target)) closePanel();
+    if (!combo.contains(e.target)) panel.style.display = "none";
   });
 }
 
+
 /* ADD ROW */
-function addRow(){
+function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
 
@@ -317,27 +299,33 @@ function addRow(){
   tr.querySelector(".qty").oninput = updateTotals;
 }
 
-function deleteRow(btn){ btn.parentElement.remove(); }
 
-function updateTotals(){
-  document.querySelectorAll("#tableBody tr").forEach(r=>{
-    const m = parseFloat(r.querySelector(".meter").value)||0;
-    const q = parseFloat(r.querySelector(".qty").value)||0;
-    r.querySelector(".total").value = m*q;
+/* DELETE */
+function deleteRow(btn) {
+  btn.parentElement.remove();
+}
+
+/* UPDATE TOTAL */
+function updateTotals() {
+  document.querySelectorAll("#tableBody tr").forEach(r => {
+    const m = Number(r.querySelector(".meter").value) || 0;
+    const q = Number(r.querySelector(".qty").value) || 0;
+    r.querySelector(".total").value = m * q;
   });
 }
 
 /* SUBMIT */
-function submitForm(){
-  const date = document.getElementById("productionDate").value;
-  const machine = document.getElementById("machineUsed").value;
-  const notes = document.getElementById("notes").value;
+function submitForm() {
 
-  if(!date){ alert("Please choose a date."); return; }
+  const payload = {
+    productionDate: document.getElementById("productionDate").value,
+    machine: document.getElementById("machineUsed").value,
+    notes: document.getElementById("notes").value,
+    items: []
+  };
 
-  const items = [];
-  document.querySelectorAll("#tableBody tr").forEach(r=>{
-    items.push({
+  document.querySelectorAll("#tableBody tr").forEach(r => {
+    payload.items.push({
       item: r.querySelector(".combo-display").dataset.value,
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
@@ -346,16 +334,10 @@ function submitForm(){
     });
   });
 
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      productionDate: date,
-      machine,
-      notes,
-      items
-    })
-  }).then(()=> alert("Submitted!"));
+  fetch(API, { method: "POST", body: JSON.stringify(payload) })
+    .then(() => alert("Submitted!"));
 }
+
 </script>
 
 </body>
