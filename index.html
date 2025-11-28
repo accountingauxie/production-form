@@ -566,10 +566,19 @@ function submitForm(){
     method:"POST",
     body: JSON.stringify(payload)
   })
-  .then(()=>{
+.then(async (res)=>{
+    const reply = await res.json();
     hideLoading();
-    alert("Submitted!");
-  })
+
+    if (reply.status === "success") {
+      // tampilkan ID final dari server
+      entryId.value = reply.entryId;
+      alert("Submitted successfully!\nProduction Entry ID: " + reply.entryId);
+    } else {
+      alert("Error saving: " + reply.message);
+    }
+})
+
   .catch(err=>{
     hideLoading();
     alert("Error submitting: " + err);
