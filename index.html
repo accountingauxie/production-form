@@ -178,8 +178,14 @@ textarea {
 
 <div class="page">
 
-  <!-- DATE + MACHINE ROW -->
+  <!-- ID + DATE + MACHINE -->
   <div class="row-flex">
+
+    <div>
+      <label>Production Entry ID</label>
+      <input type="text" id="entryId" class="input-box" readonly style="background:#f4f7fb;">
+    </div>
+
     <div>
       <label>Date</label>
       <input type="date" id="productionDate" class="input-box">
@@ -193,6 +199,7 @@ textarea {
         <option value="TRUSS010">TRUSS010</option>
       </select>
     </div>
+
   </div>
 
   <!-- TABLE -->
@@ -226,7 +233,27 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNyFxiIaOMUGfNRMnSd
 let itemList = [];
 let kpcList = [];
 
-/* LOAD ITEM + KPC LIST */
+/* ------------------ GENERATE ENTRY ID ------------------ */
+function generateEntryId() {
+  const date = document.getElementById("productionDate").value;
+
+  if (!date) {
+    document.getElementById("entryId").value = "";
+    return;
+  }
+
+  const d = new Date(date);
+  const yy = String(d.getFullYear()).slice(2);
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+
+  // Default sequence number (frontend only)
+  const seq = "0000001";
+
+  const id = `FGP${yy}${mm}${seq}`;
+  document.getElementById("entryId").value = id;
+}
+
+/* Load item + kpc */
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const [itemsRes, kpcRes] = await Promise.all([
@@ -237,18 +264,17 @@ window.addEventListener("DOMContentLoaded", async () => {
     itemList = await itemsRes.json();
     kpcList = await kpcRes.json();
 
-    console.log("Item list loaded:", itemList);
-    console.log("KPC list loaded:", kpcList);
-
     addRow();
 
   } catch (err) {
-    console.error("ERROR loading lists:", err);
-    alert("Error loading Item/KPC list. Please check Apps Script deployment.");
+    alert("Error loading Item/KPC list.");
   }
 });
 
-/* ADD NEW ROW */
+/* Update ID when date changes */
+document.getElementById("productionDate").addEventListener("change", generateEntryId);
+
+/* ADD ROW */
 function addRow() {
   const tbody = document.getElementById("tableBody");
   const tr = document.createElement("tr");
@@ -284,12 +310,10 @@ function addRow() {
   tr.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
-/* DELETE ROW */
 function deleteRow(btn) {
   btn.parentElement.remove();
 }
 
-/* UPDATE TOTAL */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const m = parseFloat(r.querySelector(".meter").value) || 0;
@@ -303,11 +327,10 @@ function submitForm() {
   const date = document.getElementById("productionDate").value;
   const machine = document.getElementById("machineUsed").value;
   const notes = document.getElementById("notes").value;
+  const entryId = document.getElementById("entryId").value;
 
-  if (!date) {
-    alert("⚠ Please select a Production Date.");
-    return;
-  }
+  if (!date) return alert("⚠ Please select a Production Date.");
+  if (!entryId) return alert("⚠ Entry ID not generated.");
 
   const rows = document.querySelectorAll("#tableBody tr");
   const items = [];
@@ -323,6 +346,7 @@ function submitForm() {
   });
 
   const payload = {
+    entryId: entryId,
     productionDate: date,
     machine: machine,
     notes: notes,
