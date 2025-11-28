@@ -15,13 +15,14 @@
 
 <style>
 /* ===========================================
-    GLOBAL BACKGROUND
+    GLOBAL (Compact++)
 =========================================== */
 body {
   margin: 0;
   padding: 0;
   background: #ffffff;
   font-family: Segoe UI, sans-serif;
+  font-size: 12.5px;
 }
 
 /* ===========================================
@@ -32,138 +33,138 @@ body {
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
-  padding: 20px 35px;
-  font-size: 22px;
+  padding: 16px 30px;
+  font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
-  border-bottom: 1px solid #e3e6ea;
+  border-bottom: 1px solid #e2e4e6;
 }
 
 .header-right {
-  font-size: 14px;
-  opacity: 0.65;
+  font-size: 13px;
+  opacity: .65;
 }
 
 /* ===========================================
-    PAGE CONTAINER
+    PAGE WRAPPER
 =========================================== */
 .page {
   max-width: 1200px;
-  margin: 25px auto;
+  margin: 20px auto;
 }
 
 /* ===========================================
-    LABEL FORMAT
+    LABELS (compact)
 =========================================== */
 label {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  margin-bottom: 5px;
-  display: block;
+  margin-bottom: 3px;
   color: #444;
 }
 
 /* ===========================================
-   UNIVERSAL INPUT STYLE (MATCH FORM PEMESANAN)
+   INPUTS — COMPACT++
 =========================================== */
 .input-box,
 .table-input,
 .choices__inner {
-  height: 28px !important;
-  min-height: 28px !important;
-  padding: 4px 8px !important;
-  font-size: 13px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 3px 6px !important;
+  font-size: 12.5px !important;
   border: 1px solid #d0d5dd !important;
   border-radius: 4px !important;
   background: #f9fafb !important;
   box-sizing: border-box;
 }
 
-/* Row spacing */
 .row-flex {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   align-items: flex-end;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 /* ===========================================
-            TABLE STYLE
+    TABLE — COMPACT++
 =========================================== */
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 6px;
-  border: 1px solid #e1e4e8;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid #dde0e3;
   overflow: visible !important;
 }
 
 th {
   background: #f5f6f7;
-  padding: 6px;
-  font-size: 13px;
+  padding: 4px;
+  font-size: 12.5px;
   font-weight: 600;
   border-bottom: 1px solid #e1e4e9;
-  color: #333;
 }
 
 td {
-  padding: 6px;
-  border-bottom: 1px solid #f2f3f5;
+  padding: 4px;
+  border-bottom: 1px solid #f1f2f3;
 }
 
 table tr {
-  height: 38px !important;
+  height: 32px !important;
 }
 
-/* IMPORTANT to allow dropdown floating */
+/* Column Width Optimized */
+#tableBody th:nth-child(2), #tableBody td:nth-child(2) { width: 28%; } /* Item */
+#tableBody th:nth-child(3), #tableBody td:nth-child(3) { width: 7%; }  /* Meter */
+#tableBody th:nth-child(4), #tableBody td:nth-child(4) { width: 7%; }  /* Qty */
+#tableBody th:nth-child(5), #tableBody td:nth-child(5) { width: 10%; } /* Total */
+#tableBody th:nth-child(6), #tableBody td:nth-child(6) { width: 20%; } /* KPC */
+#tableBody th:nth-child(1), #tableBody td:nth-child(1) { width: 20px; } /* Handle */
+#tableBody th:nth-child(7), #tableBody td:nth-child(7) { width: 20px; } /* Delete */
+
+/* Allow dropdown to float above */
 table, tbody, tr, td {
   overflow: visible !important;
   position: relative !important;
 }
 
 /* ===========================================
-  CHOICES.JS — DROPDOWN ALWAYS ABOVE
+   DROPDOWN ALWAYS ABOVE ALL
 =========================================== */
 .choices__list--dropdown,
 .choices__list[aria-expanded] {
-    position: absolute !important;
-    z-index: 99999999 !important;
-    background: white !important;
-    border: 1px solid #d0d5dd !important;
-    border-radius: 4px !important;
-    width: 100% !important;
-    font-size: 13px !important;
-}
-
-.choices {
-    width: 100% !important;
+  position: absolute !important;
+  z-index: 99999999 !important;
+  background: white !important;
+  border: 1px solid #d0d5dd !important;
+  border-radius: 4px !important;
+  font-size: 12.5px !important;
+  width: 100% !important;
 }
 
 /* ===========================================
-   HANDLE + DELETE ICONS
+    ICONS
 =========================================== */
 .row-handle {
-  font-size: 13px;
-  width: 14px;
+  font-size: 12px;
   color: #999;
   cursor: grab;
 }
 
 .delete-btn {
-  font-size: 14px;
+  font-size: 13px;
   color: #d11a2a;
   cursor: pointer;
 }
 
 /* ===========================================
-   ADD ROW BUTTON
+    ADD ROW BTN
 =========================================== */
 .add-row-btn {
-  margin-top: 10px;
-  padding: 5px 12px;
-  font-size: 12px;
+  margin-top: 8px;
+  padding: 4px 10px;
+  font-size: 11.5px;
   border-radius: 4px;
   background: #eef5ff;
   border: 1px solid #d6e4ff;
@@ -172,47 +173,42 @@ table, tbody, tr, td {
   cursor: pointer;
 }
 
-.add-row-btn:hover {
-  background: #e4edff;
-}
-
 /* ===========================================
-   NOTES
+    NOTES
 =========================================== */
 textarea {
   width: 100%;
-  height: 120px;
-  padding: 8px;
-  font-size: 13px;
+  height: 100px;
+  padding: 7px;
+  font-size: 12.5px;
   border-radius: 4px;
   border: 1px solid #d0d5dd;
   background: #f9fafb;
 }
 
 /* ===========================================
-   SUBMIT BUTTON
+    SUBMIT BUTTON
 =========================================== */
 .submit-btn {
-  margin-top: 25px;
-  padding: 10px 25px;
-  font-size: 14px;
+  margin-top: 20px;
+  padding: 8px 20px;
+  font-size: 13px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 5px;
   background: #2d6cdf;
   color: white;
   border: none;
-  cursor: pointer;
 }
 
 .submit-btn:hover {
   background: #1e54b7;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<!-- LOADING OVERLAY -->
+<!-- LOADING -->
 <div id="loadingOverlay" style="
   position:fixed; inset:0;
   background:rgba(255,255,255,0.7);
@@ -226,6 +222,7 @@ textarea {
   </div>
 </div>
 
+<!-- HEADER -->
 <div class="header">
   Production Entry
   <div class="header-right">UXILIUM — Accounting Management Services</div>
@@ -233,7 +230,7 @@ textarea {
 
 <div class="page">
 
-  <!-- FORM TOP -->
+  <!-- TOP FORM -->
   <div class="row-flex">
     <div>
       <label>Date</label>
@@ -274,7 +271,7 @@ textarea {
 
   <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-  <div style="margin-top:20px; font-size:14px; font-weight:600;">Additional Notes</div>
+  <div style="margin-top:15px; font-size:13px; font-weight:600;">Additional Notes</div>
   <textarea id="notes"></textarea>
 
   <button class="submit-btn" onclick="submitForm()">Submit</button>
@@ -287,46 +284,46 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNyFxiIaOMUGfNRMnSd
 let itemList = [];
 let kpcList = [];
 
-/* LOADING TOOLS */
+/* LOADING HELPERS */
 function showLoading() { document.getElementById("loadingOverlay").style.display = "flex"; }
 function hideLoading() { document.getElementById("loadingOverlay").style.display = "none"; }
 
-/* GENERATE DEFAULT ENTRY ID */
+/* ENTRY ID GENERATOR */
 function generateEntryId() {
   const now = new Date();
   const yy = String(now.getFullYear()).slice(2);
   const mm = String(now.getMonth() + 1).padStart(2, "0");
   const seq = "0000001";
-  document.getElementById("entryId").value = `FGP${yy}${mm}${seq}`;
+  entryId.value = `FGP${yy}${mm}${seq}`;
 }
 
-/* INITIAL LOAD */
+/* ON LOAD */
 window.addEventListener("DOMContentLoaded", async () => {
   showLoading();
   generateEntryId();
 
   try {
-    const [itemsRes, kpcRes] = await Promise.all([
+    const [itemRes, kpcRes] = await Promise.all([
       fetch(`${SCRIPT_URL}?action=getitem`),
       fetch(`${SCRIPT_URL}?action=getkpc`)
     ]);
 
-    itemList = await itemsRes.json();
+    itemList = await itemRes.json();
     kpcList = await kpcRes.json();
 
     addRow();
     setupSortable();
-    hideLoading();
 
-  } catch (err) {
-    alert("Error loading dropdown data");
     hideLoading();
+  } catch (e) {
+    hideLoading();
+    alert("Error loading dropdown data.");
   }
 });
 
 /* SORTABLE ROWS */
 function setupSortable() {
-  Sortable.create(document.getElementById("tableBody"), {
+  Sortable.create(tableBody, {
     handle: ".row-handle",
     animation: 150
   });
@@ -342,6 +339,7 @@ function addRow() {
     <td><select class="item-select"></select></td>
 
     <td><input type="number" class="table-input meter" value="6"></td>
+
     <td><input type="number" class="table-input qty" value="0"></td>
 
     <td><input type="number" class="table-input total" readonly></td>
@@ -351,7 +349,7 @@ function addRow() {
     <td class="delete-btn" onclick="this.closest('tr').remove()">🗑</td>
   `;
 
-  document.getElementById("tableBody").appendChild(row);
+  tableBody.appendChild(row);
 
   initChoices(row.querySelector(".item-select"), itemList);
   initChoices(row.querySelector(".kpc-select"), kpcList);
@@ -361,24 +359,24 @@ function addRow() {
 }
 
 /* INIT CHOICES */
-function initChoices(selectEl, optionsArray) {
-  optionsArray.forEach(v => {
+function initChoices(selectEl, arr) {
+  arr.forEach(v => {
     const opt = document.createElement("option");
     opt.value = v;
-    opt.textContent = v;
+    opt.innerText = v;
     selectEl.appendChild(opt);
   });
 
   new Choices(selectEl, {
     searchEnabled: true,
     itemSelectText: "",
-    shouldSort: false,
+    shouldSort: false
   });
 }
 
-/* CALCULATE TOTAL */
+/* UPDATE TOTALS */
 function updateTotals() {
-  document.querySelectorAll("#tableBody tr").forEach(r => {
+  tableBody.querySelectorAll("tr").forEach(r => {
     const m = parseFloat(r.querySelector(".meter").value) || 0;
     const q = parseFloat(r.querySelector(".qty").value) || 0;
     r.querySelector(".total").value = m * q;
@@ -387,14 +385,14 @@ function updateTotals() {
 
 /* VALIDATION */
 function validateForm() {
-  if (!productionDate.value) return "Date required.";
-  if (!machineUsed.value) return "Machine required.";
+  if (!productionDate.value) return "Date is required.";
+  if (!machineUsed.value) return "Machine is required.";
 
   const rows = document.querySelectorAll("#tableBody tr");
-  if (rows.length === 0) return "Add at least 1 item.";
+  if (!rows.length) return "At least 1 item required.";
 
   for (const r of rows) {
-    if (!r.querySelector(".item-select").value) return "Item required.";
+    if (!r.querySelector(".item-select").value) return "Item cannot be empty.";
     if (!r.querySelector(".meter").value) return "Meter required.";
     if (!r.querySelector(".qty").value) return "Qty required.";
     if (!r.querySelector(".kpc-select").value) return "KPC required.";
@@ -403,11 +401,16 @@ function validateForm() {
   return null;
 }
 
-/* SUBMIT FUNCTION */
+/* SUBMIT */
 function submitForm() {
   showLoading();
+
   const err = validateForm();
-  if (err) { hideLoading(); alert(err); return; }
+  if (err) {
+    hideLoading();
+    alert(err);
+    return;
+  }
 
   const payload = {
     productionEntryId: entryId.value,
@@ -427,8 +430,14 @@ function submitForm() {
     method: "POST",
     body: JSON.stringify(payload)
   })
-  .then(() => { hideLoading(); alert("Submitted!"); })
-  .catch(err => { hideLoading(); alert("Submit error: " + err); });
+  .then(() => {
+    hideLoading();
+    alert("Submitted!");
+  })
+  .catch(err => {
+    hideLoading();
+    alert("Error submitting: " + err);
+  });
 }
 </script>
 
