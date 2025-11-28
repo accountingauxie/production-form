@@ -15,7 +15,7 @@
 
 <style>
 /* ===========================================
-    GLOBAL
+    GLOBAL BACKGROUND
 =========================================== */
 body {
   margin: 0;
@@ -45,7 +45,7 @@ body {
 }
 
 /* ===========================================
-    PAGE
+    PAGE CONTAINER
 =========================================== */
 .page {
   max-width: 1200px;
@@ -53,7 +53,7 @@ body {
 }
 
 /* ===========================================
-    LABEL
+    LABEL FORMAT
 =========================================== */
 label {
   font-size: 13px;
@@ -64,7 +64,7 @@ label {
 }
 
 /* ===========================================
-   INPUTS — EXACT SAME AS “FORM PEMESANAN”
+   UNIVERSAL INPUT STYLE (MATCH FORM PEMESANAN)
 =========================================== */
 .input-box,
 .table-input,
@@ -79,7 +79,7 @@ label {
   box-sizing: border-box;
 }
 
-/* Row layout */
+/* Row spacing */
 .row-flex {
   display: flex;
   gap: 20px;
@@ -88,7 +88,7 @@ label {
 }
 
 /* ===========================================
-   TABLE
+            TABLE STYLE
 =========================================== */
 table {
   width: 100%;
@@ -117,30 +117,32 @@ table tr {
   height: 38px !important;
 }
 
+/* IMPORTANT to allow dropdown floating */
+table, tbody, tr, td {
+  overflow: visible !important;
+  position: relative !important;
+}
+
 /* ===========================================
-   CHOICES.JS DROPDOWN
+  CHOICES.JS — DROPDOWN ALWAYS ABOVE
 =========================================== */
-.choices {
-  width: 100% !important;
-}
-
-.choices__list--single {
-  padding: 0 !important;
-  margin: 0 !important;
-  font-size: 13px !important;
-}
-
 .choices__list--dropdown,
 .choices__list[aria-expanded] {
-  background: white !important;
-  border: 1px solid #d0d5dd !important;
-  border-radius: 4px !important;
-  font-size: 13px !important;
-  z-index: 999999 !important;
+    position: absolute !important;
+    z-index: 99999999 !important;
+    background: white !important;
+    border: 1px solid #d0d5dd !important;
+    border-radius: 4px !important;
+    width: 100% !important;
+    font-size: 13px !important;
+}
+
+.choices {
+    width: 100% !important;
 }
 
 /* ===========================================
-   HANDLE + DELETE
+   HANDLE + DELETE ICONS
 =========================================== */
 .row-handle {
   font-size: 13px;
@@ -188,7 +190,7 @@ textarea {
 }
 
 /* ===========================================
-   SUBMIT
+   SUBMIT BUTTON
 =========================================== */
 .submit-btn {
   margin-top: 25px;
@@ -210,7 +212,7 @@ textarea {
 
 <body>
 
-<!-- LOADING -->
+<!-- LOADING OVERLAY -->
 <div id="loadingOverlay" style="
   position:fixed; inset:0;
   background:rgba(255,255,255,0.7);
@@ -226,11 +228,12 @@ textarea {
 
 <div class="header">
   Production Entry
-  <div class="header-right">UXILIUM Accounting Management Services</div>
+  <div class="header-right">UXILIUM — Accounting Management Services</div>
 </div>
 
 <div class="page">
 
+  <!-- FORM TOP -->
   <div class="row-flex">
     <div>
       <label>Date</label>
@@ -284,11 +287,11 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNyFxiIaOMUGfNRMnSd
 let itemList = [];
 let kpcList = [];
 
-/* LOADING */
+/* LOADING TOOLS */
 function showLoading() { document.getElementById("loadingOverlay").style.display = "flex"; }
 function hideLoading() { document.getElementById("loadingOverlay").style.display = "none"; }
 
-/* ENTRY ID */
+/* GENERATE DEFAULT ENTRY ID */
 function generateEntryId() {
   const now = new Date();
   const yy = String(now.getFullYear()).slice(2);
@@ -321,7 +324,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-/* SORTABLE */
+/* SORTABLE ROWS */
 function setupSortable() {
   Sortable.create(document.getElementById("tableBody"), {
     handle: ".row-handle",
@@ -369,7 +372,7 @@ function initChoices(selectEl, optionsArray) {
   new Choices(selectEl, {
     searchEnabled: true,
     itemSelectText: "",
-    shouldSort: false
+    shouldSort: false,
   });
 }
 
@@ -386,18 +389,21 @@ function updateTotals() {
 function validateForm() {
   if (!productionDate.value) return "Date required.";
   if (!machineUsed.value) return "Machine required.";
+
   const rows = document.querySelectorAll("#tableBody tr");
   if (rows.length === 0) return "Add at least 1 item.";
+
   for (const r of rows) {
-    if (!r.querySelector(".item-select").value) return "Item cannot be empty.";
+    if (!r.querySelector(".item-select").value) return "Item required.";
     if (!r.querySelector(".meter").value) return "Meter required.";
     if (!r.querySelector(".qty").value) return "Qty required.";
     if (!r.querySelector(".kpc-select").value) return "KPC required.";
   }
+
   return null;
 }
 
-/* SUBMIT */
+/* SUBMIT FUNCTION */
 function submitForm() {
   showLoading();
   const err = validateForm();
