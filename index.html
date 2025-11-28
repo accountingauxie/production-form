@@ -351,28 +351,41 @@ function addRow() {
 
   tableBody.appendChild(row);
 
-  initChoices(row.querySelector(".item-select"), itemList);
-  initChoices(row.querySelector(".kpc-select"), kpcList);
+initChoices(row.querySelector(".item-select"), itemList, "Select Item");
+initChoices(row.querySelector(".kpc-select"), kpcList, "Select KPC");
+
 
   row.querySelector(".meter").addEventListener("input", updateTotals);
   row.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
 /* INIT CHOICES */
-function initChoices(selectEl, arr) {
-  arr.forEach(v => {
+function initChoices(selectEl, optionsArray, placeholderText = "Select") {
+
+  // Add placeholder option
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = placeholderText;
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  selectEl.appendChild(placeholder);
+
+  // Add real options
+  optionsArray.forEach(v => {
     const opt = document.createElement("option");
     opt.value = v;
-    opt.innerText = v;
+    opt.textContent = v;
     selectEl.appendChild(opt);
   });
 
   new Choices(selectEl, {
     searchEnabled: true,
     itemSelectText: "",
-    shouldSort: false
+    shouldSort: false,
+    placeholderValue: placeholderText
   });
 }
+
 
 /* UPDATE TOTALS */
 function updateTotals() {
