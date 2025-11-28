@@ -399,13 +399,39 @@ function hideLoading() {
 }
 
 /* ======================================================
-   ENTRY ID GENERATOR
+   NEW — GET SERVER LAST ID & CALCULATE NEXT ID
 ====================================================== */
-function generateEntryId() {
-  const now = new Date();
-  const yy = String(now.getFullYear()).slice(2);
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  entryId.value = `FGP${yy}${mm}000001`;
+async function loadNextEntryId() {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
+    const data = await res.json();
+
+    const lastId = data.lastId;
+
+    const today = new Date();
+    const yy = String(today.getFullYear()).slice(2);
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+
+    const prefix = `FGP${yy}${mm}`;
+
+    // If no ID exists or different month prefix → start fresh
+    if (!lastId || !lastId.startsWith(prefix)) {
+      entryId.value = prefix + "0000001";
+      return;
+    }
+
+    // Extract sequence
+    const seq = parseInt(lastId.substring(7)) + 1;
+    entryId.value = prefix + String(seq).padStart(7, "0");
+
+  } catch (err) {
+    console.error("Error loading last ID:", err);
+    // fallback
+    const today = new Date();
+    const yy = String(today.getFullYear()).slice(2);
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    entryId.value = `FGP${yy}${mm}0000001`;
+  }
 }
 
 /* ======================================================
@@ -413,7 +439,8 @@ function generateEntryId() {
 ====================================================== */
 window.addEventListener("DOMContentLoaded", async () => {
   showLoading();
-  generateEntryId();
+
+  await loadNextEntryId();  // ⬅️ USE NEW LOGIC
 
   try {
     const [itemRes, kpcRes] = await Promise.all([
