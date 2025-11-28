@@ -9,50 +9,232 @@
 <!-- Sortable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
-<!-- Choices.js (searchable dropdown) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+<!-- Choices.js -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
 <style>
-/* SAME UI — no changes */
-body { margin:0; padding:0; background:#eef3f9; font-family:Segoe UI, sans-serif; }
-.header { display:flex; justify-content:space-between; align-items:center; background:#0f80d9; color:white; padding:18px 35px; font-size:22px; font-weight:600; }
-.header-right { font-size:14px; font-weight:500; opacity:.9; }
-.page { max-width:1200px; margin:25px auto; }
-
-label { font-size:14px; font-weight:600; margin-bottom:6px; display:block; }
-
-.input-box {
-  padding:11px 13px; border:1px solid #cfd8e3; border-radius:8px;
-  font-size:14px; width:220px; background:#fff;
+body {
+  margin: 0;
+  padding: 0;
+  background: #eef3f9;
+  font-family: Segoe UI, sans-serif;
 }
-.input-box:focus { border-color:#0f80d9; box-shadow:0 0 0 2px rgba(15,128,217,.25); outline:none; }
 
-.row-flex { display:flex; gap:30px; align-items:flex-end; margin-bottom:25px; }
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f80d9;
+  color: white;
+  padding: 18px 35px;
+  font-size: 22px;
+  font-weight: 600;
+}
 
-table { width:100%; border-collapse:collapse; margin-top:20px; background:#fff; border-radius:12px; overflow:hidden; }
-th { background:#e9f0f9; padding:12px; font-size:14px; font-weight:600; border-bottom:1px solid #d8dfe8; color:#2b3d55; }
-td { padding:12px; border-bottom:1px solid #f0f3f7; }
+.header-right {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: .9;
+}
 
-.table-input { width:100%; padding:9px 10px; border-radius:8px; border:1px solid #cfd7e0; font-size:14px; }
-.table-input:focus { border-color:#0f80d9; box-shadow:0 0 0 2px rgba(15,128,217,.25); outline:none; }
+/* PAGE */
+.page {
+  max-width: 1200px;
+  margin: 25px auto;
+}
 
-.row-handle { cursor:grab; width:20px; text-align:center; color:#888; font-size:18px; }
-.delete-btn { cursor:pointer; font-size:18px; color:#d11a2a; text-align:center; }
+/* LABEL */
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
 
-.add-row-btn { margin-top:15px; padding:9px 16px; border-radius:8px; background:#e9f2ff; color:#0f80d9; border:1px solid #c6dbf8; font-weight:600; cursor:pointer; }
-.add-row-btn:hover { background:#dceaff; }
+/* INPUT BOX */
+.input-box {
+  padding: 11px 13px;
+  border: 1px solid #cfd8e3;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 220px;
+  background: #fff;
+}
 
-textarea { width:100%; height:130px; padding:12px; border-radius:10px; border:1px solid #cfd7e0; font-size:15px; background:#fff; }
+.input-box:focus {
+  border-color: #0f80d9;
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  outline: none;
+}
 
-.submit-btn { margin-top:30px; padding:14px 35px; background:#0f80d9; color:white; border:none; border-radius:10px; font-size:16px; font-weight:600; cursor:pointer; }
-.submit-btn:hover { background:#0d6fbb; }
+/* FLEX ROW */
+.row-flex {
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+  margin-bottom: 25px;
+}
 
-#loadingOverlay { position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(255,255,255,0.75); display:none; justify-content:center; align-items:center; z-index:999; }
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-.loader { border:6px solid #d1e3f5; border-top:6px solid #0f80d9; border-radius:50%; width:55px; height:55px; animation:spin .9s linear infinite; }
-@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+th {
+  background: #e9f0f9;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid #d8dfe8;
+  color: #2b3d55;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f3f7;
+}
+
+/* TABLE INPUT */
+.table-input {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid #cfd7e0;
+  font-size: 14px;
+}
+
+.table-input:focus {
+  border-color: #0f80d9;
+  box-shadow: 0 0 0 2px rgba(15,128,217,.25);
+  outline: none;
+}
+
+.row-handle {
+  cursor: grab;
+  width: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 18px;
+}
+
+.delete-btn {
+  cursor: pointer;
+  font-size: 18px;
+  color: #d11a2a;
+  text-align: center;
+}
+
+/* ADD ROW BUTTON */
+.add-row-btn {
+  margin-top: 15px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: #e9f2ff;
+  color: #0f80d9;
+  border: 1px solid #c6dbf8;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-row-btn:hover {
+  background: #dceaff;
+}
+
+/* NOTES */
+textarea {
+  width: 100%;
+  height: 130px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #cfd7e0;
+  font-size: 15px;
+  background: #fff;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+  margin-top: 30px;
+  padding: 14px 35px;
+  background: #0f80d9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background: #0d6fbb;
+}
+
+/* LOADING OVERLAY */
+#loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  display: none;
+}
+
+.loader {
+  border: 6px solid #d1e3f5;
+  border-top: 6px solid #0f80d9;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ------------------------------
+   FIX CHOICES.JS UI
+------------------------------ */
+
+/* Dropdown always above all */
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    z-index: 999999 !important;
+}
+
+/* Make select size equal to meter/qty input */
+.choices__inner {
+    padding: 6px 10px !important;
+    min-height: 38px !important;
+    border-radius: 8px !important;
+    border: 1px solid #cfd7e0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+}
+
+.choices__input {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.choices {
+    margin: 0 !important;
+}
+
 </style>
 </head>
 
@@ -76,15 +258,12 @@ textarea { width:100%; height:130px; padding:12px; border-radius:10px; border:1p
 
     <div>
       <label>Production Machine</label>
-      <select id="machineUsed" class="input-box" onchange="handleMachineOthers()">
+      <select id="machineUsed" class="input-box">
         <option value="">— Select Machine —</option>
         <option value="RENG__009_MX">RENG__009_MX</option>
         <option value="TRUSS010">TRUSS010</option>
         <option value="OTHERS">OTHERS</option>
       </select>
-
-      <input type="text" id="machineOther" class="input-box" placeholder="Enter machine name"
-        style="margin-top:8px; display:none;">
     </div>
 
     <div>
@@ -129,14 +308,7 @@ let kpcList = [];
 function showLoading() { document.getElementById("loadingOverlay").style.display = "flex"; }
 function hideLoading() { document.getElementById("loadingOverlay").style.display = "none"; }
 
-/* MACHINE "OTHERS" */
-function handleMachineOthers() {
-  const val = document.getElementById("machineUsed").value;
-  document.getElementById("machineOther").style.display =
-    val === "OTHERS" ? "block" : "none";
-}
-
-/* GENERATE FGP ID */
+/* GENERATE FGP ID BASED ON TODAY TIMESTAMP */
 function generateEntryId() {
   const now = new Date();
   const yy = String(now.getFullYear()).slice(2);
@@ -164,27 +336,19 @@ window.addEventListener("DOMContentLoaded", async () => {
     hideLoading();
 
   } catch (err) {
+    console.error(err);
     alert("Failed loading Item/KPC list");
     hideLoading();
   }
 });
 
-/* SORTABLE */
+/* SORTABLE ROWS */
 function setupSortable() {
-  Sortable.create(document.getElementById("tableBody"), {
+  const tbody = document.getElementById("tableBody");
+  Sortable.create(tbody, {
     handle: ".row-handle",
-    animation: 150
-  });
-}
-
-/* CREATE SEARCHABLE SELECT */
-function createSearchableSelect(element) {
-  return new Choices(element, {
-    searchEnabled: true,
-    itemSelectText: "",
-    shouldSort: false,
-    allowHTML: true,
-    searchPlaceholderValue: "Search…",
+    animation: 150,
+    ghostClass: "sortable-ghost"
   });
 }
 
@@ -196,7 +360,7 @@ function addRow() {
     <td class="row-handle">⋮⋮</td>
 
     <td>
-      <select class="table-input item-select">
+      <select class="table-input item item-select">
         <option value="">— Select Item —</option>
         ${itemList.map(i => `<option value="${i}">${i}</option>`).join("")}
       </select>
@@ -208,7 +372,7 @@ function addRow() {
     <td><input type="number" class="table-input total" readonly style="background:#f4f6f9;"></td>
 
     <td>
-      <select class="table-input kpc-select">
+      <select class="table-input kpc kpc-select">
         <option value="">— Select KPC —</option>
         ${kpcList.map(k => `<option value="${k}">${k}</option>`).join("")}
       </select>
@@ -219,15 +383,10 @@ function addRow() {
 
   document.getElementById("tableBody").appendChild(tr);
 
-  /* Searchable dropdowns */
-  createSearchableSelect(tr.querySelector(".item-select"));
-  createSearchableSelect(tr.querySelector(".kpc-select"));
-
-  /* Auto total */
   tr.querySelector(".meter").addEventListener("input", updateTotals);
   tr.querySelector(".qty").addEventListener("input", updateTotals);
 
-  updateTotals();
+  applyChoices(tr);
 }
 
 /* DELETE ROW */
@@ -235,11 +394,33 @@ function deleteRow(btn) {
   btn.closest("tr").remove();
 }
 
+/* APPLY CHOICES.JS */
+function applyChoices(row) {
+  const itemSelect = row.querySelector(".item-select");
+  const kpcSelect = row.querySelector(".kpc-select");
+
+  new Choices(itemSelect, {
+    searchEnabled: true,
+    itemSelectText: "",
+    allowHTML: true,
+    position: "bottom",
+    shouldSort: false
+  });
+
+  new Choices(kpcSelect, {
+    searchEnabled: true,
+    itemSelectText: "",
+    allowHTML: true,
+    position: "bottom",
+    shouldSort: false
+  });
+}
+
 /* UPDATE TOTAL */
 function updateTotals() {
   document.querySelectorAll("#tableBody tr").forEach(r => {
     const meter = parseFloat(r.querySelector(".meter").value) || 0;
-    const qty   = parseFloat(r.querySelector(".qty").value) || 0;
+    const qty   = parseFloat(r.querySelector(".qty").value)   || 0;
     r.querySelector(".total").value = meter * qty;
   });
 }
@@ -249,18 +430,14 @@ function validateForm() {
   if (!document.getElementById("productionDate").value) return "Date required";
   if (!document.getElementById("machineUsed").value) return "Machine required";
 
-  if (document.getElementById("machineUsed").value === "OTHERS" &&
-      !document.getElementById("machineOther").value.trim())
-      return "Machine (Others) must be filled";
-
   const rows = document.querySelectorAll("#tableBody tr");
   if (rows.length === 0) return "Add at least 1 item";
 
   for (const r of rows) {
-    if (!r.querySelector(".item-select").value) return "Item cannot be empty";
+    if (!r.querySelector(".item").value) return "Item cannot be empty";
     if (!r.querySelector(".meter").value) return "Meter cannot be empty";
     if (!r.querySelector(".qty").value) return "Qty cannot be empty";
-    if (!r.querySelector(".kpc-select").value) return "KPC cannot be empty";
+    if (!r.querySelector(".kpc").value) return "KPC cannot be empty";
   }
 
   return null;
@@ -277,22 +454,17 @@ function submitForm() {
     return;
   }
 
-  const machineVal =
-    document.getElementById("machineUsed").value === "OTHERS"
-    ? document.getElementById("machineOther").value
-    : document.getElementById("machineUsed").value;
-
   const payload = {
     productionEntryId: document.getElementById("entryId").value,
     productionDate: document.getElementById("productionDate").value,
-    machine: machineVal,
+    machine: document.getElementById("machineUsed").value,
     notes: document.getElementById("notes").value,
     items: Array.from(document.querySelectorAll("#tableBody tr")).map(r => ({
-      item: r.querySelector(".item-select").value,
+      item: r.querySelector(".item").value,
       meter: r.querySelector(".meter").value,
       qty: r.querySelector(".qty").value,
       total: r.querySelector(".total").value,
-      kpc: r.querySelector(".kpc-select").value
+      kpc: r.querySelector(".kpc").value
     }))
   };
 
