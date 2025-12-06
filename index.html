@@ -307,6 +307,37 @@ textarea {
   height: 42px;
   animation: spin .85s linear infinite;
 }
+
+/* Google Sheet Button — Bottom Placement */
+.sheet-bottom-wrapper {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.sheet-bottom-btn {
+  background: #eef4ff;
+  border: 1px solid #cfe0ff;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f5ddb;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sheet-bottom-btn:hover {
+  background: #e2ebff;
+}
+
+/* Icon */
+.sheet-icon {
+  width: 18px;
+  height: 18px;
+}
+
 </style>
 </head>
 
@@ -373,6 +404,22 @@ textarea {
 
     <div class="notes-label">Additional Notes</div>
     <textarea id="notes"></textarea>
+<!-- Google Sheet Button at Bottom -->
+<div class="sheet-bottom-wrapper">
+  <a 
+    href="https://docs.google.com/spreadsheets/d/1KQ4uKabzjyVcw6a-wlqHFha7OWPfgqbghFXS59dZf5Q/edit?gid=1028502721"
+    target="_blank"
+    class="sheet-bottom-btn">
+
+    <!-- Icon Google Sheets (SVG) -->
+    <svg class="sheet-icon" viewBox="0 0 24 24">
+      <path fill="#0F9D58" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+      <path fill="#FFF" d="M7 7h10v2H7zM7 11h10v2H7zM7 15h7v2H7z"/>
+    </svg>
+
+    Open Google Sheet
+  </a>
+</div>
 
     <div class="actions-row">
       <button class="submit-btn" onclick="submitForm()">Submit</button>
