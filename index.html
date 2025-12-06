@@ -25,17 +25,6 @@ body {
   font-size: 13px;
   color: #333;
 }
-/* ==========================================================
-   GLOBAL BASE STYLE — Xero-like
-========================================================== */
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f7fa;
-  font-family: "Segoe UI", Roboto, sans-serif;
-  font-size: 13px;
-  color: #333;
-}
 
 input, select, textarea, .choices__inner {
   transition: all 0.18s ease;
@@ -337,18 +326,9 @@ textarea {
 <div class="page">
   <div class="card">
 
-<div class="card-header">
-  <div class="card-title">Production Entry</div>
-
-  <!-- 🔗 BUTTON GOOGLE SHEET -->
-  <a 
-    href="https://docs.google.com/spreadsheets/d/1KQ4uKabzjyVcw6a-wlqHFha7OWPfgqbghFXS59dZf5Q/edit?gid=1028502721"
-    target="_blank"
-    class="sheet-link-btn">
-      Open Google Sheet
-  </a>
-</div>
-
+    <div class="card-header">
+      <div class="card-title">Production Entry</div>
+    </div>
 
     <!-- Top Form -->
     <div class="row-flex">
@@ -393,31 +373,6 @@ textarea {
 
     <div class="notes-label">Additional Notes</div>
     <textarea id="notes"></textarea>
-
-    <!-- Google Sheet Button at Bottom -->
-/* === GOOGLE SHEET BUTTON STYLE (TAMBAHKAN DI SINI PALING ATAS) === */
-.sheet-link-btn {
-  margin-left: auto;
-  background: #eef4ff;
-  border: 1px solid #cfe0ff;
-  padding: 6px 12px;
-  border-radius: 5px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #1f5ddb;
-  text-decoration: none;
-}
-.sheet-link-btn:hover {
-  background: #e2ebff;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
 
     <div class="actions-row">
       <button class="submit-btn" onclick="submitForm()">Submit</button>
