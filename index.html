@@ -9,91 +9,154 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 <style>
-/* --- MODERN VARIABLES --- */
+/* --- 1. MODERN VARIABLES & RESET --- */
 :root { 
   --border-color: #e2e8f0; 
   --bg-color: #f8fafc; 
-  --primary-blue: #2563eb; 
+  --primary-blue: #3b82f6; /* Lebih soft & modern dari biru standar */
+  --primary-hover: #2563eb;
   --text-dark: #1e293b;
   --text-gray: #64748b;
   --danger: #ef4444;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 * { box-sizing: border-box; outline: none; }
-body { margin: 0; background: var(--bg-color); font-family: 'Inter', "Segoe UI", Roboto, sans-serif; font-size: 13px; color: var(--text-dark); }
+body { margin: 0; background: var(--bg-color); font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13.5px; color: var(--text-dark); -webkit-font-smoothing: antialiased; }
 
-/* --- NAVIGATION --- */
-.top-bar { padding: 12px 32px; background: #fff; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
-.brand { font-weight: 700; font-size: 16px; color: var(--text-dark); display: flex; align-items: center; gap: 6px; }
-.nav-menu { display: flex; gap: 4px; }
-.nav-item { text-decoration: none; color: var(--text-gray); padding: 8px 14px; border-radius: 6px; font-weight: 500; transition: all 0.2s; }
-.nav-item:hover { background: #eff6ff; color: var(--primary-blue); }
-.nav-item.active { background: #eff6ff; color: var(--primary-blue); font-weight: 600; }
+/* --- 2. LAYOUT & CARD --- */
+.top-bar { padding: 14px 32px; background: #fff; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+.brand { font-weight: 700; font-size: 16px; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+.nav-menu { display: flex; gap: 6px; }
+.nav-item { text-decoration: none; color: var(--text-gray); padding: 8px 12px; border-radius: 6px; font-weight: 500; transition: all 0.2s; font-size: 13px; }
+.nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--primary-blue); }
 
-/* --- CONTAINER --- */
-.page { max-width: 1200px; margin: 32px auto; padding: 0 20px; }
-.card { background: #fff; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); padding: 32px; border: 1px solid var(--border-color); }
+.page { max-width: 1280px; margin: 32px auto; padding: 0 24px; }
+.card { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 32px; border: 1px solid var(--border-color); }
 .card-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--text-dark); display: flex; align-items: center; justify-content: space-between; }
 
-/* --- FORMS --- */
-label { font-size: 12px; font-weight: 600; color: var(--text-gray); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.input-box { width: 100%; height: 38px; padding: 0 12px; font-size: 13px; border: 1px solid var(--border-color); border-radius: 6px; background: #fff; transition: border 0.2s; color: var(--text-dark); }
-.input-box:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
-.input-box[readonly] { background: #f1f5f9; color: var(--text-gray); cursor: default; }
+/* --- 3. FORMS & INPUTS --- */
+label { font-size: 12px; font-weight: 600; color: var(--text-gray); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
 
-.row-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+/* Input Standar (Date, Text) */
+.input-box { width: 100%; height: 40px; padding: 0 12px; font-size: 13.5px; border: 1px solid var(--border-color); border-radius: 6px; background: #fff; color: var(--text-dark); transition: border 0.15s, box-shadow 0.15s; }
+.input-box:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+.input-box[readonly] { background: #f1f5f9; color: var(--text-gray); cursor: not-allowed; border-color: #cbd5e1; }
 
-/* --- TABLE --- */
-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; margin-bottom: 16px; }
-th { background: #f8fafc; padding: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-gray); border-bottom: 1px solid var(--border-color); text-align: left; }
-td { padding: 8px; border-bottom: 1px solid var(--border-color); background: #fff; vertical-align: top; }
+.row-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+
+/* --- 4. TABLE STYLING --- */
+table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--border-color); border-radius: 8px; overflow: visible; margin-bottom: 20px; }
+th { background: #f8fafc; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-gray); border-bottom: 1px solid var(--border-color); text-align: left; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); background: #fff; vertical-align: top; }
 tr:last-child td { border-bottom: none; }
 
+/* Input di dalam tabel */
+.table-input { width: 100%; height: 38px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 13.5px; transition: all 0.2s; }
+.table-input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
 .hidden-col { display: none; }
-.table-input { width: 100%; border: 1px solid var(--border-color); border-radius: 4px; padding: 6px; font-size: 13px; }
 
-/* --- CHOICES.JS CUSTOMIZATION (MODERN LOOK) --- */
-.choices { margin-bottom: 0; }
-.choices__inner { min-height: 38px !important; border: 1px solid var(--border-color) !important; background: #fff !important; border-radius: 6px !important; padding: 4px 8px !important; display: flex; align-items: center; }
-.choices__input { background: transparent !important; margin-bottom: 0 !important; }
-.choices__list--dropdown { border: 1px solid var(--border-color) !important; border-radius: 8px !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1) !important; margin-top: 4px !important; padding: 4px !important; }
-.choices__list--dropdown .choices__item { border-radius: 4px; font-size: 13px; padding: 8px 12px; }
-.choices__list--dropdown .choices__item--selectable.is-highlighted { background-color: #eff6ff !important; color: var(--primary-blue); }
+/* --- 5. CHOICES.JS FIX & BEAUTIFICATION (Sangat Penting) --- */
+/* Reset container agar tidak gepeng */
+.choices { margin-bottom: 0; overflow: visible; }
 
-/* Custom Badge untuk Sisa Coil */
+/* Kotak Utama (Inner) */
+.choices__inner { 
+  min-height: 40px !important; 
+  padding: 4px 8px !important; 
+  border: 1px solid var(--border-color) !important; 
+  background-color: #fff !important; 
+  border-radius: 6px !important; 
+  display: flex !important; 
+  align-items: center !important; 
+  font-size: 13.5px !important;
+  transition: border 0.15s, box-shadow 0.15s;
+}
+.choices.is-focused .choices__inner {
+  border-color: var(--primary-blue) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* FIX: Input Search di dalam dropdown yang sering rusak */
+.choices__input { 
+  background-color: transparent !important; 
+  border: none !important; 
+  margin-bottom: 0 !important; 
+  padding: 4px 0 !important;
+  font-size: 13.5px !important;
+  height: auto !important; /* Biarkan auto agar tidak gepeng */
+  min-width: 120px !important; /* Pastikan cukup lebar */
+}
+.choices__input:focus { 
+  box-shadow: none !important; 
+}
+
+/* Dropdown List (Menu Pilihan) */
+.choices__list--dropdown { 
+  border: 1px solid var(--border-color) !important; 
+  border-radius: 8px !important; 
+  box-shadow: var(--shadow-lg) !important; 
+  margin-top: 6px !important; 
+  padding: 6px !important; 
+  background: #fff !important;
+  z-index: 9999 !important; /* Agar selalu di atas */
+  word-break: break-word;
+}
+
+/* Item di dalam list */
+.choices__list--dropdown .choices__item { 
+  border-radius: 6px !important; 
+  font-size: 13px !important; 
+  padding: 8px 12px !important; 
+  margin-bottom: 2px !important;
+  color: var(--text-dark);
+}
+
+/* Hover & Active State */
+.choices__list--dropdown .choices__item--selectable.is-highlighted { 
+  background-color: #eff6ff !important; 
+  color: var(--primary-blue) !important; 
+}
+
+/* Badge Sisa Coil (Style Modern) */
 .kpc-balance { 
   float: right; 
   font-size: 11px; 
   background: #f1f5f9; 
   color: #64748b; 
   padding: 2px 8px; 
-  border-radius: 12px; 
-  font-weight: 500;
+  border-radius: 99px; 
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
 }
 
-/* --- BUTTONS --- */
-.action-btn { border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
-.add-row-btn { background: #eff6ff; color: var(--primary-blue); padding: 8px 16px; }
-.add-row-btn:hover { background: #dbeafe; }
+/* Placeholder Color */
+.choices__placeholder { opacity: 0.6; }
 
-.submit-btn { background: var(--primary-blue); color: #fff; padding: 10px 32px; float: right; margin-top: 16px; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
-.submit-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
+/* --- 6. BUTTONS --- */
+.action-btn { border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; height: 38px; }
 
-.delete-btn { color: var(--text-gray); cursor: pointer; text-align: center; padding: 8px; border-radius: 4px; transition: 0.2s; }
+.add-row-btn { background: #fff; color: var(--primary-blue); border: 1px dashed var(--border-color); width: 100%; margin-top: 10px; }
+.add-row-btn:hover { background: #eff6ff; border-color: var(--primary-blue); }
+
+.submit-btn { background: var(--primary-blue); color: #fff; padding: 0 32px; height: 44px; float: right; margin-top: 16px; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
+.submit-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+.delete-cell { vertical-align: middle; text-align: center; }
+.delete-btn { color: #94a3b8; cursor: pointer; padding: 6px; border-radius: 4px; transition: 0.2s; font-size: 16px; }
 .delete-btn:hover { color: var(--danger); background: #fef2f2; }
 
-.row-handle { cursor: grab; color: #cbd5e1; text-align: center; padding-top: 12px; font-size: 18px; }
+.row-handle { cursor: grab; color: #cbd5e1; text-align: center; vertical-align: middle; font-size: 20px; width: 30px; }
 .row-handle:hover { color: var(--text-gray); }
 
-/* --- LOADING --- */
-#loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(2px); display: none; justify-content: center; align-items: center; z-index: 9999; }
+/* --- 7. UTILS --- */
+textarea { width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-family: inherit; font-size: 13.5px; resize: vertical; min-height: 100px; transition: border 0.15s; }
+textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+#loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(2px); display: none; justify-content: center; align-items: center; z-index: 10000; }
 .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* --- NOTES TEXTAREA --- */
-textarea { width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; font-family: inherit; font-size: 13px; resize: vertical; min-height: 80px; }
-textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
-
 </style>
 </head>
 
