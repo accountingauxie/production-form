@@ -6,376 +6,100 @@
 <title>Production Entry</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Choices.js -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
-<!-- Sortable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 <style>
-/* ==========================================================
-   GLOBAL BASE STYLE — Xero-like
-========================================================== */
-body {
-  margin: 0;
-  padding: 0;
-  background: #f5f7fa;
-  font-family: "Segoe UI", Roboto, sans-serif;
-  font-size: 13px;
-  color: #333;
-}
+/* ... CSS DASAR ... */
+:root { --border: #d6dce1; --border-light: #e3e7eb; --header-bg: #f7f8fa; --text-muted: #697386; --blue: #0075c9; --bg: #f5f7fa; }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 0; background: var(--bg); font-family: "Segoe UI", Roboto, "Arial", sans-serif; font-size: 13px; color: #333; overflow-x: hidden; }
 
-input, select, textarea, .choices__inner {
-  transition: all 0.18s ease;
-}
+/* ... CSS UTAMA SAMA SEPERTI SEBELUMNYA ... */
+.top-bar { padding: 10px 36px; background: #ffffff; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; position: sticky; top: 0; z-index: 1000; }
+.logo-section { display: flex; align-items: center; gap: 8px; color: #1e1e1e; }
+.nav-menu { display: flex; gap: 8px; align-items: center; }
+.nav-item { text-decoration: none; color: #64748b; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 6px; transition: all 0.2s ease; }
+.nav-item:hover { background-color: #f1f5f9; color: var(--blue); }
+.nav-item.active { background-color: #eff6ff; color: var(--blue); font-weight: 600; }
+.page { max-width: 1120px; margin: 32px auto; padding: 0 16px; }
+.card { background: #ffffff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04), 0 14px 30px rgba(15, 23, 42, 0.08); padding: 24px 26px 26px 26px; }
+.card-header { margin-bottom: 18px; }
+.card-title { font-size: 20px; font-weight: 600; color: #1f2933; }
 
-input:hover, select:hover, textarea:hover, .choices__inner:hover {
-  border-color: #b9c4d0 !important;
-}
+/* FORM */
+label { font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: #4a5568; display: block; }
+.input-box, .table-input, .choices__inner { height: 30px !important; min-height: 30px !important; padding: 5px 8px !important; font-size: 12.5px !important; border: 1px solid #d0d7df !important; border-radius: 5px !important; background: #f9fafb !important; transition: all 0.18s ease; }
+input[type="date"] { padding-right: 26px !important; }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* LAYOUT INPUTS */
+.row-flex { display: grid; grid-template-columns: 1.2fr 1fr 1fr; column-gap: 24px; row-gap: 10px; align-items: end; margin-bottom: 18px; }
 
-/* ==========================================================
-   TOP BAR
-========================================================== */
-.top-bar {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  padding: 0 48px;
-  background: #ffffff;
-  border-bottom: 1px solid #e1e4e8;
-}
-
-.brand-main {
-  font-weight: 600;
-  font-size: 17px;
-  letter-spacing: 0.08em;
-  margin-right: 6px;
-}
-
-.brand-sub {
-  font-size: 13px;
-  color: #7a8699;
-}
-
-/* ==========================================================
-   PAGE + CARD
-========================================================== */
-.page {
-  max-width: 1120px;
-  margin: 32px auto;
-  padding: 0 16px;
-}
-
-.card {
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04),
-              0 14px 30px rgba(15, 23, 42, 0.08);
-  padding: 24px 26px 26px 26px;
-}
-
-.card-header {
-  margin-bottom: 18px;
-}
-
-.card-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2933;
-}
-
-/* ==========================================================
-   LABEL
-========================================================== */
-label {
-  font-size: 12.5px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #4a5568;
-  display: block;
-}
-
-/* ==========================================================
-   INPUT STYLE
-========================================================== */
-.input-box,
-.table-input,
-.choices__inner {
-  height: 30px !important;
-  min-height: 30px !important;
-  padding: 5px 8px !important;
-  font-size: 12.5px !important;
-  border: 1px solid #d0d7df !important;
-  border-radius: 5px !important;
-  background: #f9fafb !important;
-  box-sizing: border-box;
-}
-
-.choices__placeholder {
-  color: #999 !important;
-  opacity: 1 !important;
-}
-
-input[type="date"] {
-  padding-right: 26px !important;
-}
-
-/* ==========================================================
-   TOP FORM LAYOUT
-========================================================== */
-.row-flex {
-  display: grid;
-  grid-template-columns: minmax(180px, 1.1fr) minmax(200px, 1.1fr) minmax(210px, 1.1fr);
-  column-gap: 24px;
-  row-gap: 10px;
-  align-items: end;
-  margin-bottom: 18px;
-}
-
-/* ==========================================================
-   TABLE STYLE
-========================================================== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #ffffff;
-  border-radius: 6px;
-  border: 1px solid #e3e6ea;
-  overflow: visible !important;
-}
-
+/* TABLE */
+table { width: 100%; border-collapse: collapse; background: #ffffff; border-radius: 6px; border: 1px solid #e3e6ea; overflow: visible !important; }
 thead tr { height: 32px; }
+th { background: #edf0f5; padding: 6px; font-size: 12.5px; font-weight: 600; border-bottom: 1px solid #e1e4e9; color: #313d4f; text-align: left; }
+td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle !important; }
+.row-handle { font-size: 12px; color: #999; cursor: grab; text-align: center; width: 20px; }
+.delete-btn { font-size: 14px; color: #cc1f2f; cursor: pointer; text-align: center; width: 20px; }
 
-th {
-  background: #edf0f5;
-  padding: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  border-bottom: 1px solid #e1e4e9;
-  color: #313d4f;
-  text-align: left;
-}
+/* DROPDOWN FIX */
+.choices__list--dropdown { z-index: 999999 !important; }
 
-td {
-  padding: 4px;
-  border-bottom: 1px solid #f3f4f6;
-  vertical-align: middle !important;
-}
-
-table tr { height: 34px !important; }
-
-/* Column widths */
-#tableBody td:nth-child(1), #tableBody th:nth-child(1) { width: 20px; }
-#tableBody td:nth-child(2), #tableBody th:nth-child(2) { width: 28%; }
-#tableBody td:nth-child(3), #tableBody th:nth-child(3) { width: 7%; }
-#tableBody td:nth-child(4), #tableBody th:nth-child(4) { width: 7%; }
-#tableBody td:nth-child(5), #tableBody th:nth-child(5) { width: 10%; }
-#tableBody td:nth-child(6), #tableBody th:nth-child(6) { width: 21%; }
-#tableBody td:nth-child(7), #tableBody th:nth-child(7) { width: 20px; }
-
-.row-handle {
-  font-size: 12px;
-  color: #999;
-  cursor: grab;
-  text-align: center;
-}
-
-.delete-btn {
-  font-size: 14px;
-  color: #cc1f2f;
-  cursor: pointer;
-  text-align: center;
-}
+/* BUTTONS */
+.add-row-btn { margin-top: 10px; padding: 5px 12px; font-size: 12px; border-radius: 5px; background: #eef4ff; border: 1px solid #cfe0ff; color: #1f5ddb; font-weight: 600; cursor: pointer; }
+.actions-row { margin-top: 22px; display: flex; justify-content: flex-end; }
+.submit-btn { padding: 9px 24px; font-size: 13.5px; font-weight: 600; border-radius: 6px; background: #0f80d9; color: #ffffff; border: none; cursor: pointer; }
 
 /* ==========================================================
-   DROPDOWN FIX
-========================================================== */
-table, tbody, tr, td {
-  overflow: visible !important;
-  position: relative !important;
+   KHUSUS HIDDEN COLUMN (QTY, METER, TOTAL)
+   ========================================================== */
+.hidden-col {
+  display: none !important;
 }
 
-.choices__list--dropdown,
-.choices__list[aria-expanded] {
-  position: absolute !important;
-  z-index: 99999999 !important;
-  background: #ffffff !important;
-  border: 1px solid #cfd7df !important;
-  border-radius: 5px !important;
-  width: 100% !important;
-  font-size: 12.5px !important;
-}
-
-.choices__list--dropdown .choices__list {
-  max-height: 210px !important;
-  overflow-y: auto !important;
-}
-
-.choices__inner {
-  display: flex !important;
-  align-items: center !important;
-}
-
-.table-input {
-  display: flex;
-  align-items: center;
-}
-
-/* ==========================================================
-   BUTTONS
-========================================================== */
-.add-row-btn {
-  margin-top: 10px;
-  padding: 5px 12px;
-  font-size: 12px;
-  border-radius: 5px;
-  background: #eef4ff;
-  border: 1px solid #cfe0ff;
-  color: #1f5ddb;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.add-row-btn:hover {
-  background: #e2ebff;
-}
-
-.notes-label {
-  margin-top: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #4a5568;
-}
-
-textarea {
-  width: 100%;
-  height: 110px;
-  padding: 8px;
-  font-size: 12.5px;
-  background: #f9fafb;
-  border: 1px solid #d0d7df;
-  border-radius: 6px;
-  margin-top: 4px;
-  resize: vertical;
-}
-
-.actions-row {
-  margin-top: 22px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.submit-btn {
-  padding: 9px 24px;
-  font-size: 13.5px;
-  font-weight: 600;
-  border-radius: 6px;
-  background: #0f80d9;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background: #0b66ad;
-}
-
-/* ==========================================================
-   LOADING OVERLAY
-========================================================== */
-#loadingOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.75);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.loading-spinner {
-  border: 5px solid #dae6f4;
-  border-top: 5px solid #2b6be8;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  animation: spin .85s linear infinite;
-}
-
-/* Google Sheet Button — Bottom Placement */
-.sheet-bottom-wrapper {
-  margin-top: 16px;
-  margin-bottom: 8px;
-}
-
-.sheet-bottom-btn {
-  background: #eef4ff;
-  border: 1px solid #cfe0ff;
-  padding: 7px 14px;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #1f5ddb;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sheet-bottom-btn:hover {
-  background: #e2ebff;
-}
-
-/* Icon */
-.sheet-icon {
-  width: 18px;
-  height: 18px;
-}
-
+/* Loading */
+#loadingOverlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.75); display: none; justify-content: center; align-items: center; z-index: 9999; }
+.loading-spinner { border: 5px solid #dae6f4; border-top: 5px solid #2b6be8; border-radius: 50%; width: 42px; height: 42px; animation: spin .85s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
 <body>
 
-<!-- Loading Overlay -->
-<div id="loadingOverlay">
-  <div class="loading-spinner"></div>
-</div>
+<div id="loadingOverlay"><div class="loading-spinner"></div></div>
 
-<!-- Top Bar -->
 <div class="top-bar">
-  <span class="brand-main">UXILIUM</span>
-  <span class="brand-sub">Accounting Management Services</span>
+  <div class="logo-section">AUXILIUM <span style="font-weight:300;color:#909090; margin-left: 6px;">Accounting Management Services</span></div>
+  <nav class="nav-menu">
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/index.html" class="nav-item">Home</a>
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/receiving/" class="nav-item">Receiving</a>
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/production/" class="nav-item active">Production</a>
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/reviewinvoice/" class="nav-item">Review Invoice Order</a>
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/orderform/" class="nav-item">Sales Order</a>
+  </nav>
 </div>
 
 <div class="page">
   <div class="card">
+    <div class="card-header"><div class="card-title">Production Entry</div></div>
 
-    <div class="card-header">
-      <div class="card-title">Production Entry</div>
-    </div>
-
-    <!-- Top Form -->
     <div class="row-flex">
-      <div>
-        <label>Date</label>
-        <input type="date" id="productionDate" class="input-box">
-      </div>
-
+      
       <div>
         <label>Production Machine</label>
-        <select id="machineUsed" class="input-box">
-          <option value="">— Select Machine —</option>
+        <select id="machineUsed" class="input-box" onchange="onMachineChanged()">
+          <option value="">— Select Machine First —</option>
           <option value="RENG__009_MX">RENG__009_MX</option>
           <option value="TRUSS010">TRUSS010</option>
           <option value="OTHERS">OTHERS</option>
         </select>
+      </div>
+
+      <div>
+        <label>Date</label>
+        <input type="date" id="productionDate" class="input-box">
       </div>
 
       <div>
@@ -384,17 +108,17 @@ textarea {
       </div>
     </div>
 
-    <!-- Table -->
     <table>
       <thead>
         <tr>
-          <th></th>
+          <th style="width:20px;"></th>
           <th>Item</th>
-          <th>Meter</th>
-          <th>Qty</th>
-          <th>Total (m)</th>
+          <th class="hidden-col">Meter</th>
+          <th class="hidden-col">Qty</th>
+          <th class="hidden-col">Total (m)</th>
+          
           <th>KPC</th>
-          <th></th>
+          <th style="width:20px;"></th>
         </tr>
       </thead>
       <tbody id="tableBody"></tbody>
@@ -402,24 +126,8 @@ textarea {
 
     <button class="add-row-btn" onclick="addRow()">+ Add row</button>
 
-    <div class="notes-label">Additional Notes</div>
-    <textarea id="notes"></textarea>
-<!-- Google Sheet Button at Bottom -->
-<div class="sheet-bottom-wrapper">
-  <a 
-    href="https://docs.google.com/spreadsheets/d/1KQ4uKabzjyVcw6a-wlqHFha7OWPfgqbghFXS59dZf5Q/edit?gid=1028502721"
-    target="_blank"
-    class="sheet-bottom-btn">
-
-    <!-- Icon Google Sheets (SVG) -->
-    <svg class="sheet-icon" viewBox="0 0 24 24">
-      <path fill="#0F9D58" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-      <path fill="#FFF" d="M7 7h10v2H7zM7 11h10v2H7zM7 15h7v2H7z"/>
-    </svg>
-
-    Open Google Sheet
-  </a>
-</div>
+    <div style="margin-top: 20px; font-weight:600; color:#4a5568;">Additional Notes</div>
+    <textarea id="notes" style="width:100%; height:80px; margin-top:4px; border:1px solid #d0d7df; border-radius:5px;"></textarea>
 
     <div class="actions-row">
       <button class="submit-btn" onclick="submitForm()">Submit</button>
@@ -429,65 +137,22 @@ textarea {
 </div>
 
 <script>
-const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycby5iiAvTSJ4AqKe7MbfmilGLLrkiDAoYFG72xn_5ruOssqV9bqVUmZeJeIotXfLc1waVA/exec";
+// !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxN4aATAbbnERImp6C7W0vcptthsD7-VMGu_uuxLCdtPFj5GSNnGz4EzKvTxPlpXn7qIg/exec";
 
-let itemList = [];
+let allItemsData = []; // Menyimpan semua data {name, machine}
+let currentFilteredItems = []; // Menyimpan list item untuk mesin yang dipilih
 let kpcList = [];
 
-/* ======================================================
-   LOADING
-====================================================== */
-function showLoading() {
-  loadingOverlay.style.display = "flex";
-}
-function hideLoading() {
-  loadingOverlay.style.display = "none";
-}
+function showLoading() { document.getElementById("loadingOverlay").style.display = "flex"; }
+function hideLoading() { document.getElementById("loadingOverlay").style.display = "none"; }
 
 /* ======================================================
-   NEW — GET SERVER LAST ID & CALCULATE NEXT ID
-====================================================== */
-async function loadNextEntryId() {
-  try {
-    const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
-    const data = await res.json();
-
-    const lastId = data.lastId;
-
-    const today = new Date();
-    const yy = String(today.getFullYear()).slice(2);
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-
-    const prefix = `FGP${yy}${mm}`;
-
-    // If no ID exists or different month prefix → start fresh
-    if (!lastId || !lastId.startsWith(prefix)) {
-      entryId.value = prefix + "0000001";
-      return;
-    }
-
-    // Extract sequence
-    const seq = parseInt(lastId.substring(7)) + 1;
-    entryId.value = prefix + String(seq).padStart(7, "0");
-
-  } catch (err) {
-    console.error("Error loading last ID:", err);
-    // fallback
-    const today = new Date();
-    const yy = String(today.getFullYear()).slice(2);
-    const mm = String(today.getMonth() + 1).padStart(2, "0");
-    entryId.value = `FGP${yy}${mm}0000001`;
-  }
-}
-
-/* ======================================================
-   ON PAGE LOAD
+   LOAD DATA
 ====================================================== */
 window.addEventListener("DOMContentLoaded", async () => {
   showLoading();
-
-  await loadNextEntryId();  // ⬅️ USE NEW LOGIC
+  await loadNextEntryId();  
 
   try {
     const [itemRes, kpcRes] = await Promise.all([
@@ -495,25 +160,56 @@ window.addEventListener("DOMContentLoaded", async () => {
       fetch(`${SCRIPT_URL}?action=getkpc`)
     ]);
 
-    itemList = await itemRes.json();
+    allItemsData = await itemRes.json(); // Format: [{name: "A", machine: "X"}, ...]
     kpcList = await kpcRes.json();
 
+    // Default: Add one row (but items will be empty until Machine is selected)
     addRow();
     setupSortable();
-  } catch (e) {
-    alert("Error loading dropdown data.");
-  }
 
+  } catch (e) {
+    console.error("Fetch Error:", e);
+    alert("Error loading data. Check console.");
+  }
   hideLoading();
 });
 
 /* ======================================================
-   SORTABLE ROWS
+   LOGIC: MACHINE CHANGED
 ====================================================== */
-function setupSortable() {
-  Sortable.create(tableBody, {
-    handle: ".row-handle",
-    animation: 150
+function onMachineChanged() {
+  const machineSelect = document.getElementById("machineUsed");
+  const selectedMachine = machineSelect.value;
+  
+  if (!selectedMachine) {
+    currentFilteredItems = [];
+  } else {
+    // Filter item berdasarkan kolom F (Machine)
+    // Menggunakan normalize/trim agar pencocokan string aman
+    currentFilteredItems = allItemsData
+      .filter(i => i.machine && i.machine.trim() === selectedMachine.trim())
+      .map(i => i.name);
+  }
+
+  // Reset tabel karena pilihan item sebelumnya mungkin tidak valid untuk mesin baru
+  // Atau kita bisa membiarkan barisnya tapi mengupdate dropdownnya.
+  // Untuk keamanan data, lebih baik kita update dropdownnya saja.
+  
+  const allItemSelects = document.querySelectorAll(".item-select");
+  allItemSelects.forEach(selectEl => {
+    // Ambil instance choices yang menempel
+    const choiceInstance = selectEl.choicesInstance;
+    if (choiceInstance) {
+      // Hancurkan instance lama
+      choiceInstance.destroy();
+    }
+    
+    // Kosongkan option
+    selectEl.innerHTML = "";
+    
+    // Re-init dengan list baru
+    initChoices(selectEl, currentFilteredItems, "Select Item");
+    // Simpan instance baru ke properti element agar bisa diakses nanti
   });
 }
 
@@ -522,129 +218,156 @@ function setupSortable() {
 ====================================================== */
 function addRow() {
   const row = document.createElement("tr");
+  const tableBody = document.getElementById("tableBody");
 
+  // Perhatikan class 'hidden-col' pada td Meter, Qty, Total
+  // Value default Qty = 0, Meter = 0 agar backend tidak error hitung
   row.innerHTML = `
     <td class="row-handle">⋮⋮</td>
     <td><select class="item-select"></select></td>
-    <td><input type="number" class="table-input meter" value="6"></td>
-    <td><input type="number" class="table-input qty" value="0"></td>
-    <td><input type="number" class="table-input total" readonly></td>
+    
+    <td class="hidden-col"><input type="number" class="table-input meter" value="0"></td>
+    <td class="hidden-col"><input type="number" class="table-input qty" value="0"></td>
+    <td class="hidden-col"><input type="number" class="table-input total" value="0" readonly></td>
+    
     <td><select class="kpc-select"></select></td>
     <td class="delete-btn" onclick="this.closest('tr').remove()">🗑</td>
   `;
 
   tableBody.appendChild(row);
 
-  initChoices(row.querySelector(".item-select"), itemList, "Select Item");
+  const itemSelect = row.querySelector(".item-select");
+  
+  // Gunakan list yang sudah difilter (currentFilteredItems)
+  initChoices(itemSelect, currentFilteredItems, "Select Item");
+  
   initChoices(row.querySelector(".kpc-select"), kpcList, "Select KPC");
-
-  row.querySelector(".meter").addEventListener("input", updateTotals);
-  row.querySelector(".qty").addEventListener("input", updateTotals);
 }
 
 /* ======================================================
-   INIT CHOICES
+   INIT CHOICES JS
 ====================================================== */
 function initChoices(selectEl, optionsArray, placeholderText) {
+  // Tambah placeholder
   const ph = document.createElement("option");
   ph.value = "";
-  ph.disabled = true;
-  ph.selected = true;
   ph.textContent = placeholderText;
   selectEl.appendChild(ph);
 
-  optionsArray.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    selectEl.appendChild(opt);
-  });
+  // Tambah opsi
+  if (Array.isArray(optionsArray)) {
+    optionsArray.forEach(v => {
+      const opt = document.createElement("option");
+      opt.value = v;
+      opt.textContent = v;
+      selectEl.appendChild(opt);
+    });
+  }
 
-  new Choices(selectEl, {
+  const choice = new Choices(selectEl, {
     searchEnabled: true,
     itemSelectText: "",
     shouldSort: false,
     placeholderValue: placeholderText
   });
+  
+  // Simpan instance ke elemen agar mudah di-destroy saat ganti mesin
+  selectEl.choicesInstance = choice;
 }
 
 /* ======================================================
-   UPDATE TOTALS
+   ID GENERATOR (CLIENT SIDE PREVIEW)
 ====================================================== */
-function updateTotals() {
-  tableBody.querySelectorAll("tr").forEach(r => {
-    const m = parseFloat(r.querySelector(".meter").value) || 0;
-    const q = parseFloat(r.querySelector(".qty").value) || 0;
-    r.querySelector(".total").value = m * q;
-  });
-}
+async function loadNextEntryId() {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
+    const data = await res.json();
+    const lastId = data.lastId;
+    const today = new Date();
+    const yy = String(today.getFullYear()).slice(2);
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const prefix = `FGP${yy}${mm}`;
+    const entryIdField = document.getElementById("entryId");
 
-/* ======================================================
-   VALIDATION
-====================================================== */
-function validateForm() {
-  if (!productionDate.value) return "Date is required.";
-  if (!machineUsed.value) return "Machine is required.";
-
-  const rows = document.querySelectorAll("#tableBody tr");
-  if (!rows.length) return "At least 1 item required.";
-
-  for (const r of rows) {
-    if (!r.querySelector(".item-select").value) return "Item required.";
-    if (!r.querySelector(".meter").value) return "Meter required.";
-    if (!r.querySelector(".qty").value) return "Qty required.";
-    if (!r.querySelector(".kpc-select").value) return "KPC required.";
+    if (!lastId || !lastId.startsWith(prefix)) {
+      entryIdField.value = prefix + "0000001";
+    } else {
+      const seq = parseInt(lastId.substring(7)) + 1;
+      entryIdField.value = prefix + String(seq).padStart(7, "0");
+    }
+  } catch (err) {
+    console.error("Error loading ID", err);
   }
-
-  return null;
 }
 
 /* ======================================================
    SUBMIT
 ====================================================== */
 function submitForm() {
+  const machine = document.getElementById("machineUsed").value;
+  const dateVal = document.getElementById("productionDate").value;
+
+  if (!machine) return alert("Please select a Machine first.");
+  if (!dateVal) return alert("Please select a Date.");
+
+  const rows = document.querySelectorAll("#tableBody tr");
+  if (!rows.length) return alert("At least 1 item required.");
+
+  const itemsPayload = [];
+  let isRowValid = true;
+
+  rows.forEach(r => {
+    const itemVal = r.querySelector(".item-select").value;
+    const kpcVal = r.querySelector(".kpc-select").value;
+    
+    // Validasi: Hanya cek Item dan KPC (karena Qty/Meter di-hide/default 0)
+    if (!itemVal || !kpcVal) {
+      isRowValid = false;
+    }
+
+    itemsPayload.push({
+      item: itemVal,
+      meter: r.querySelector(".meter").value, // kirim 0
+      qty: r.querySelector(".qty").value,     // kirim 0
+      total: r.querySelector(".total").value, // kirim 0
+      kpc: kpcVal
+    });
+  });
+
+  if (!isRowValid) return alert("Please fill in Item and KPC for all rows.");
+
   showLoading();
 
-  const err = validateForm();
-  if (err) {
-    hideLoading();
-    alert(err);
-    return;
-  }
-
   const payload = {
-    productionEntryId: entryId.value,
-    productionDate: productionDate.value,
-    machine: machineUsed.value,
-    notes: notes.value,
-    items: Array.from(document.querySelectorAll("#tableBody tr")).map(r => ({
-      item: r.querySelector(".item-select").value,
-      meter: r.querySelector(".meter").value,
-      qty: r.querySelector(".qty").value,
-      total: r.querySelector(".total").value,
-      kpc: r.querySelector(".kpc-select").value
-    }))
+    productionEntryId: document.getElementById("entryId").value,
+    productionDate: dateVal,
+    machine: machine,
+    notes: document.getElementById("notes").value,
+    items: itemsPayload
   };
 
   fetch(SCRIPT_URL, {
     method: "POST",
     body: JSON.stringify(payload)
   })
-    .then(async res => {
-      const reply = await res.json();
-      hideLoading();
+  .then(res => res.json())
+  .then(reply => {
+    hideLoading();
+    if (reply.status === "success") {
+      alert("Success! ID: " + reply.entryId);
+      window.location.reload(); // Refresh form
+    } else {
+      alert("Error: " + reply.message);
+    }
+  })
+  .catch(err => {
+    hideLoading();
+    alert("Network Error: " + err);
+  });
+}
 
-      if (reply.status === "success") {
-        entryId.value = reply.entryId;
-        alert("Submitted successfully!\nProduction Entry ID: " + reply.entryId);
-      } else {
-        alert("Error saving: " + reply.message);
-      }
-    })
-    .catch(err => {
-      hideLoading();
-      alert("Error submitting: " + err);
-    });
+function setupSortable() {
+  Sortable.create(document.getElementById("tableBody"), { handle: ".row-handle", animation: 150 });
 }
 </script>
 
