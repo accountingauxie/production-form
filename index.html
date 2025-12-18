@@ -98,7 +98,7 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
 
 <script>
 // !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPQUaLy_ttXaucT5ksYDy1omUCID7Y43-MSqvM37FnHwU5aQpoWhvuMsjiVfeQK-F45w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0cqRetrg2EWe8_DvV3doX0IswpMJiuM5v1zEByTPkfeD-0CYhIiezWHN8DFGXInam1Q/exec";
 
 let allItemsData = []; 
 let allKPCData = [];   
@@ -107,6 +107,15 @@ let uniqueMachines = [];
 /* LOAD DATA */
 window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("loadingOverlay").style.display = "flex";
+  
+  // --- SET DEFAULT DATE TO TODAY ---
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  document.getElementById("productionDate").value = `${yyyy}-${mm}-${dd}`;
+  // ---------------------------------
+
   await loadNextEntryId();  
 
   try {
@@ -116,7 +125,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     ]);
 
     allItemsData = await itemRes.json();
-    allKPCData = await kpcRes.json(); // Format: {name, sisa, relatedItem}
+    allKPCData = await kpcRes.json(); 
 
     const machinesSet = new Set(allItemsData.map(i => i.machine).filter(m => m));
     uniqueMachines = Array.from(machinesSet).sort();
@@ -178,7 +187,6 @@ function addRow() {
     if (selectedItem) {
       placeholder = "Select KPC";
       
-      // Filter KPC berdasarkan relatedItem
       kpcOptions = allKPCData
         .filter(k => k.relatedItem === selectedItem)
         .map(k => {
@@ -186,12 +194,10 @@ function addRow() {
           const formattedSisa = new Intl.NumberFormat('id-ID').format(k.sisa || 0);
           return {
             value: k.name,
-            // LABEL YANG DITAMPILKAN: "AKJ001 (Sisa: 5.500)"
+            // LABEL: "AKJ001 (Sisa: 5.500)"
             label: `${k.name} (Sisa: ${formattedSisa})`
           };
         });
-      
-      // "Others" SUDAH DIHAPUS, TIDAK ADA PUSH DISINI
     }
     updateDropdown(kpcSelect, kpcOptions, placeholder);
   });
@@ -206,13 +212,11 @@ function updateDropdown(el, options, placeholder) {
 
 /* HELPER: Init Choices (Generic) */
 function initChoices(el, options, placeholder) {
-  // Tambah Placeholder
   const ph = document.createElement("option");
   ph.value = "";
   ph.textContent = placeholder;
   el.appendChild(ph);
 
-  // Tambah Options ke DOM (Fallback)
   options.forEach(opt => {
     const o = document.createElement("option");
     o.value = opt.value;
@@ -220,7 +224,6 @@ function initChoices(el, options, placeholder) {
     el.appendChild(o);
   });
 
-  // Init Library
   el.choicesInstance = new Choices(el, {
     searchEnabled: true,
     itemSelectText: "",
@@ -229,7 +232,7 @@ function initChoices(el, options, placeholder) {
   });
 }
 
-/* ID & SUBMIT Logic (Sama seperti sebelumnya) */
+/* ID & SUBMIT Logic */
 async function loadNextEntryId() {
   try {
     const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
