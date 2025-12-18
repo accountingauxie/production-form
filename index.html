@@ -79,7 +79,7 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
           <th class="hidden-col">Meter</th>
           <th class="hidden-col">Qty</th>
           <th class="hidden-col">Total</th>
-          <th>KPC</th>
+          <th>KPC (Rincian Sisa Coil)</th>
           <th style="width:20px;"></th>
         </tr>
       </thead>
@@ -98,7 +98,7 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
 
 <script>
 // !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0cqRetrg2EWe8_DvV3doX0IswpMJiuM5v1zEByTPkfeD-0CYhIiezWHN8DFGXInam1Q/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn1OIVcu6RUljERn1SeN0iDg0Tabw4AZ8pETN-1f7T1h3ZEkaBUwRq09OvGyn3mGxRdg/exec";
 
 let allItemsData = []; 
 let allKPCData = [];   
@@ -108,12 +108,13 @@ let uniqueMachines = [];
 window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("loadingOverlay").style.display = "flex";
   
-  // Set Date Today
+  // --- SET DEFAULT DATE TO TODAY ---
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const dd = String(today.getDate()).padStart(2, '0');
   document.getElementById("productionDate").value = `${yyyy}-${mm}-${dd}`;
+  // ---------------------------------
 
   await loadNextEntryId();  
 
@@ -177,7 +178,7 @@ function addRow() {
     }
   });
 
-  // EVENT: Item Change (LOGIKA UTAMA DISINI)
+  // EVENT: Item Change (FILTER KPC & FORMAT LABEL)
   itemSelect.addEventListener("change", function(e) {
     const selectedItem = e.target.value;
     let kpcOptions = [];
@@ -189,14 +190,12 @@ function addRow() {
       kpcOptions = allKPCData
         .filter(k => k.relatedItem === selectedItem)
         .map(k => {
+          // FORMAT ANKA SISA COIL
           const formattedSisa = new Intl.NumberFormat('id-ID').format(k.sisa || 0);
           return {
             value: k.name,
-            label: k.name, // Label tetap bersih (hanya nama) saat dipilih
-            // Informasi tambahan disimpan di customProperties
-            customProperties: {
-              sisaDesc: `(Sisa: ${formattedSisa})` 
-            }
+            // LABEL: "AKJ001 (Sisa: 5.500)"
+            label: `${k.name} (Sisa: ${formattedSisa})`
           };
         });
     }
@@ -211,7 +210,7 @@ function updateDropdown(el, options, placeholder) {
   initChoices(el, options, placeholder);
 }
 
-/* HELPER: Init Choices (MODIFIED FOR TEMPLATE) */
+/* HELPER: Init Choices (Generic) */
 function initChoices(el, options, placeholder) {
   const ph = document.createElement("option");
   ph.value = "";
@@ -222,7 +221,6 @@ function initChoices(el, options, placeholder) {
     const o = document.createElement("option");
     o.value = opt.value;
     o.textContent = opt.label;
-    // Simpan custom props di atribut data jika perlu, tapi Choices js handle lewat opsi
     el.appendChild(o);
   });
 
@@ -230,30 +228,7 @@ function initChoices(el, options, placeholder) {
     searchEnabled: true,
     itemSelectText: "",
     shouldSort: false,
-    placeholderValue: placeholder,
-    choices: options, // Masukkan data langsung ke config supaya customProperties terbaca
-    callbackOnCreateTemplates: function(template) {
-      return {
-        // Template untuk ITEM LIST (Dropdown saat dibuka)
-        choice: (classNames, data) => {
-          const sisaInfo = data.customProperties && data.customProperties.sisaDesc 
-                           ? `<span style="font-size:0.85em; color:#666; margin-left:8px;">${data.customProperties.sisaDesc}</span>` 
-                           : '';
-                           
-          return template(`
-            <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" 
-                 data-select-text="${this.config.itemSelectText}" 
-                 data-choice 
-                 ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} 
-                 data-id="${data.id}" 
-                 data-value="${data.value}" 
-                 ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
-                 <span>${data.label}</span> ${sisaInfo}
-            </div>
-          `);
-        }
-      };
-    }
+    placeholderValue: placeholder
   });
 }
 
