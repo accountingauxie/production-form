@@ -67,8 +67,15 @@ tr:last-child td { border-bottom: none; }
 }
 .choices.is-focused .choices__inner { border-color: var(--primary-blue) !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important; }
 
-/* FIX UTAMA: Sembunyikan Placeholder jika sudah ada Item terpilih */
-.choices.has-choice .choices__placeholder { display: none !important; }
+/* --- !!! FIX PLACEHOLDER GANTUNG !!! --- */
+/* Ini memaksa placeholder HILANG TOTAL saat item dipilih */
+.choices.is-item-selected .choices__placeholder,
+.choices.has-value .choices__placeholder { 
+    display: none !important; 
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+/* --------------------------------------- */
 
 /* Input Search: Pastikan tidak gepeng */
 .choices__input { background: transparent !important; border: none !important; margin: 0 !important; padding: 0 8px !important; height: auto !important; width: auto !important; min-width: 10ch !important; }
@@ -166,7 +173,7 @@ textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(5
 
 <script>
 // !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMAhADzLxtfMTSrC7KnUSieVTy5DYF5kiAlnrHF6zb3GTwo4D8ZiUto4uA8PAw12qpmg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqJcMssNa-hwb1o3KJYnPBtlOX7zRFdtO1-KxsyYEtY-l95ecpANwIdSmNFl_jqetcHg/exec";
 
 let allItemsData = []; 
 let allKPCData = [];    
@@ -268,9 +275,6 @@ function removeRow(btn) {
   const row = btn.closest('tr');
   if(document.querySelectorAll('#tableBody tr').length > 1) {
     row.remove();
-  } else {
-    // Reset baris terakhir jika user menghapus satu-satunya baris
-    // row.querySelectorAll('select').forEach(s => s.choicesInstance && s.choicesInstance.setChoiceByValue(""));
   }
 }
 
