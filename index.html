@@ -92,8 +92,25 @@ tr:last-child td { border-bottom: none; }
 .action-btn { border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; height: 38px; }
 .add-row-btn { background: #fff; color: var(--primary-blue); border: 1px dashed var(--border-color); width: 100%; margin-top: 10px; }
 .add-row-btn:hover { background: #eff6ff; border-color: var(--primary-blue); }
+
 .submit-btn { background: var(--primary-blue); color: #fff; padding: 0 32px; height: 44px; float: right; margin-top: 16px; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
 .submit-btn:hover { background: var(--primary-hover); }
+
+/* NEW: VIEW LIST BUTTON STYLE */
+.view-list-btn {
+  float: left; /* Posisi di kiri */
+  margin-top: 16px;
+  background: #fff;
+  color: var(--text-gray);
+  border: 1px solid var(--border-color);
+  text-decoration: none; /* Hilangkan garis bawah link */
+  padding: 0 20px;
+}
+.view-list-btn:hover {
+  background: #f1f5f9;
+  color: var(--text-dark);
+  border-color: #cbd5e1;
+}
 
 .delete-btn { color: #94a3b8; cursor: pointer; padding: 8px; border-radius: 4px; transition: 0.2s; text-align: center; font-size: 16px; }
 .delete-btn:hover { color: var(--danger); background: #fef2f2; }
@@ -165,7 +182,13 @@ textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(5
     </div>
     
     <div style="margin-top:20px; border-top:1px solid #f1f5f9; padding-top:20px;">
+      
+      <a href="production-form/hasilproduksi/index.html" class="action-btn view-list-btn">
+        Lihat Daftar
+      </a>
+
       <button class="action-btn submit-btn" onclick="submitForm()">Submit Entry</button>
+      
       <div style="clear:both;"></div>
     </div>
   </div>
