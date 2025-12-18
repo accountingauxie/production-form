@@ -9,50 +9,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
 <style>
-/* CSS SAMA SEPERTI SEBELUMNYA */
-:root { --border: #d6dce1; --border-light: #e3e7eb; --header-bg: #f7f8fa; --text-muted: #697386; --blue: #0075c9; --bg: #f5f7fa; }
+/* CSS STYLE */
+:root { --border: #d6dce1; --border-light: #e3e7eb; --bg: #f5f7fa; --blue: #0075c9; }
 * { box-sizing: border-box; }
-body { margin: 0; padding: 0; background: var(--bg); font-family: "Segoe UI", Roboto, "Arial", sans-serif; font-size: 13px; color: #333; overflow-x: hidden; }
+body { margin: 0; background: var(--bg); font-family: "Segoe UI", Roboto, sans-serif; font-size: 13px; color: #333; }
 
-.top-bar { padding: 10px 36px; background: #ffffff; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 600; position: sticky; top: 0; z-index: 1000; }
-.logo-section { display: flex; align-items: center; gap: 8px; color: #1e1e1e; }
-.nav-menu { display: flex; gap: 8px; align-items: center; }
-.nav-item { text-decoration: none; color: #64748b; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 6px; transition: all 0.2s ease; }
-.nav-item:hover { background-color: #f1f5f9; color: var(--blue); }
-.nav-item.active { background-color: #eff6ff; color: var(--blue); font-weight: 600; }
+.top-bar { padding: 10px 36px; background: #fff; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 1000; font-weight: 600; font-size: 15px; }
+.nav-menu { display: flex; gap: 8px; }
+.nav-item { text-decoration: none; color: #64748b; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; }
+.nav-item:hover { background: #f1f5f9; color: var(--blue); }
+.nav-item.active { background: #eff6ff; color: var(--blue); font-weight: 600; }
 
 .page { max-width: 1120px; margin: 32px auto; padding: 0 16px; }
-.card { background: #ffffff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.04), 0 14px 30px rgba(15, 23, 42, 0.08); padding: 24px 26px 26px 26px; }
-.card-header { margin-bottom: 18px; }
-.card-title { font-size: 20px; font-weight: 600; color: #1f2933; }
+.card { background: #fff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(15,23,42,0.04), 0 14px 30px rgba(15,23,42,0.08); padding: 24px; }
+.card-title { font-size: 20px; font-weight: 600; margin-bottom: 18px; color: #1f2933; }
 
-/* FORM ELEMENTS */
-label { font-size: 12.5px; font-weight: 600; margin-bottom: 4px; color: #4a5568; display: block; }
-.input-box, .table-input, .choices__inner { height: 30px !important; min-height: 30px !important; padding: 5px 8px !important; font-size: 12.5px !important; border: 1px solid #d0d7df !important; border-radius: 5px !important; background: #f9fafb !important; transition: all 0.18s ease; }
-input[type="date"] { padding-right: 26px !important; }
+label { font-size: 12.5px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px; }
+.input-box, .choices__inner { height: 32px !important; min-height: 32px !important; padding: 4px 8px !important; font-size: 12.5px !important; border: 1px solid #d0d7df !important; border-radius: 5px !important; background: #f9fafb !important; }
 
-/* LAYOUT */
-.row-flex { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; row-gap: 10px; align-items: end; margin-bottom: 18px; }
+.row-flex { display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; margin-bottom: 18px; }
 
-/* TABLE */
-table { width: 100%; border-collapse: collapse; background: #ffffff; border-radius: 6px; border: 1px solid #e3e6ea; overflow: visible !important; }
-thead tr { height: 32px; }
-th { background: #edf0f5; padding: 6px; font-size: 12.5px; font-weight: 600; border-bottom: 1px solid #e1e4e9; color: #313d4f; text-align: left; }
-td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle !important; }
+table { width: 100%; border-collapse: collapse; border: 1px solid #e3e6ea; border-radius: 6px; background: #fff; }
+th { background: #edf0f5; padding: 8px; font-size: 12.5px; font-weight: 600; border-bottom: 1px solid #e1e4e9; text-align: left; }
+td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
 
 .choices__list--dropdown { z-index: 999999 !important; }
-.row-handle { font-size: 12px; color: #999; cursor: grab; text-align: center; width: 20px; }
-.delete-btn { font-size: 14px; color: #cc1f2f; cursor: pointer; text-align: center; width: 20px; }
-
 .hidden-col { display: none !important; }
+.delete-btn { color: #cc1f2f; cursor: pointer; text-align: center; font-size: 14px; }
+.row-handle { color: #999; cursor: grab; text-align: center; }
 
-.add-row-btn { margin-top: 10px; padding: 5px 12px; font-size: 12px; border-radius: 5px; background: #eef4ff; border: 1px solid #cfe0ff; color: #1f5ddb; font-weight: 600; cursor: pointer; }
-.actions-row { margin-top: 22px; display: flex; justify-content: flex-end; }
-.submit-btn { padding: 9px 24px; font-size: 13.5px; font-weight: 600; border-radius: 6px; background: #0f80d9; color: #ffffff; border: none; cursor: pointer; }
+.add-row-btn { margin-top: 10px; padding: 6px 14px; background: #eef4ff; color: #1f5ddb; border: 1px solid #cfe0ff; border-radius: 5px; font-weight: 600; cursor: pointer; }
+.submit-btn { padding: 9px 24px; background: #0f80d9; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; float: right; margin-top: 22px; }
 
-#loadingOverlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.75); display: none; justify-content: center; align-items: center; z-index: 9999; }
+#loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.75); display: none; justify-content: center; align-items: center; z-index: 9999; }
 .loading-spinner { border: 5px solid #dae6f4; border-top: 5px solid #2b6be8; border-radius: 50%; width: 42px; height: 42px; animation: spin .85s linear infinite; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
@@ -60,29 +51,23 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle !imp
 <div id="loadingOverlay"><div class="loading-spinner"></div></div>
 
 <div class="top-bar">
-  <div class="logo-section">AUXILIUM <span style="font-weight:300;color:#909090; margin-left: 6px;">Accounting Management Services</span></div>
+  <div style="display:flex;align-items:center;gap:8px;color:#1e1e1e;">AUXILIUM <span style="font-weight:300;color:#909090;">Accounting Management</span></div>
   <nav class="nav-menu">
     <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/index.html" class="nav-item">Home</a>
     <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/receiving/" class="nav-item">Receiving</a>
     <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/production/" class="nav-item active">Production</a>
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/reviewinvoice/" class="nav-item">Review Invoice Order</a>
+    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/reviewinvoice/" class="nav-item">Review Invoice</a>
     <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/orderform/" class="nav-item">Sales Order</a>
   </nav>
 </div>
 
 <div class="page">
   <div class="card">
-    <div class="card-header"><div class="card-title">Production Entry</div></div>
+    <div class="card-title">Production Entry</div>
 
     <div class="row-flex">
-      <div>
-        <label>Date</label>
-        <input type="date" id="productionDate" class="input-box">
-      </div>
-      <div>
-        <label>Production Entry ID</label>
-        <input type="text" id="entryId" class="input-box" readonly>
-      </div>
+      <div><label>Date</label><input type="date" id="productionDate" class="input-box"></div>
+      <div><label>Production Entry ID</label><input type="text" id="entryId" class="input-box" readonly></div>
     </div>
 
     <table>
@@ -93,9 +78,8 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle !imp
           <th style="width:30%;">Item</th>
           <th class="hidden-col">Meter</th>
           <th class="hidden-col">Qty</th>
-          <th class="hidden-col">Total (m)</th>
-          
-          <th>KPC</th>
+          <th class="hidden-col">Total</th>
+          <th>KPC (Rincian Sisa Coil)</th>
           <th style="width:20px;"></th>
         </tr>
       </thead>
@@ -103,32 +87,26 @@ td { padding: 4px; border-bottom: 1px solid #f3f4f6; vertical-align: middle !imp
     </table>
 
     <button class="add-row-btn" onclick="addRow()">+ Add row</button>
-
+    
     <div style="margin-top: 20px; font-weight:600; color:#4a5568;">Additional Notes</div>
     <textarea id="notes" style="width:100%; height:80px; margin-top:4px; border:1px solid #d0d7df; border-radius:5px;"></textarea>
-
-    <div class="actions-row">
-      <button class="submit-btn" onclick="submitForm()">Submit</button>
-    </div>
+    
+    <button class="submit-btn" onclick="submitForm()">Submit</button>
+    <div style="clear:both;"></div>
   </div>
 </div>
 
 <script>
-// !!! PASTE DEPLOYMENT ID BARU DISINI !!!
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxh-sYDuIAagCmI4W7w3WdcMlLjM2zRz4NqYkQdGKLMad2GMdLIE9jC710GnpJZtz3d9g/exec";
+// !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPQUaLy_ttXaucT5ksYDy1omUCID7Y43-MSqvM37FnHwU5aQpoWhvuMsjiVfeQK-F45w/exec";
 
-let allItemsData = []; // [{name: "A", machine: "M1"}, ...]
-let allKPCData = [];   // [{name: "K1", relatedItem: "A"}, ...]
+let allItemsData = []; 
+let allKPCData = [];   
 let uniqueMachines = [];
 
-function showLoading() { document.getElementById("loadingOverlay").style.display = "flex"; }
-function hideLoading() { document.getElementById("loadingOverlay").style.display = "none"; }
-
-/* ======================================================
-   LOAD DATA
-====================================================== */
+/* LOAD DATA */
 window.addEventListener("DOMContentLoaded", async () => {
-  showLoading();
+  document.getElementById("loadingOverlay").style.display = "flex";
   await loadNextEntryId();  
 
   try {
@@ -138,211 +116,171 @@ window.addEventListener("DOMContentLoaded", async () => {
     ]);
 
     allItemsData = await itemRes.json();
-    allKPCData = await kpcRes.json(); // Format baru: {name, relatedItem}
+    allKPCData = await kpcRes.json(); // Format: {name, sisa, relatedItem}
 
-    // Get Unique Machines
-    const machinesSet = new Set(allItemsData.map(i => i.machine).filter(m => m && m.trim() !== ""));
+    const machinesSet = new Set(allItemsData.map(i => i.machine).filter(m => m));
     uniqueMachines = Array.from(machinesSet).sort();
 
     addRow(); 
     setupSortable();
-
   } catch (e) {
-    console.error("Fetch Error:", e);
-    alert("Error loading data. Check console.");
+    alert("Error loading data.");
+    console.error(e);
   }
-  hideLoading();
+  document.getElementById("loadingOverlay").style.display = "none";
 });
 
-/* ======================================================
-   ADD ROW
-====================================================== */
+/* ADD ROW */
 function addRow() {
   const row = document.createElement("tr");
-  const tableBody = document.getElementById("tableBody");
-
   row.innerHTML = `
     <td class="row-handle">⋮⋮</td>
     <td><select class="machine-select"></select></td>
     <td><select class="item-select"></select></td>
-    
-    <td class="hidden-col"><input type="number" class="table-input meter" value="0"></td>
-    <td class="hidden-col"><input type="number" class="table-input qty" value="0"></td>
-    <td class="hidden-col"><input type="number" class="table-input total" value="0" readonly></td>
-    
+    <td class="hidden-col"><input class="table-input meter" value="0"></td>
+    <td class="hidden-col"><input class="table-input qty" value="0"></td>
+    <td class="hidden-col"><input class="table-input total" value="0"></td>
     <td><select class="kpc-select"></select></td>
     <td class="delete-btn" onclick="this.closest('tr').remove()">🗑</td>
   `;
-
-  tableBody.appendChild(row);
+  document.getElementById("tableBody").appendChild(row);
 
   const machineSelect = row.querySelector(".machine-select");
   const itemSelect = row.querySelector(".item-select");
   const kpcSelect = row.querySelector(".kpc-select");
 
-  // 1. Init Machine
-  initChoices(machineSelect, uniqueMachines, "Select Machine");
-
-  // 2. Init Item (Empty initially)
+  // Init Machine
+  initChoices(machineSelect, uniqueMachines.map(m => ({value: m, label: m})), "Select Machine");
+  
+  // Init Item & KPC (Empty)
   initChoices(itemSelect, [], "Select Machine First");
-
-  // 3. Init KPC (Empty initially)
   initChoices(kpcSelect, [], "Select Item First");
 
-  // --- LOGIKA FILTER BERTINGKAT ---
-
-  // A. Saat Machine Berubah -> Update list Item
+  // EVENT: Machine Change
   machineSelect.addEventListener("change", function(e) {
-    const selectedMachine = e.target.value;
-    
-    // Clear item & KPC choices
     updateDropdown(itemSelect, [], "Select Machine First");
     updateDropdown(kpcSelect, [], "Select Item First");
 
-    if (selectedMachine) {
-      const filteredItems = allItemsData
-        .filter(i => i.machine === selectedMachine)
-        .map(i => i.name);
-      
-      updateDropdown(itemSelect, filteredItems, "Select Item");
+    if (e.target.value) {
+      const filtered = allItemsData
+        .filter(i => i.machine === e.target.value)
+        .map(i => ({ value: i.name, label: i.name }));
+      updateDropdown(itemSelect, filtered, "Select Item");
     }
   });
 
-  // B. Saat Item Berubah -> Update list KPC
+  // EVENT: Item Change (FILTER KPC & FORMAT LABEL)
   itemSelect.addEventListener("change", function(e) {
     const selectedItem = e.target.value;
-    
-    // Default placeholder
-    let kpcdPlaceholder = "Select Item First";
-    let filteredKPC = [];
+    let kpcOptions = [];
+    let placeholder = "Select Item First";
 
     if (selectedItem) {
-      kpcdPlaceholder = "Select KPC";
-      // Filter KPC berdasarkan kolom D (relatedItem)
-      filteredKPC = allKPCData
-        .filter(k => k.relatedItem === selectedItem)
-        .map(k => k.name);
+      placeholder = "Select KPC";
       
-      // Tambahkan opsi "Others" selalu
-      filteredKPC.push("Others");
+      // Filter KPC berdasarkan relatedItem
+      kpcOptions = allKPCData
+        .filter(k => k.relatedItem === selectedItem)
+        .map(k => {
+          // FORMAT ANKA SISA COIL
+          const formattedSisa = new Intl.NumberFormat('id-ID').format(k.sisa || 0);
+          return {
+            value: k.name,
+            // LABEL YANG DITAMPILKAN: "AKJ001 (Sisa: 5.500)"
+            label: `${k.name} (Sisa: ${formattedSisa})`
+          };
+        });
+      
+      // "Others" SUDAH DIHAPUS, TIDAK ADA PUSH DISINI
     }
-
-    updateDropdown(kpcSelect, filteredKPC, kpcdPlaceholder);
+    updateDropdown(kpcSelect, kpcOptions, placeholder);
   });
 }
 
-/* ======================================================
-   HELPER: UPDATE DROPDOWN
-====================================================== */
-function updateDropdown(selectEl, newOptions, placeholder) {
-  if (selectEl.choicesInstance) {
-    selectEl.choicesInstance.destroy();
-  }
-  selectEl.innerHTML = "";
-  initChoices(selectEl, newOptions, placeholder);
+/* HELPER: Update Choices */
+function updateDropdown(el, options, placeholder) {
+  if (el.choicesInstance) el.choicesInstance.destroy();
+  el.innerHTML = "";
+  initChoices(el, options, placeholder);
 }
 
-/* ======================================================
-   INIT CHOICES
-====================================================== */
-function initChoices(selectEl, optionsArray, placeholderText) {
+/* HELPER: Init Choices (Generic) */
+function initChoices(el, options, placeholder) {
+  // Tambah Placeholder
   const ph = document.createElement("option");
   ph.value = "";
-  ph.textContent = placeholderText;
-  selectEl.appendChild(ph);
+  ph.textContent = placeholder;
+  el.appendChild(ph);
 
-  if (Array.isArray(optionsArray)) {
-    optionsArray.forEach(v => {
-      const opt = document.createElement("option");
-      opt.value = v;
-      opt.textContent = v;
-      selectEl.appendChild(opt);
-    });
-  }
+  // Tambah Options ke DOM (Fallback)
+  options.forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt.value;
+    o.textContent = opt.label;
+    el.appendChild(o);
+  });
 
-  const choice = new Choices(selectEl, {
+  // Init Library
+  el.choicesInstance = new Choices(el, {
     searchEnabled: true,
     itemSelectText: "",
     shouldSort: false,
-    placeholderValue: placeholderText
+    placeholderValue: placeholder
   });
-  
-  selectEl.choicesInstance = choice;
 }
 
-/* ======================================================
-   SUBMIT & ID
-====================================================== */
+/* ID & SUBMIT Logic (Sama seperti sebelumnya) */
 async function loadNextEntryId() {
   try {
     const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
     const data = await res.json();
-    const lastId = data.lastId;
     const today = new Date();
-    const prefix = `FGP${String(today.getFullYear()).slice(2)}${String(today.getMonth() + 1).padStart(2, "0")}`;
-    const entryIdField = document.getElementById("entryId");
-
+    const prefix = `FGP${String(today.getFullYear()).slice(2)}${String(today.getMonth()+1).padStart(2,"0")}`;
+    const lastId = data.lastId;
+    
     if (!lastId || !lastId.startsWith(prefix)) {
-      entryIdField.value = prefix + "0000001";
+      document.getElementById("entryId").value = prefix + "0000001";
     } else {
-      entryIdField.value = prefix + String(parseInt(lastId.substring(7)) + 1).padStart(7, "0");
+      document.getElementById("entryId").value = prefix + String(parseInt(lastId.substring(7))+1).padStart(7,"0");
     }
-  } catch (err) { console.error("Error ID", err); }
+  } catch(e) {}
 }
 
 function submitForm() {
   const dateVal = document.getElementById("productionDate").value;
-  if (!dateVal) return alert("Please select a Date.");
-
+  if (!dateVal) return alert("Select Date");
+  
   const rows = document.querySelectorAll("#tableBody tr");
-  if (!rows.length) return alert("At least 1 item required.");
+  if (!rows.length) return alert("Add at least 1 row");
 
-  const itemsPayload = [];
-  let isRowValid = true;
+  const items = [];
+  let valid = true;
 
   rows.forEach(r => {
-    const machineVal = r.querySelector(".machine-select").value;
-    const itemVal = r.querySelector(".item-select").value;
-    const kpcVal = r.querySelector(".kpc-select").value;
-
-    if (!machineVal || !itemVal || !kpcVal) isRowValid = false;
-
-    itemsPayload.push({
-      machine: machineVal,
-      item: itemVal,
-      meter: r.querySelector(".meter").value,
-      qty: r.querySelector(".qty").value,
-      total: r.querySelector(".total").value,
-      kpc: kpcVal
-    });
+    const m = r.querySelector(".machine-select").value;
+    const i = r.querySelector(".item-select").value;
+    const k = r.querySelector(".kpc-select").value;
+    if(!m || !i || !k) valid = false;
+    items.push({ machine: m, item: i, kpc: k, meter:0, qty:0, total:0 });
   });
 
-  if (!isRowValid) return alert("Please fill in Machine, Item, and KPC for all rows.");
+  if (!valid) return alert("Fill all fields (Machine, Item, KPC)");
 
-  showLoading();
-
+  document.getElementById("loadingOverlay").style.display = "flex";
   fetch(SCRIPT_URL, {
     method: "POST",
     body: JSON.stringify({
       productionEntryId: document.getElementById("entryId").value,
       productionDate: dateVal,
       notes: document.getElementById("notes").value,
-      items: itemsPayload
+      items: items
     })
   })
   .then(res => res.json())
-  .then(reply => {
-    hideLoading();
-    if (reply.status === "success") {
-      alert("Success! ID: " + reply.entryId);
-      window.location.reload();
-    } else {
-      alert("Error: " + reply.message);
-    }
-  })
-  .catch(err => {
-    hideLoading();
-    alert("Network Error: " + err);
+  .then(r => {
+    document.getElementById("loadingOverlay").style.display = "none";
+    if(r.status === "success") { alert("Success!"); window.location.reload(); }
+    else alert("Error: " + r.message);
   });
 }
 
