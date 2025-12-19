@@ -35,7 +35,7 @@ body { margin: 0; background: var(--bg-color); font-family: 'Inter', system-ui, 
 .nav-item { text-decoration: none; color: var(--text-gray); padding: 8px 12px; border-radius: 6px; font-weight: 500; transition: all 0.2s; font-size: 13px; }
 .nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--primary-blue); }
 
-.page { max-width: 1480px; margin: 32px auto; padding: 0 24px; } /* Lebar sedikit diperbesar */
+.page { max-width: 1380px; margin: 32px auto; padding: 0 24px; }
 .card { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 32px; border: 1px solid var(--border-color); }
 .card-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
 
@@ -58,9 +58,6 @@ tr:last-child td { border-bottom: none; }
 
 /* WE Number Input (Auto Generated) */
 .we-number { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; font-weight: 600; font-family: 'Monaco', 'Consolas', monospace; font-size: 12px; }
-
-/* Sisa Coil Input Style */
-.sisa-coil { background-color: #f8fafc; color: #475569; font-weight: 700; text-align: right; cursor: default; }
 
 /* --- 5. CHOICES.JS FIXED --- */
 .choices { margin-bottom: 0; overflow: visible; }
@@ -178,7 +175,6 @@ textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(5
           <th class="hidden-col">Qty</th>
           <th class="hidden-col">Total</th>
           <th style="width:25%;">KPC</th> 
-          <th style="width:12%;">Sisa Coil</th> 
           <th>WE Number</th>
           <th style="width:40px;"></th>
         </tr>
@@ -207,11 +203,11 @@ textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(5
 </div>
 
 <script>
-// !!! PASTIKAN URL INI BENAR !!!
+// !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8yMkeTBz9MmpkHvBDAXAMwebvdwpjjkpeyPhruGQO5rDqKtzcMuiCMOFAes9D7Xca4A/exec";
 
 let allItemsData = []; 
-let allKPCData = [];     
+let allKPCData = [];    
 let uniqueMachines = [];
 
 /* --- INITIAL LOAD --- */
@@ -241,6 +237,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     addRow(); 
     setupSortable();
   } catch (e) {
+    // ALERT MODERN UNTUK ERROR LOAD
     Swal.fire({
         icon: 'error',
         title: 'Network Error',
@@ -263,11 +260,6 @@ function addRow() {
     <td class="hidden-col"><input class="table-input qty" type="number" value="0"></td>
     <td class="hidden-col"><input class="table-input total" type="number" value="0"></td>
     <td><select class="kpc-select"></select></td>
-    
-    <td>
-        <input class="table-input sisa-coil" readonly placeholder="0">
-    </td>
-
     <td><input class="table-input we-number" readonly placeholder="Auto..."></td>
     <td class="delete-cell">
        <div class="delete-btn" onclick="removeRow(this)">✕</div>
@@ -278,7 +270,6 @@ function addRow() {
   const machineSelect = row.querySelector(".machine-select");
   const itemSelect = row.querySelector(".item-select");
   const kpcSelect = row.querySelector(".kpc-select");
-  const sisaInput = row.querySelector(".sisa-coil");
 
   initChoices(machineSelect, uniqueMachines.map(m => ({value: m, label: m})), "Select Machine");
   initChoices(itemSelect, [], "Select Machine First");
@@ -289,7 +280,6 @@ function addRow() {
     updateDropdown(itemSelect, [], "Select Machine First");
     updateDropdown(kpcSelect, [], "Select Item First", true);
     row.querySelector(".we-number").value = "";
-    sisaInput.value = ""; // Clear Sisa
 
     if (e.target.value) {
       const filtered = allItemsData
@@ -305,7 +295,6 @@ function addRow() {
     let placeholder = "Select Item First";
     
     row.querySelector(".we-number").value = ""; 
-    sisaInput.value = ""; // Clear Sisa
     
     let kpcOptions = [];
     if (selectedItem) {
@@ -316,22 +305,8 @@ function addRow() {
     refreshKPCOptionsForElement(kpcSelect, kpcOptions, placeholder);
   });
 
-  // EVENT: KPC Change (Trigger WE Number & Sisa Coil)
+  // EVENT: KPC Change (Trigger WE Number & Lock other rows)
   kpcSelect.addEventListener("change", function(e) {
-      const selectedKPC = e.target.value;
-      
-      // 1. Set Sisa Coil
-      if (selectedKPC) {
-        const selectedData = allKPCData.find(k => k.name === selectedKPC);
-        if (selectedData) {
-            // Format angka menjadi ribuan (misal: 7,000)
-            sisaInput.value = new Intl.NumberFormat('en-US').format(selectedData.sisa || 0);
-        }
-      } else {
-        sisaInput.value = "";
-      }
-
-      // 2. Set WE Number
       calculateWENumber(row); 
   });
 }
@@ -393,8 +368,8 @@ function refreshKPCOptionsForElement(el, rawData, placeholder) {
         .map(k => {
             const formattedSisa = new Intl.NumberFormat('id-ID').format(k.sisa || 0);
             return {
-                value: k.name,              
-                label: k.name,              
+                value: k.name,             
+                label: k.name,             
                 customProperties: { sisa: formattedSisa }
             };
         });
@@ -474,7 +449,7 @@ async function loadNextEntryId() {
   } catch(e) {}
 }
 
-/* --- SUBMIT LOGIC --- */
+/* --- UPDATED SUBMIT LOGIC WITH MODERN POPUP --- */
 function submitForm() {
   const dateVal = document.getElementById("productionDate").value;
   
@@ -543,7 +518,7 @@ function submitForm() {
     return;
   }
 
-  // CONFIRMATION POPUP
+  // MODERN CONFIRMATION POPUP
   Swal.fire({
     title: 'Submit Entry?',
     text: "Are you sure you want to submit this production entry?",
@@ -556,6 +531,7 @@ function submitForm() {
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
+      // IF USER CLICKS YES -> SHOW LOADING & FETCH
       document.getElementById("loadingOverlay").style.display = "flex";
 
       fetch(SCRIPT_URL, {
@@ -572,6 +548,7 @@ function submitForm() {
         document.getElementById("loadingOverlay").style.display = "none";
         
         if(r.status === "success") { 
+            // SUCCESS POPUP
             Swal.fire({
               icon: 'success',
               title: 'Submitted!',
@@ -583,6 +560,7 @@ function submitForm() {
                window.location.reload(); 
             });
         } else { 
+            // SERVER ERROR POPUP
             Swal.fire({
               icon: 'error',
               title: 'Submission Error',
@@ -593,6 +571,7 @@ function submitForm() {
       })
       .catch(err => {
           document.getElementById("loadingOverlay").style.display = "none";
+          // NETWORK ERROR POPUP
           Swal.fire({
               icon: 'error',
               title: 'Connection Failed',
