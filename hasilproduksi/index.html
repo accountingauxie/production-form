@@ -123,7 +123,7 @@
 <script>
 // =================================================================
 // GANTI URL API
-const API_URL = "https://script.google.com/macros/s/AKfycbz21uHS30oPD5Df69o6ngvFMK9y2l1E7qOoI1sJAgbEtbNWhSuVystF2SQhA4blU40n/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbxMiVPIZssC1Max6PDlDSwzwYM1-py44qVm8P2Pi8iTsnRMDtHC5vQI4c686mErIDg/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
@@ -337,7 +337,7 @@ function renderModalRow(item = null) {
       <td class="px-2 py-3 text-center">${deleteBtn}</td>
     `;
   } else {
-    // READONLY MODE - SHOW INPUTS
+    // READONLY MODE - SHOW INPUTS INCLUDING WEIGHT
     html = `
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly machine-select" value="${machineVal}" readonly></td>
       <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700">${itemVal}</span></td>
@@ -364,6 +364,8 @@ function renderModalRow(item = null) {
 
 function addNewRow() { renderModalRow(); }
 function deleteRow(btn) { btn.closest('tr').remove(); }
+
+// --- CASCADE FILTER LOGIC ---
 
 function onMachineChange(el, resetValue = true) {
   if(!el) return;
@@ -419,20 +421,21 @@ function updateRowWE(el) {
 function renderFooterButtons() {
   const footer = document.getElementById('modal-footer');
   if (IS_EDIT_MODE) {
+    // MODE EDIT: Hanya Save Changes (Kuning) & Cancel
     footer.innerHTML = `
-      <button onclick="submitForm('replaceBatch', true)" class="btn-primary bg-blue-600 text-white px-5 py-2.5 rounded hover:bg-blue-700">Complete Production</button>
-      <button onclick="submitForm('replaceBatch', false)" class="btn-sec bg-amber-100 text-amber-800 px-5 py-2.5 rounded hover:bg-amber-200">Save Changes</button>
-      <button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50">Cancel</button>`;
+      <button onclick="submitForm('replaceBatch')" class="bg-amber-400 text-amber-900 px-5 py-2.5 rounded hover:bg-amber-500 font-semibold shadow-sm">Save Changes</button>
+      <button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50 font-medium text-slate-700 shadow-sm">Cancel</button>`;
   } else {
+    // MODE INPUT: Submit & Complete (Biru) & Cancel
     footer.innerHTML = `
-      <button onclick="submitForm('submitResult')" class="btn-primary bg-blue-600 text-white px-5 py-2.5 rounded hover:bg-blue-700">Submit & Complete</button>
-      <button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50">Cancel</button>`;
+      <button onclick="submitForm('submitResult')" class="bg-blue-600 text-white px-5 py-2.5 rounded hover:bg-blue-700 font-semibold shadow-sm">Submit & Complete</button>
+      <button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50 font-medium text-slate-700 shadow-sm">Cancel</button>`;
   }
 }
 
 function closeModal() { document.getElementById('modalResult').classList.add('hidden'); }
 
-async function submitForm(action, forceComplete = false) {
+async function submitForm(action) {
   const rows = document.querySelectorAll('#modal-table-body tr');
   const items = [];
   rows.forEach(tr => {
@@ -457,11 +460,11 @@ async function submitForm(action, forceComplete = false) {
     });
   });
 
-  const msg = forceComplete || action === 'submitResult' ? "Selesaikan produksi?" : "Simpan perubahan data?";
+  const msg = action === 'submitResult' ? "Selesaikan produksi? Data akan dipindahkan ke tab Completed." : "Simpan perubahan rencana produksi?";
   if(!confirm(msg)) return;
   
   closeModal();
-  await postAction(action, { batchId: CURRENT_BATCH_ID, items: items, forceComplete: forceComplete });
+  await postAction(action, { batchId: CURRENT_BATCH_ID, items: items });
 }
 
 async function postAction(action, payload) {
