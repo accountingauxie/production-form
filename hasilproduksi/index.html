@@ -13,6 +13,13 @@
   .active-tab { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
   .inactive-tab { color: #64748b; border-bottom: 2px solid transparent; }
   .inactive-tab:hover { color: #334155; border-bottom: 2px solid #e2e8f0; }
+  
+  /* Style untuk Sub-Menu Pills */
+  .sub-pill { padding: 4px 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+  .sub-pill-active { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+  .sub-pill-inactive { background-color: white; color: #64748b; border-color: #e2e8f0; }
+  .sub-pill-inactive:hover { background-color: #f1f5f9; color: #334155; }
+
   #loading { position: fixed; inset: 0; background: rgba(255,255,255,0.85); z-index: 50; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
   .spinner { border: 4px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 50%; width: 45px; height: 45px; animation: spin 0.8s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -32,28 +39,33 @@
   <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Production Management</h1>
-      <p class="text-sm text-slate-500 mt-1">Manage production queue, results, and syncing.</p>
+      <p class="text-sm text-slate-500 mt-1">Manage production queue, results, and Xero sync.</p>
     </div>
     <button onclick="fetchData()" class="bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-lg text-sm font-medium transition shadow-sm flex items-center justify-center">
       <i class="fas fa-sync-alt mr-2"></i> Refresh Data
     </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
       <div class="absolute right-0 top-0 h-full w-1 bg-blue-500"></div>
-      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Queue (Siap Produksi)</div>
-      <div class="flex items-baseline"><span class="text-4xl font-bold text-slate-800" id="count-queue">0</span><span class="ml-2 text-sm text-slate-500">batches</span></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Queue</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-queue">0</span></div>
     </div>
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
       <div class="absolute right-0 top-0 h-full w-1 bg-emerald-500"></div>
-      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Completed (Selesai)</div>
-      <div class="flex items-baseline"><span class="text-4xl font-bold text-slate-800" id="count-completed">0</span><span class="ml-2 text-sm text-slate-500">need approval</span></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Completed</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-completed">0</span></div>
     </div>
     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
       <div class="absolute right-0 top-0 h-full w-1 bg-indigo-500"></div>
-      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Ready to Sync</div>
-      <div class="flex items-baseline"><span class="text-4xl font-bold text-slate-800" id="count-import">0</span><span class="ml-2 text-sm text-slate-500">to Xero</span></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">To Sync</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-import">0</span></div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+      <div class="absolute right-0 top-0 h-full w-1 bg-gray-500"></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Monitoring</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-monitoring">0</span></div>
     </div>
   </div>
 
@@ -62,7 +74,21 @@
       <button onclick="switchTab('queue')" id="tab-queue" class="active-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Siap Untuk Di Produksi</button>
       <button onclick="switchTab('completed')" id="tab-completed" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Sudah Di Produksi</button>
       <button onclick="switchTab('import')" id="tab-import" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Siap Import Xero</button>
+      <button onclick="switchTab('monitoring')" id="tab-monitoring" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Monitoring Xero</button>
     </nav>
+  </div>
+
+  <div id="monitoring-submenu" class="hidden mb-6 flex gap-3 overflow-x-auto pb-2">
+    <button onclick="switchSubTab('all')" id="sub-all" class="sub-pill sub-pill-active">All Status</button>
+    <button onclick="switchSubTab('Proses Import')" id="sub-proses" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-spinner fa-spin mr-1.5 text-xs"></i>Proses Import
+    </button>
+    <button onclick="switchSubTab('Sukses Impor')" id="sub-sukses" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-check-circle mr-1.5 text-xs text-emerald-500"></i>Sukses Impor
+    </button>
+    <button onclick="switchSubTab('Gagal Import')" id="sub-gagal" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-times-circle mr-1.5 text-xs text-red-500"></i>Gagal Import
+    </button>
   </div>
 
   <div class="mb-6">
@@ -96,25 +122,19 @@
         <div class="overflow-visible rounded-lg border border-slate-200 shadow-sm">
           <table class="min-w-full divide-y divide-slate-200 bg-white">
             <thead class="bg-slate-50">
-              <tr id="modal-table-header">
-                </tr>
+              <tr id="modal-table-header"></tr>
             </thead>
             <tbody id="modal-table-body" class="divide-y divide-slate-200"></tbody>
           </table>
-          
           <div id="add-row-container" class="hidden bg-slate-50 px-4 py-3 border-t border-slate-200">
-             <button onclick="addNewRow()" class="text-sm text-blue-600 font-semibold hover:text-blue-800 flex items-center">
-               <i class="fas fa-plus-circle mr-2"></i> Add Row
-             </button>
+             <button onclick="addNewRow()" class="text-sm text-blue-600 font-semibold hover:text-blue-800 flex items-center"><i class="fas fa-plus-circle mr-2"></i> Add Row</button>
           </div>
         </div>
-        
         <div class="mt-4 flex items-start p-3 bg-amber-50 border border-amber-200 rounded-lg" id="modal-warning">
           <i class="fas fa-exclamation-circle text-amber-500 mt-0.5 mr-2"></i>
           <p class="text-xs text-amber-700" id="modal-warning-text"></p>
         </div>
       </div>
-
       <div class="bg-white px-6 py-4 flex flex-row-reverse gap-3 border-t border-slate-100" id="modal-footer"></div>
     </div>
   </div>
@@ -122,17 +142,21 @@
 
 <script>
 // =================================================================
-// SILAKAN GANTI URL API DI BAWAH INI DENGAN DEPLOYMENT BARU ANDA
-const API_URL = "https://script.google.com/macros/s/AKfycbyf8xE_8V3S2AG9HVHjqwA1mfpU7rx-C45rBUST91SoxjFhqYmZ1dCvoKT5AtZzGXk0/exec"; 
+// GANTI URL API JIKA DIPERLUKAN
+const API_URL = "https://script.google.com/macros/s/AKfycbzX-3Ne7F646Hd-zY9MM--aYlbCQGLfuxwBowmKeqFoQ6-sDB3GzMY_1StSPMkY2x0F/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
 let GROUPED_DATA = {};
 let OPTIONS = { items: [], kpcs: [] };
 let CURRENT_TAB = 'queue';
+let CURRENT_SUB_TAB = 'all'; // Variable baru untuk Sub Menu
 let CURRENT_BATCH_ID = null;
 let CURRENT_BATCH_DATE = null;
 let CURRENT_MODE = ''; 
+
+// Daftar Status untuk Tab Monitoring
+const MONITORING_STATUSES = ['Proses Import', 'Sukses Impor', 'Gagal Import'];
 
 window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
@@ -155,8 +179,9 @@ async function fetchData() {
 function processData() {
   GROUPED_DATA = {};
   RAW_DATA.forEach(row => {
-    // FILTER UPDATED: Tambahkan 'Proses Import'
-    if(!['Siap Untuk Di Produksi', 'Sudah Di Produksi', 'Siap Import', 'Proses Import'].includes(row.status)) return;
+    // FILTER UTAMA: Pastikan status-status baru (monitoring) juga masuk
+    const allowed = ['Siap Untuk Di Produksi', 'Sudah Di Produksi', 'Siap Import', ...MONITORING_STATUSES];
+    if(!allowed.includes(row.status)) return;
     
     if (!GROUPED_DATA[row.id]) {
       GROUPED_DATA[row.id] = { id: row.id, date: row.date, status: row.status, timestamp: row.timestamp, items: [] };
@@ -166,24 +191,67 @@ function processData() {
 }
 
 function updateCounts() {
-  let q = 0, c = 0, i = 0;
+  let q = 0, c = 0, i = 0, m = 0;
   Object.values(GROUPED_DATA).forEach(batch => {
     const st = batch.items[0].status;
     if (st === 'Siap Untuk Di Produksi') q++;
     else if (st === 'Sudah Di Produksi') c++;
     else if (st === 'Siap Import') i++;
+    else if (MONITORING_STATUSES.includes(st)) m++; // Count untuk monitoring
   });
   document.getElementById('count-queue').innerText = q;
   document.getElementById('count-completed').innerText = c;
   document.getElementById('count-import').innerText = i;
+  document.getElementById('count-monitoring').innerText = m;
 }
 
 function switchTab(tabName) {
   CURRENT_TAB = tabName;
-  ['queue', 'completed', 'import'].forEach(t => {
+  
+  // 1. Atur Class Active Tab Utama
+  ['queue', 'completed', 'import', 'monitoring'].forEach(t => {
     const el = document.getElementById('tab-' + t);
     t === tabName ? (el.classList.remove('inactive-tab'), el.classList.add('active-tab')) : (el.classList.remove('active-tab'), el.classList.add('inactive-tab'));
   });
+
+  // 2. Tampilkan/Sembunyikan Sub Menu
+  const subMenu = document.getElementById('monitoring-submenu');
+  if (tabName === 'monitoring') {
+    subMenu.classList.remove('hidden');
+    switchSubTab('all'); // Reset ke all saat masuk tab monitoring
+  } else {
+    subMenu.classList.add('hidden');
+  }
+
+  renderData();
+}
+
+function switchSubTab(subName) {
+  CURRENT_SUB_TAB = subName;
+  
+  // Reset style semua pill
+  const pills = ['all', 'proses', 'sukses', 'gagal'];
+  pills.forEach(p => {
+    // Mapping ID: 'all' -> 'sub-all', 'Proses Import' -> 'sub-proses', dst
+    let id = 'sub-' + p; 
+    let el = document.getElementById(id);
+    
+    // Logic simple untuk mapping status ke ID tombol
+    let isMatch = false;
+    if (subName === 'all' && p === 'all') isMatch = true;
+    if (subName === 'Proses Import' && p === 'proses') isMatch = true;
+    if (subName === 'Sukses Impor' && p === 'sukses') isMatch = true;
+    if (subName === 'Gagal Import' && p === 'gagal') isMatch = true;
+
+    if (isMatch) {
+      el.classList.remove('sub-pill-inactive');
+      el.classList.add('sub-pill-active');
+    } else {
+      el.classList.remove('sub-pill-active');
+      el.classList.add('sub-pill-inactive');
+    }
+  });
+
   renderData();
 }
 
@@ -195,10 +263,18 @@ function renderData() {
   const batches = Object.values(GROUPED_DATA).filter(batch => {
     const st = batch.items[0].status;
     let matchTab = false;
+
+    // Logic Tab
     if (CURRENT_TAB === 'queue' && st === 'Siap Untuk Di Produksi') matchTab = true;
-    if (CURRENT_TAB === 'completed' && st === 'Sudah Di Produksi') matchTab = true;
-    // LOGIC TAB IMPORT DIPERBAIKI
-    if (CURRENT_TAB === 'import' && (st === 'Siap Import' || st === 'Proses Import')) matchTab = true;
+    else if (CURRENT_TAB === 'completed' && st === 'Sudah Di Produksi') matchTab = true;
+    else if (CURRENT_TAB === 'import' && st === 'Siap Import') matchTab = true;
+    else if (CURRENT_TAB === 'monitoring') {
+      // Logic Sub Menu Monitoring
+      if (MONITORING_STATUSES.includes(st)) {
+        if (CURRENT_SUB_TAB === 'all') matchTab = true;
+        else if (CURRENT_SUB_TAB === st) matchTab = true;
+      }
+    }
     
     if (!matchTab) return false;
     const searchString = (batch.id + batch.items.map(i => i.item + i.machine).join(' ')).toLowerCase();
@@ -229,11 +305,24 @@ function renderData() {
           <button onclick="approveBatch('${batch.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-check-circle mr-2"></i> Approve</button>
         </div>`;
     } else if (CURRENT_TAB === 'import') {
-       // LOGIKA TOMBOL IMPORT/SYNC
-       const isSynced = currentStatus === 'Proses Import';
-       actionBtn = !isSynced 
-         ? `<button onclick="syncXero('${batch.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-cloud-upload-alt mr-2"></i> Sync Xero</button>` 
-         : `<span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-xs font-bold border border-slate-200 text-center"><i class="fas fa-check mr-1"></i> IMPORT PROCESS</span>`;
+       actionBtn = `<button onclick="syncXero('${batch.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-cloud-upload-alt mr-2"></i> Sync Xero</button>`;
+    } else if (CURRENT_TAB === 'monitoring') {
+       // TAMPILAN BADGE UNTUK MONITORING
+       let badgeClass = "bg-gray-100 text-gray-600 border-gray-200";
+       let icon = "";
+       
+       if(currentStatus === 'Proses Import') {
+          badgeClass = "bg-sky-50 text-sky-600 border-sky-100";
+          icon = "<i class='fas fa-spinner fa-spin mr-2'></i>";
+       } else if (currentStatus === 'Sukses Impor') {
+          badgeClass = "bg-emerald-50 text-emerald-600 border-emerald-100";
+          icon = "<i class='fas fa-check-circle mr-2'></i>";
+       } else if (currentStatus === 'Gagal Import') {
+          badgeClass = "bg-red-50 text-red-600 border-red-100";
+          icon = "<i class='fas fa-times-circle mr-2'></i>";
+       }
+       
+       actionBtn = `<div class="px-4 py-1.5 rounded-full text-xs font-bold border flex items-center ${badgeClass}">${icon} ${currentStatus.toUpperCase()}</div>`;
     }
 
     let itemRows = '';
