@@ -146,7 +146,7 @@
 <script>
 // =================================================================
 // GANTI URL API ANDA DI SINI
-const API_URL = "https://script.google.com/macros/s/AKfycbzEY9Yz5Z3QPXjF4_h4MGaY9NGWLWZ5TX4NHaBBOQlCG-He9SJH8bwDpYzZQpX_S2Ve/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbyKsx5yZX5e79m_4UMOkVM4ZetFeMn-Vaf7LIGGsOvIiP4GggyWhYs9AHbVaDC7wzFK/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
@@ -331,7 +331,8 @@ function renderData() {
       const sisaDisplay = new Intl.NumberFormat('id-ID').format(sisaVal);
       // ==========================================
 
-      const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>M: <b>${item.meter}</b></span><span>Kg: <b>${item.weight}</b></span></div>` : '<div class="ml-auto"></div>';
+      // Tampilkan Total, bukan Weight
+      const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>M: <b>${item.meter}</b></span><span>Total: <b>${new Intl.NumberFormat('id-ID').format(item.total)}</b></span></div>` : '<div class="ml-auto"></div>';
       
       itemRows += `
         <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition px-2 -mx-2 rounded">
@@ -376,39 +377,37 @@ function openInputModal(batchId, mode) {
   let title = "Form";
   let warning = "";
   
+  const thead = document.getElementById('modal-table-header');
+  
+  // === LOGIC TAMPILAN HEADER BERDASARKAN MODE ===
   if (CURRENT_MODE === 'plan_edit') {
       title = "Edit Production Plan";
-      warning = "<strong>Mode Edit Plan:</strong> Ubah Mesin/Item/KPC atau tambah baris. Angka hasil produksi belum diinput.";
-  } else if (CURRENT_MODE === 'result_input') {
-      title = "Input Production Result";
-      warning = "<strong>Mode Input Hasil:</strong> Masukkan angka aktual (Qty/Meter/Berat). Mesin & Item terkunci.";
-  } else if (CURRENT_MODE === 'result_revise') {
-      title = "Revisi Production Result";
-      warning = "<strong>Mode Revisi:</strong> Perbaiki angka salah input. Data Mesin & Item tetap terkunci.";
+      warning = "<strong>Mode Edit Plan:</strong> Ubah Mesin, Item, atau KPC. Kolom hasil produksi disembunyikan.";
+      
+      thead.innerHTML = `
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">Item</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">KPC</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>
+        <th class="px-2 py-3 w-10">Action</th>`;
+
+  } else if (CURRENT_MODE === 'result_input' || CURRENT_MODE === 'result_revise') {
+      title = (CURRENT_MODE === 'result_revise') ? "Revisi Production Result" : "Input Production Result";
+      warning = "<strong>Mode Input Hasil:</strong> Masukkan angka Meter dan Qty. Total akan terhitung otomatis.";
+      
+      thead.innerHTML = `
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">Item</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-32">KPC</th>
+        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-24">Meter</th>
+        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-24">Qty</th>
+        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-32">Total</th>
+        <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>`;
   }
 
   document.getElementById('modal-title').innerText = title;
   document.getElementById('modal-warning-text').innerHTML = warning;
   document.getElementById('add-row-container').classList.toggle('hidden', CURRENT_MODE !== 'plan_edit');
-
-  const thead = document.getElementById('modal-table-header');
-  if (CURRENT_MODE === 'plan_edit') {
-    thead.innerHTML = `
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">Item</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">KPC</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>
-      <th class="px-2 py-3 w-10">Action</th>`;
-  } else {
-    thead.innerHTML = `
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">Item</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">KPC</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Meter</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Qty</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Berat (kg)</th>
-      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>`;
-  }
 
   const tbody = document.getElementById('modal-table-body');
   tbody.innerHTML = '';
@@ -420,17 +419,20 @@ function openInputModal(batchId, mode) {
 function renderModalRow(item = null) {
   const tbody = document.getElementById('modal-table-body');
   const rowIndex = item ? item.rowIndex : 'new';
+  
   const itemVal = item ? item.item : '';
   const machineVal = item ? item.machine : '';
   const kpcVal = item ? item.kpc : '';
-  const meterVal = item ? item.meter : 0;
-  const qtyVal = item ? item.qty : 0;
-  const weightVal = item ? item.weight : 0;
   const weVal = item ? item.weNumber : '';
+  
+  const meterVal = item ? (item.meter || 0) : 0;
+  const qtyVal = item ? (item.qty || 0) : 0;
+  const totalVal = meterVal * qtyVal; // Hitung awal jika ada data lama
 
   let html = '';
 
   if (CURRENT_MODE === 'plan_edit') {
+    // === MODE EDIT PLAN (DROPDOWN, NO NUMBERS) ===
     const machineOpts = [...new Set(OPTIONS.items.map(i => i.machine))].sort();
     let machineEl = `<select class="input-xs machine-select bg-white" onchange="onMachineChange(this)">
                         <option value="">Select Machine</option>
@@ -448,13 +450,14 @@ function renderModalRow(item = null) {
       <td class="px-2 py-3 text-center">${deleteBtn}</td>
     `;
   } else {
+    // === MODE INPUT RESULT (TEXT ONLY + INPUT NUMBERS) ===
     html = `
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly machine-select" value="${machineVal}" readonly></td>
-      <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700">${itemVal}</span></td>
+      <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700 item-text">${itemVal}</span></td>
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly kpc-select" value="${kpcVal}" readonly></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-meter text-center font-mono" value="${meterVal}" min="0"></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-qty text-center font-mono" value="${qtyVal}" min="0"></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-weight text-center font-mono" value="${weightVal}" min="0"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-meter text-center font-mono border-blue-300 focus:ring-blue-200" value="${meterVal}" min="0" oninput="calculateRowTotal(this)"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-qty text-center font-mono border-blue-300 focus:ring-blue-200" value="${qtyVal}" min="0" oninput="calculateRowTotal(this)"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-total text-center font-mono bg-slate-100 font-bold text-slate-700" value="${totalVal}" readonly></td>
       <td class="px-4 py-3"><input type="text" class="input-xs bg-slate-50 text-slate-500 we-preview font-mono text-xs cursor-not-allowed" value="${weVal}" readonly></td>
     `;
   }
@@ -467,6 +470,14 @@ function renderModalRow(item = null) {
   if (CURRENT_MODE === 'plan_edit' && machineVal) {
     setTimeout(() => { onMachineChange(tr.querySelector('.machine-select'), false); }, 0);
   }
+}
+
+function calculateRowTotal(inputElement) {
+    const tr = inputElement.closest('tr');
+    const meter = parseFloat(tr.querySelector('.input-meter').value) || 0;
+    const qty = parseFloat(tr.querySelector('.input-qty').value) || 0;
+    const total = meter * qty;
+    tr.querySelector('.input-total').value = total;
 }
 
 function addNewRow() { renderModalRow(); }
@@ -502,7 +513,7 @@ function updateRowWE(el) {
   const tr = el.closest('tr');
   const machine = tr.querySelector('.machine-select').value;
   const kpc = tr.querySelector('.kpc-select').value;
-  let item = (CURRENT_MODE === 'plan_edit') ? tr.querySelector('.item-select').value : tr.querySelector('span').innerText;
+  let item = (CURRENT_MODE === 'plan_edit') ? tr.querySelector('.item-select').value : tr.querySelector('.item-text').innerText;
   
   if(!machine || !item || !kpc) return;
 
@@ -547,19 +558,23 @@ async function submitForm(action, forceComplete = false) {
   rows.forEach(tr => {
     let itemVal = "";
     if (CURRENT_MODE === 'plan_edit') {
-        itemVal = tr.querySelector('.item-select').value;
+         itemVal = tr.querySelector('.item-select').value;
     } else {
-        itemVal = tr.querySelector('td:nth-child(2) span').innerText;
+         itemVal = tr.querySelector('.item-text').innerText;
     }
+
+    const meter = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-meter').value) || 0;
+    const qty = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-qty').value) || 0;
+    const total = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-total').value) || 0;
 
     items.push({
       rowIndex: tr.getAttribute('data-row-index'),
       item: itemVal,
       machine: tr.querySelector('.machine-select').value,
       kpc: tr.querySelector('.kpc-select').value,
-      meter: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-meter').value,
-      qty: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-qty').value,
-      weight: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-weight').value,
+      meter: meter,
+      qty: qty,
+      total: total,
       weNumber: tr.querySelector('.we-preview').value,
       date: CURRENT_BATCH_DATE
     });
