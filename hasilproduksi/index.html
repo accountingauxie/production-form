@@ -156,8 +156,8 @@
 
 <script>
 // =================================================================
-// URL API ANDA (Sudah disesuaikan dengan input)
-const API_URL = "https://script.google.com/macros/s/AKfycbyKsx5yZX5e79m_4UMOkVM4ZetFeMn-Vaf7LIGGsOvIiP4GggyWhYs9AHbVaDC7wzFK/exec"; 
+// URL API ANDA (Sesuaikan jika perlu)
+const API_URL = "https://script.google.com/macros/s/AKfycbxunfnULdfkur_LmBf1ArX--UyLqj-hy13OQcIzOcchW9s_tzAk_51Lw1_bzFKmhgaB/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
@@ -478,6 +478,7 @@ function renderModalRow(item = null) {
   tr.innerHTML = html;
   tbody.appendChild(tr);
 
+  // Trick untuk memicu pengisian dropdown otomatis saat mode edit dibuka
   if (CURRENT_MODE === 'plan_edit' && machineVal) {
     setTimeout(() => { onMachineChange(tr.querySelector('.machine-select'), false); }, 0);
   }
@@ -566,10 +567,24 @@ function closeModal() { document.getElementById('modalResult').classList.add('hi
 async function submitForm(action, forceComplete = false) {
   const rows = document.querySelectorAll('#modal-table-body tr');
   const items = [];
+  let isError = false;
+
   rows.forEach(tr => {
     let itemVal = "";
+    
+    // === VALIDASI FORM EDIT ===
     if (CURRENT_MODE === 'plan_edit') {
          itemVal = tr.querySelector('.item-select').value;
+         const machineVal = tr.querySelector('.machine-select').value;
+         const kpcVal = tr.querySelector('.kpc-select').value;
+
+         // Cek jika ada yang kosong
+         if(!itemVal || !machineVal || !kpcVal) {
+             isError = true;
+             tr.classList.add('bg-red-50'); // Highlight error
+         } else {
+             tr.classList.remove('bg-red-50');
+         }
     } else {
          itemVal = tr.querySelector('.item-text').innerText;
     }
@@ -590,6 +605,11 @@ async function submitForm(action, forceComplete = false) {
       date: CURRENT_BATCH_DATE
     });
   });
+
+  if(isError) {
+      Swal.fire('Data Belum Lengkap', 'Mohon lengkapi semua kolom (Mesin, Item, KPC) sebelum menyimpan.', 'warning');
+      return;
+  }
 
   const result = await Swal.fire({
     title: 'Simpan Data?',
