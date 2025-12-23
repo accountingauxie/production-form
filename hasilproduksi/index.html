@@ -1,1192 +1,652 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Production Management</title>
 
-<title>Production Entry</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-
 <style>
-
-/* --- 1. MODERN VARIABLES & RESET --- */
-
-:root { 
-
-  --border-color: #e2e8f0; 
-
-  --bg-color: #f8fafc; 
-
-  --primary-blue: #3b82f6; 
-
-  --primary-hover: #2563eb;
-
-  --text-dark: #0f172a;
-
-  --text-gray: #64748b;
-
-  --danger: #ef4444;
-
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-
-}
-
-
-
-* { box-sizing: border-box; outline: none; }
-
-body { margin: 0; background: var(--bg-color); font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 13.5px; color: var(--text-dark); -webkit-font-smoothing: antialiased; }
-
-
-
-/* --- 2. LAYOUT --- */
-
-.top-bar { padding: 14px 32px; background: #fff; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
-
-.brand { font-weight: 700; font-size: 16px; color: var(--text-dark); }
-
-.nav-menu { display: flex; gap: 6px; }
-
-.nav-item { text-decoration: none; color: var(--text-gray); padding: 8px 12px; border-radius: 6px; font-weight: 500; transition: all 0.2s; font-size: 13px; }
-
-.nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--primary-blue); }
-
-
-
-.page { max-width: 1380px; margin: 32px auto; padding: 0 24px; }
-
-.card { background: #fff; border-radius: 12px; box-shadow: var(--shadow-sm); padding: 32px; border: 1px solid var(--border-color); }
-
-.card-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; color: var(--text-dark); display: flex; justify-content: space-between; align-items: center; }
-
-
-
-/* --- 3. FORMS --- */
-
-label { font-size: 12px; font-weight: 700; color: var(--text-gray); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
-
-.input-box { width: 100%; height: 40px; padding: 0 12px; font-size: 13.5px; border: 1px solid var(--border-color); border-radius: 6px; background: #fff; color: var(--text-dark); transition: border 0.15s; }
-
-.input-box:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-
-.input-box[readonly] { background: #f1f5f9; color: var(--text-gray); cursor: not-allowed; }
-
-
-
-.row-flex { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
-
-
-
-/* --- 4. TABLE --- */
-
-table { width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 20px; }
-
-th { background: #f8fafc; padding: 12px 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-gray); border-bottom: 1px solid var(--border-color); text-align: left; }
-
-td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); background: #fff; vertical-align: top; }
-
-tr:last-child td { border-bottom: none; }
-
-
-
-.hidden-col { display: none; }
-
-.table-input { width: 100%; height: 38px; border: 1px solid var(--border-color); border-radius: 6px; padding: 0 10px; font-size: 13.5px; }
-
-
-
-/* WE Number Input (Auto Generated) */
-
-.we-number { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; font-weight: 600; font-family: 'Monaco', 'Consolas', monospace; font-size: 12px; }
-
-
-
-/* --- 5. CHOICES.JS FIXED --- */
-
-.choices { margin-bottom: 0; overflow: visible; }
-
-.choices__inner { 
-
-  min-height: 40px !important; 
-
-  padding: 0 8px !important; 
-
-  border: 1px solid var(--border-color) !important; 
-
-  background-color: #fff !important; 
-
-  border-radius: 6px !important; 
-
-  display: flex !important; 
-
-  align-items: center !important; 
-
-  font-size: 13.5px !important;
-
-  position: relative;
-
-}
-
-.choices.is-focused .choices__inner { border-color: var(--primary-blue) !important; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important; }
-
-
-
-/* FIX PLACEHOLDER MENUMPUK */
-
-.choices.is-item-selected .choices__placeholder { 
-
-    position: absolute; 
-
-    opacity: 0; 
-
-    pointer-events: none; 
-
-    z-index: -1;
-
-}
-
-
-
-.choices__input { background: transparent !important; border: none !important; margin: 0 !important; padding: 0 8px !important; height: auto !important; width: auto !important; min-width: 10ch !important; }
-
-.choices__input:focus { box-shadow: none !important; }
-
-
-
-.choices__list--dropdown { border: 1px solid var(--border-color) !important; border-radius: 8px !important; box-shadow: var(--shadow-lg) !important; margin-top: 6px !important; padding: 6px !important; z-index: 9999 !important; }
-
-.choices__list--dropdown .choices__item { border-radius: 6px !important; font-size: 13px !important; padding: 8px 12px !important; margin-bottom: 2px !important; }
-
-.choices__list--dropdown .choices__item--selectable.is-highlighted { background-color: #eff6ff !important; color: var(--primary-blue) !important; }
-
-
-
-.kpc-balance { float: right; font-size: 11px; background: #f1f5f9; color: #64748b; padding: 2px 8px; border-radius: 99px; font-weight: 600; border: 1px solid #e2e8f0; }
-
-
-
-/* --- 6. BUTTONS --- */
-
-.action-btn { border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; height: 38px; }
-
-.add-row-btn { background: #fff; color: var(--primary-blue); border: 1px dashed var(--border-color); width: 100%; margin-top: 10px; }
-
-.add-row-btn:hover { background: #eff6ff; border-color: var(--primary-blue); }
-
-
-
-.submit-btn { background: var(--primary-blue); color: #fff; padding: 0 32px; height: 44px; float: right; margin-top: 16px; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
-
-.submit-btn:hover { background: var(--primary-hover); }
-
-
-
-/* NEW: VIEW LIST BUTTON STYLE */
-
-.view-list-btn {
-
-  float: left;
-
-  margin-top: 16px;
-
-  background: #fff;
-
-  color: var(--text-gray);
-
-  border: 1px solid var(--border-color);
-
-  text-decoration: none;
-
-  padding: 0 20px;
-
-}
-
-.view-list-btn:hover {
-
-  background: #f1f5f9;
-
-  color: var(--text-dark);
-
-  border-color: #cbd5e1;
-
-}
-
-
-
-.delete-btn { color: #94a3b8; cursor: pointer; padding: 8px; border-radius: 4px; transition: 0.2s; text-align: center; font-size: 16px; }
-
-.delete-btn:hover { color: var(--danger); background: #fef2f2; }
-
-.row-handle { cursor: grab; color: #cbd5e1; text-align: center; vertical-align: middle; font-size: 20px; width: 30px; }
-
-
-
-/* --- 7. UTILS --- */
-
-textarea { width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-family: inherit; font-size: 13.5px; resize: vertical; min-height: 100px; }
-
-textarea:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
-
-#loadingOverlay { position: fixed; inset: 0; background: rgba(255,255,255,0.8); display: none; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(2px); }
-
-.spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: var(--primary-blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-
-
-/* SweetAlert Customization Override */
-
-.swal2-popup { font-family: 'Inter', system-ui, -apple-system, sans-serif !important; border-radius: 12px !important; }
-
-.swal2-title { font-size: 20px !important; color: var(--text-dark) !important; }
-
-.swal2-content { font-size: 14px !important; color: var(--text-gray) !important; }
-
+  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+  .active-tab { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
+  .inactive-tab { color: #64748b; border-bottom: 2px solid transparent; }
+  .inactive-tab:hover { color: #334155; border-bottom: 2px solid #e2e8f0; }
+   
+  /* Style untuk Sub-Menu Pills */
+  .sub-pill { padding: 4px 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
+  .sub-pill-active { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+  .sub-pill-inactive { background-color: white; color: #64748b; border-color: #e2e8f0; }
+  .sub-pill-inactive:hover { background-color: #f1f5f9; color: #334155; }
+
+  #loading { position: fixed; inset: 0; background: rgba(255,255,255,0.85); z-index: 50; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(2px); }
+  .spinner { border: 4px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 50%; width: 45px; height: 45px; animation: spin 0.8s linear infinite; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .input-xs { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; width: 100%; transition: border 0.2s; }
+  .input-xs:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+  .input-readonly { background-color: #f8fafc; color: #64748b; cursor: not-allowed; border-color: #e2e8f0; }
+  select.input-xs { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; appearance: none; }
 </style>
-
 </head>
 
+<body class="text-slate-800">
 
+<div id="loading"><div class="spinner"></div></div>
 
-<body>
-
-<div id="loadingOverlay"><div class="spinner"></div></div>
-
-
-
-<div class="top-bar">
-
-  <div class="brand">AUXILIUM <span style="font-weight:400; color:#94a3b8; font-size:14px; margin-left:4px;">Accounting</span></div>
-
-  <nav class="nav-menu">
-
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/index.html" class="nav-item">Home</a>
-
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/receiving/" class="nav-item">Receiving</a>
-
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/production/" class="nav-item active">Production</a>
-
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/reviewinvoice/" class="nav-item">Review Invoice</a>
-
-    <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/orderform/" class="nav-item">Sales Order</a>
-
-  </nav>
-
-</div>
-
-
-
-<div class="page">
-
-  <div class="card">
-
-    <div class="card-title">
-
-      Production Entry
-
-      <span style="font-size:12px; font-weight:500; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:20px;">New Entry</span>
-
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+   
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Production Management</h1>
+      <p class="text-sm text-slate-500 mt-1">Manage production queue, results, and Xero sync.</p>
     </div>
-
-
-
-    <div class="row-flex">
-
-      <div>
-
-        <label>Date</label>
-
-        <input type="date" id="productionDate" class="input-box">
-
-      </div>
-
-      <div>
-
-        <label>Production Entry ID</label>
-
-        <input type="text" id="entryId" class="input-box" readonly placeholder="Generating ID...">
-
-      </div>
-
-    </div>
-
-
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th style="width:30px;"></th>
-
-          <th style="width:20%;">Machine</th> 
-
-          <th style="width:20%;">Item</th>
-
-          <th class="hidden-col">Meter</th>
-
-          <th class="hidden-col">Qty</th>
-
-          <th class="hidden-col">Total</th>
-
-          <th style="width:25%;">KPC</th> 
-
-          <th>WE Number</th>
-
-          <th style="width:40px;"></th>
-
-        </tr>
-
-      </thead>
-
-      <tbody id="tableBody"></tbody>
-
-    </table>
-
-
-
-    <button class="action-btn add-row-btn" onclick="addRow()">+ Add Row</button>
-
-    
-
-    <div style="margin-top: 24px;">
-
-      <label>Additional Notes</label>
-
-      <textarea id="notes" placeholder="Enter any specific notes regarding this production batch..."></textarea>
-
-    </div>
-
-    
-
-    <div style="margin-top:20px; border-top:1px solid #f1f5f9; padding-top:20px;">
-
-      
-
-      <a href="hasilproduksi/index.html" class="action-btn view-list-btn">
-
-        Lihat Daftar
-
-      </a>
-
-
-
-      <button class="action-btn submit-btn" onclick="submitForm()">Submit Entry</button>
-
-      
-
-      <div style="clear:both;"></div>
-
-    </div>
-
+    <button onclick="fetchData()" class="bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-lg text-sm font-medium transition shadow-sm flex items-center justify-center">
+      <i class="fas fa-sync-alt mr-2"></i> Refresh Data
+    </button>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+      <div class="absolute right-0 top-0 h-full w-1 bg-blue-500"></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Queue</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-queue">0</span></div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+      <div class="absolute right-0 top-0 h-full w-1 bg-emerald-500"></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Completed</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-completed">0</span></div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+      <div class="absolute right-0 top-0 h-full w-1 bg-indigo-500"></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">To Sync</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-import">0</span></div>
+    </div>
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative overflow-hidden">
+      <div class="absolute right-0 top-0 h-full w-1 bg-gray-500"></div>
+      <div class="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">Monitoring</div>
+      <div class="flex items-baseline"><span class="text-3xl font-bold text-slate-800" id="count-monitoring">0</span></div>
+    </div>
+  </div>
+
+  <div class="border-b border-slate-200 mb-6">
+    <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
+      <button onclick="switchTab('queue')" id="tab-queue" class="active-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Siap Untuk Di Produksi</button>
+      <button onclick="switchTab('completed')" id="tab-completed" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Sudah Di Produksi</button>
+      <button onclick="switchTab('import')" id="tab-import" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Siap Import Xero</button>
+      <button onclick="switchTab('monitoring')" id="tab-monitoring" class="inactive-tab whitespace-nowrap py-4 px-1 font-medium text-sm transition-colors">Monitoring Xero</button>
+    </nav>
+  </div>
+
+  <div id="monitoring-submenu" class="hidden mb-6 flex gap-3 overflow-x-auto pb-2">
+    <button onclick="switchSubTab('all')" id="sub-all" class="sub-pill sub-pill-active">All Status</button>
+    <button onclick="switchSubTab('Proses')" id="sub-proses" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-spinner fa-spin mr-1.5 text-xs"></i>Proses
+    </button>
+    <button onclick="switchSubTab('Sukses')" id="sub-sukses" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-check-circle mr-1.5 text-xs text-emerald-500"></i>Sukses
+    </button>
+    <button onclick="switchSubTab('Gagal')" id="sub-gagal" class="sub-pill sub-pill-inactive">
+      <i class="fas fa-times-circle mr-1.5 text-xs text-red-500"></i>Gagal
+    </button>
+  </div>
+
+  <div class="mb-6">
+    <div class="relative max-w-md">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <i class="fas fa-search text-slate-400"></i>
+      </div>
+      <input type="text" id="searchInput" onkeyup="renderData()" class="block w-full pl-10 pr-3 py-2.5 border border-slate-300 rounded-lg leading-5 bg-white placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm shadow-sm" placeholder="Search ID, Machine, or Item...">
+    </div>
+  </div>
+
+  <div id="list-container" class="space-y-4 pb-20"></div>
+
 </div>
 
+<div id="modalResult" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
+       
+      <div class="bg-white px-6 py-5 border-b border-slate-100 flex justify-between items-start">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900" id="modal-title">Input Production Result</h3>
+          <div class="mt-1 text-sm text-slate-500">Entry ID: <span id="modal-batch-id" class="font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded"></span></div>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition"><i class="fas fa-times text-xl"></i></button>
+      </div>
 
+      <div class="bg-slate-50 px-6 py-6">
+        <div class="overflow-visible rounded-lg border border-slate-200 shadow-sm">
+          <table class="min-w-full divide-y divide-slate-200 bg-white">
+            <thead class="bg-slate-50">
+              <tr id="modal-table-header"></tr>
+            </thead>
+            <tbody id="modal-table-body" class="divide-y divide-slate-200"></tbody>
+          </table>
+          <div id="add-row-container" class="hidden bg-slate-50 px-4 py-3 border-t border-slate-200">
+             <button onclick="addNewRow()" class="text-sm text-blue-600 font-semibold hover:text-blue-800 flex items-center"><i class="fas fa-plus-circle mr-2"></i> Add Row</button>
+          </div>
+        </div>
+        <div class="mt-4 flex items-start p-3 bg-amber-50 border border-amber-200 rounded-lg" id="modal-warning">
+          <i class="fas fa-exclamation-circle text-amber-500 mt-0.5 mr-2"></i>
+          <p class="text-xs text-amber-700" id="modal-warning-text"></p>
+        </div>
+      </div>
+
+      <div class="bg-white px-6 py-4 flex flex-row-reverse gap-3 border-t border-slate-100" id="modal-footer"></div>
+    </div>
+  </div>
+</div>
 
 <script>
+// =================================================================
+// GANTI URL API ANDA DI SINI
+const API_URL = "https://script.google.com/macros/s/AKfycbwTDlBQQvDdLFpyXNq_b4YhXaE9YsFBgt5WY1fdK3mMuDyoQ3NqcZ8jRhZfdHN8Wf3l/exec"; 
+// =================================================================
 
-// !!! GANTI URL INI DENGAN DEPLOYMENT ID TERBARU ANDA !!!
+let RAW_DATA = [];
+let GROUPED_DATA = {};
+let OPTIONS = { items: [], kpcs: [] };
+let CURRENT_TAB = 'queue';
+let CURRENT_SUB_TAB = 'all'; 
+let CURRENT_BATCH_ID = null;
+let CURRENT_BATCH_DATE = null;
+let CURRENT_MODE = ''; 
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxUrlr-IIAk3mFi3f0N5UuHQPfaHRWhH7FSM3LNykIzk34nEs-yzrMIo4oUxXn9wsYJ/exec";
+// STATUS BARU
+const MONITORING_STATUSES = ['Proses', 'Sukses', 'Gagal'];
 
+window.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
-
-let allItemsData = []; 
-
-let allKPCData = [];    
-
-let uniqueMachines = [];
-
-
-
-/* --- INITIAL LOAD --- */
-
-window.addEventListener("DOMContentLoaded", async () => {
-
-  document.getElementById("loadingOverlay").style.display = "flex";
-
-  
-
-  const today = new Date();
-
-  const yyyy = today.getFullYear();
-
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-
-  const dd = String(today.getDate()).padStart(2, '0');
-
-  document.getElementById("productionDate").value = `${yyyy}-${mm}-${dd}`;
-
-
-
-  await loadNextEntryId();  
-
-
-
+async function fetchData() {
+  document.getElementById('loading').style.display = 'flex';
   try {
-
-    const [itemRes, kpcRes] = await Promise.all([
-
-      fetch(`${SCRIPT_URL}?action=getitem`),
-
-      fetch(`${SCRIPT_URL}?action=getkpc`)
-
+    const [dataRes, optionsRes] = await Promise.all([
+      fetch(`${API_URL}?action=getData`),
+      fetch(`${API_URL}?action=getOptions`)
     ]);
-
-
-
-    allItemsData = await itemRes.json();
-
-    allKPCData = await kpcRes.json(); 
-
-
-
-    const machinesSet = new Set(allItemsData.map(i => i.machine).filter(m => m));
-
-    uniqueMachines = Array.from(machinesSet).sort();
-
-
-
-    addRow(); 
-
-    setupSortable();
-
-  } catch (e) {
-
-    // ALERT MODERN UNTUK ERROR LOAD
-
-    Swal.fire({
-
-        icon: 'error',
-
-        title: 'Network Error',
-
-        text: 'Failed to load data. Please check your internet connection.',
-
-        confirmButtonColor: '#ef4444'
-
-    });
-
-    console.error(e);
-
-  }
-
-  document.getElementById("loadingOverlay").style.display = "none";
-
-});
-
-
-
-/* --- ROW MANAGEMENT --- */
-
-function addRow() {
-
-  const row = document.createElement("tr");
-
-  row.innerHTML = `
-
-    <td class="row-handle">⋮⋮</td>
-
-    <td><select class="machine-select"></select></td>
-
-    <td><select class="item-select"></select></td>
-
-    <td class="hidden-col"><input class="table-input meter" type="number" value="0"></td>
-
-    <td class="hidden-col"><input class="table-input qty" type="number" value="0"></td>
-
-    <td class="hidden-col"><input class="table-input total" type="number" value="0"></td>
-
-    <td><select class="kpc-select"></select></td>
-
-    <td><input class="table-input we-number" readonly placeholder="Auto..."></td>
-
-    <td class="delete-cell">
-
-       <div class="delete-btn" onclick="removeRow(this)">✕</div>
-
-    </td>
-
-  `;
-
-  document.getElementById("tableBody").appendChild(row);
-
-
-
-  const machineSelect = row.querySelector(".machine-select");
-
-  const itemSelect = row.querySelector(".item-select");
-
-  const kpcSelect = row.querySelector(".kpc-select");
-
-
-
-  initChoices(machineSelect, uniqueMachines.map(m => ({value: m, label: m})), "Select Machine");
-
-  initChoices(itemSelect, [], "Select Machine First");
-
-  initChoices(kpcSelect, [], "Select Item First", true); 
-
-
-
-  // EVENT: Machine Change
-
-  machineSelect.addEventListener("change", function(e) {
-
-    updateDropdown(itemSelect, [], "Select Machine First");
-
-    updateDropdown(kpcSelect, [], "Select Item First", true);
-
-    row.querySelector(".we-number").value = "";
-
-
-
-    if (e.target.value) {
-
-      const filtered = allItemsData
-
-        .filter(i => i.machine === e.target.value)
-
-        .map(i => ({ value: i.name, label: i.name }));
-
-      updateDropdown(itemSelect, filtered, "Select Item");
-
+    RAW_DATA = await dataRes.json();
+    OPTIONS = await optionsRes.json();
+    processData();
+    updateCounts();
+    renderData();
+  } catch (err) { 
+    Swal.fire('Error', err.toString(), 'error');
+  } 
+  finally { document.getElementById('loading').style.display = 'none'; }
+}
+
+function processData() {
+  GROUPED_DATA = {};
+  RAW_DATA.forEach(row => {
+    const allowed = ['Siap Untuk Di Produksi', 'Sudah Di Produksi', 'Siap Import', ...MONITORING_STATUSES];
+    
+    if(!allowed.includes(row.status)) return;
+    
+    if (!GROUPED_DATA[row.id]) {
+      GROUPED_DATA[row.id] = { id: row.id, date: row.date, status: row.status, timestamp: row.timestamp, items: [] };
     }
+    GROUPED_DATA[row.id].items.push(row);
+  });
+}
 
+function updateCounts() {
+  let q = 0, c = 0, i = 0, m = 0;
+  Object.values(GROUPED_DATA).forEach(batch => {
+    const st = batch.items[0].status;
+    if (st === 'Siap Untuk Di Produksi') q++;
+    else if (st === 'Sudah Di Produksi') c++;
+    else if (st === 'Siap Import') i++;
+    else if (MONITORING_STATUSES.includes(st)) m++;
+  });
+  document.getElementById('count-queue').innerText = q;
+  document.getElementById('count-completed').innerText = c;
+  document.getElementById('count-import').innerText = i;
+  document.getElementById('count-monitoring').innerText = m;
+}
+
+function switchTab(tabName) {
+  CURRENT_TAB = tabName;
+   
+  ['queue', 'completed', 'import', 'monitoring'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    t === tabName ? (el.classList.remove('inactive-tab'), el.classList.add('active-tab')) : (el.classList.remove('active-tab'), el.classList.add('inactive-tab'));
   });
 
+  const subMenu = document.getElementById('monitoring-submenu');
+  if (tabName === 'monitoring') {
+    subMenu.classList.remove('hidden');
+    switchSubTab('all');
+  } else {
+    subMenu.classList.add('hidden');
+  }
 
+  renderData();
+}
 
-  // EVENT: Item Change (Filter KPC options)
-
-  itemSelect.addEventListener("change", function(e) {
-
-    const selectedItem = e.target.value;
-
-    let placeholder = "Select Item First";
-
+function switchSubTab(subName) {
+  CURRENT_SUB_TAB = subName;
+   
+  const pills = ['all', 'proses', 'sukses', 'gagal'];
+  pills.forEach(p => {
+    let id = 'sub-' + p; 
+    let el = document.getElementById(id);
     
+    let isMatch = false;
+    if (subName === 'all' && p === 'all') isMatch = true;
+    if (subName === 'Proses' && p === 'proses') isMatch = true;
+    if (subName === 'Sukses' && p === 'sukses') isMatch = true;
+    if (subName === 'Gagal' && p === 'gagal') isMatch = true;
 
-    row.querySelector(".we-number").value = ""; 
-
-    
-
-    let kpcOptions = [];
-
-    if (selectedItem) {
-
-        placeholder = "Select KPC";
-
-        kpcOptions = allKPCData.filter(k => k.relatedItem === selectedItem);
-
+    if (isMatch) {
+      el.classList.remove('sub-pill-inactive');
+      el.classList.add('sub-pill-active');
+    } else {
+      el.classList.remove('sub-pill-active');
+      el.classList.add('sub-pill-inactive');
     }
-
-
-
-    refreshKPCOptionsForElement(kpcSelect, kpcOptions, placeholder);
-
   });
 
+  renderData();
+}
 
+function renderData() {
+  const container = document.getElementById('list-container');
+  container.innerHTML = '';
+  const search = document.getElementById('searchInput').value.toLowerCase();
+   
+  const batches = Object.values(GROUPED_DATA).filter(batch => {
+    const st = batch.items[0].status;
+    let matchTab = false;
 
-  // EVENT: KPC Change (Trigger WE Number & Lock other rows)
-
-  kpcSelect.addEventListener("change", function(e) {
-
-      calculateWENumber(row); 
-
+    if (CURRENT_TAB === 'queue' && st === 'Siap Untuk Di Produksi') matchTab = true;
+    else if (CURRENT_TAB === 'completed' && st === 'Sudah Di Produksi') matchTab = true;
+    else if (CURRENT_TAB === 'import' && st === 'Siap Import') matchTab = true;
+    else if (CURRENT_TAB === 'monitoring') {
+      if (MONITORING_STATUSES.includes(st)) {
+        if (CURRENT_SUB_TAB === 'all') matchTab = true;
+        else if (CURRENT_SUB_TAB === st) matchTab = true;
+      }
+    }
+    
+    if (!matchTab) return false;
+    const searchString = (batch.id + batch.items.map(i => i.item + i.machine).join(' ')).toLowerCase();
+    return searchString.includes(search);
   });
 
-}
+  batches.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-
-
-function removeRow(btn) {
-
-  const row = btn.closest('tr');
-
-  if(document.querySelectorAll('#tableBody tr').length > 1) {
-
-    row.remove();
-
-  }
-
-}
-
-
-
-/* --- LOGIC: WE NUMBER GENERATOR --- */
-
-function calculateWENumber(row) {
-
-    const machine = row.querySelector(".machine-select").value;
-
-    const item = row.querySelector(".item-select").value;
-
-    const kpc = row.querySelector(".kpc-select").value;
-
-    const prodId = document.getElementById("entryId").value;
-
-    const weInput = row.querySelector(".we-number");
-
-
-
-    if(!machine || !item || !kpc || !prodId) {
-
-        weInput.value = "";
-
-        return;
-
-    }
-
-
-
-    // 1. Machine Code
-
-    let machineCode = "XX";
-
-    const mUpper = machine.toUpperCase();
-
-    if(mUpper.includes("RENG")) machineCode = "RG";
-
-    else if(mUpper.includes("TRUSS")) machineCode = "TS";
-
-    else machineCode = mUpper.substring(0,2);
-
-
-
-    const machineDigits = machine.match(/\d+/);
-
-    const machineNum = machineDigits ? machineDigits[0].slice(-2) : "00";
-
-    const finalMachineSegment = machineCode + machineNum;
-
-
-
-    // 2. Item Suffix
-
-    const itemDigitsMatch = item.match(/\d+/g); 
-
-    let itemSuffix = "00";
-
-    if(itemDigitsMatch && itemDigitsMatch.length > 0) {
-
-        const lastGroup = itemDigitsMatch[itemDigitsMatch.length - 1];
-
-        itemSuffix = lastGroup.slice(-2);
-
-    }
-
-
-
-    weInput.value = `${finalMachineSegment}_${kpc}_${prodId}_${itemSuffix}`;
-
-}
-
-
-
-/* --- LOGIC: PREVENT DUPLICATE KPC --- */
-
-function refreshKPCOptionsForElement(el, rawData, placeholder) {
-
-    const allSelects = document.querySelectorAll(".kpc-select");
-
-    const usedValues = [];
-
-    allSelects.forEach(sel => {
-
-        if(sel !== el && sel.value) { 
-
-            usedValues.push(sel.value);
-
-        }
-
-    });
-
-
-
-    const filteredOptions = rawData
-
-        .filter(k => !usedValues.includes(k.name))
-
-        .map(k => {
-
-            const formattedSisa = new Intl.NumberFormat('id-ID').format(k.sisa || 0);
-
-            return {
-
-                value: k.name,             
-
-                label: k.name,             
-
-                customProperties: { sisa: formattedSisa }
-
-            };
-
-        });
-
-
-
-    updateDropdown(el, filteredOptions, placeholder, true);
-
-}
-
-
-
-
-
-/* --- CHOICES HELPER --- */
-
-function updateDropdown(el, options, placeholder, useTemplate = false) {
-
-  if (el.choicesInstance) {
-
-    el.choicesInstance.destroy();
-
-    el.choicesInstance = null;
-
-  }
-
-  el.innerHTML = ""; 
-
-  initChoices(el, options, placeholder, useTemplate);
-
-}
-
-
-
-function initChoices(el, options, placeholder, useTemplate = false) {
-
-  const config = {
-
-    searchEnabled: true,
-
-    itemSelectText: "",
-
-    shouldSort: false,
-
-    placeholder: true,
-
-    placeholderValue: placeholder,
-
-    allowHTML: true,
-
-    removeItemButton: true, 
-
-  };
-
-
-
-  if (useTemplate) {
-
-    config.callbackOnCreateTemplates = function(template) {
-
-      return {
-
-        item: ({ classNames }, data) => {
-
-          return template(`
-
-            <div class="${classNames.item} ${classNames.itemChoice} ${classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
-
-              ${data.label}
-
-            </div>
-
-          `);
-
-        },
-
-        choice: ({ classNames }, data) => {
-
-          const sisa = data.customProperties && data.customProperties.sisa 
-
-                        ? `<span class="kpc-balance">Sisa: ${data.customProperties.sisa}</span>` 
-
-                        : '';
-
-          
-
-          return template(`
-
-            <div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${this.config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
-
-              <span style="font-weight:600; color:#1e293b;">${data.label}</span> ${sisa}
-
-            </div>
-
-          `);
-
-        },
-
-      };
-
-    };
-
-  }
-
-
-
-  const choices = new Choices(el, config);
-
-  if(options.length > 0) {
-
-      choices.setChoices(options, 'value', 'label', true);
-
-  }
-
-  el.choicesInstance = choices;
-
-}
-
-
-
-/* --- SERVER LOGIC --- */
-
-async function loadNextEntryId() {
-
-  try {
-
-    const res = await fetch(`${SCRIPT_URL}?action=getlastid`);
-
-    const data = await res.json();
-
-    const today = new Date();
-
-    const prefix = `FGP${String(today.getFullYear()).slice(2)}${String(today.getMonth()+1).padStart(2,"0")}`;
-
-    const lastId = data.lastId;
-
-    
-
-    let nextId = prefix + "0000001";
-
-    if (lastId && lastId.startsWith(prefix)) {
-
-      const num = parseInt(lastId.substring(7), 10);
-
-      nextId = prefix + String(num + 1).padStart(7, "0");
-
-    }
-
-    document.getElementById("entryId").value = nextId;
-
-  } catch(e) {}
-
-}
-
-
-
-/* --- UPDATED SUBMIT LOGIC WITH MODERN POPUP --- */
-
-function submitForm() {
-
-  const dateVal = document.getElementById("productionDate").value;
-
-  
-
-  // Validation 1: Date
-
-  if (!dateVal) {
-
-    Swal.fire({
-
-      icon: 'warning',
-
-      title: 'Missing Date',
-
-      text: 'Please select a Production Date.',
-
-      confirmButtonColor: '#3b82f6'
-
-    });
-
+  if (batches.length === 0) {
+    container.innerHTML = `<div class="text-center py-16 text-slate-400">Tidak ada data.</div>`;
     return;
-
   }
 
-  
+  batches.forEach(batch => {
+    let actionBtn = '';
+    const currentStatus = batch.items[0].status;
+    
+    if (CURRENT_TAB === 'queue') {
+      actionBtn = `
+        <div class="flex gap-2">
+          <button onclick="openInputModal('${batch.id}', 'plan_edit')" class="bg-amber-100 hover:bg-amber-200 text-amber-700 border border-amber-200 px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-edit mr-2"></i> Edit Plan</button>
+          <button onclick="openInputModal('${batch.id}', 'result_input')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-clipboard-check mr-2"></i> Input Result</button>
+        </div>`;
+    } else if (CURRENT_TAB === 'completed') {
+      actionBtn = `
+        <div class="flex gap-2">
+          <button onclick="openInputModal('${batch.id}', 'result_revise')" class="bg-amber-100 hover:bg-amber-200 text-amber-700 border border-amber-200 px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-pen mr-2"></i> Revisi</button>
+          <button onclick="approveBatch('${batch.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-check-circle mr-2"></i> Approve</button>
+        </div>`;
+    } else if (CURRENT_TAB === 'import') {
+       actionBtn = `<button onclick="syncXero('${batch.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-cloud-upload-alt mr-2"></i> Sync Xero</button>`;
+    } else if (CURRENT_TAB === 'monitoring') {
+       let badgeClass = "bg-gray-100 text-gray-600 border-gray-200";
+       let icon = "";
+       
+       if(currentStatus === 'Proses') {
+          badgeClass = "bg-sky-50 text-sky-600 border-sky-100";
+          icon = "<i class='fas fa-spinner fa-spin mr-2'></i>";
+       } else if (currentStatus === 'Sukses') {
+          badgeClass = "bg-emerald-50 text-emerald-600 border-emerald-100";
+          icon = "<i class='fas fa-check-circle mr-2'></i>";
+       } else if (currentStatus === 'Gagal') {
+          badgeClass = "bg-red-50 text-red-600 border-red-100";
+          icon = "<i class='fas fa-times-circle mr-2'></i>";
+       }
+       
+       actionBtn = `<div class="px-4 py-1.5 rounded-full text-xs font-bold border flex items-center ${badgeClass}">${icon} ${currentStatus.toUpperCase()}</div>`;
+    }
 
-  const rows = document.querySelectorAll("#tableBody tr");
-
-  // Validation 2: Rows
-
-  if (!rows.length) {
-
-    Swal.fire({
-
-      icon: 'warning',
-
-      title: 'Empty List',
-
-      text: 'Please add at least one item row.',
-
-      confirmButtonColor: '#3b82f6'
-
+    let itemRows = '';
+    batch.items.forEach(item => {
+      const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>M: <b>${item.meter}</b></span><span>Kg: <b>${item.weight}</b></span></div>` : '<div class="ml-auto"></div>';
+      
+      // === LOGIKA BARU: CARI SISA KPC ===
+      const matchedKpc = OPTIONS.kpcs.find(k => k.name === item.kpc);
+      const sisaValue = matchedKpc ? new Intl.NumberFormat('id-ID').format(matchedKpc.sisa) : '-';
+      
+      itemRows += `
+        <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition px-2 -mx-2 rounded">
+           <div class="flex items-center flex-1 gap-4">
+             <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+             <div class="w-32 text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded text-center">${item.machine}</div>
+             <div class="text-sm font-medium text-slate-700 w-48">${item.item}</div>
+             
+             <div class="flex items-center gap-2">
+                <div class="text-xs text-slate-600 font-mono font-bold">${item.kpc}</div>
+                <div class="text-xs text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md shadow-sm whitespace-nowrap" title="Sisa KPC">
+                    <span class="text-[10px] uppercase text-slate-400 mr-1">Sisa:</span>
+                    <span class="font-bold text-slate-700">${sisaValue}</span>
+                </div>
+             </div>
+             
+           </div>
+           ${resultDisplay}
+        </div>`;
     });
 
-    return;
+    container.innerHTML += `
+      <div class="bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-md transition duration-200 overflow-hidden">
+        <div class="px-6 py-4 flex items-center justify-between bg-slate-50 border-b border-slate-100">
+          <div>
+            <div class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">ID</div>
+            <div class="text-lg font-bold text-slate-800 font-mono">${batch.id}</div>
+            <div class="text-xs text-slate-500 mt-1"><i class="far fa-calendar-alt mr-1.5"></i> ${batch.date}</div>
+          </div>
+          <div>${actionBtn}</div>
+        </div>
+        <div class="px-6 py-4">${itemRows}</div>
+      </div>`;
+  });
+}
 
+function openInputModal(batchId, mode) {
+  CURRENT_BATCH_ID = batchId;
+  CURRENT_MODE = mode; 
+  const batch = GROUPED_DATA[batchId];
+  CURRENT_BATCH_DATE = batch.date;
+   
+  document.getElementById('modal-batch-id').innerText = batchId;
+   
+  let title = "Form";
+  let warning = "";
+   
+  if (CURRENT_MODE === 'plan_edit') {
+      title = "Edit Production Plan";
+      warning = "<strong>Mode Edit Plan:</strong> Ubah Mesin/Item/KPC atau tambah baris. Angka hasil produksi belum diinput.";
+  } else if (CURRENT_MODE === 'result_input') {
+      title = "Input Production Result";
+      warning = "<strong>Mode Input Hasil:</strong> Masukkan angka aktual (Qty/Meter/Berat). Mesin & Item terkunci.";
+  } else if (CURRENT_MODE === 'result_revise') {
+      title = "Revisi Production Result";
+      warning = "<strong>Mode Revisi:</strong> Perbaiki angka salah input. Data Mesin & Item tetap terkunci.";
   }
 
+  document.getElementById('modal-title').innerText = title;
+  document.getElementById('modal-warning-text').innerHTML = warning;
+  document.getElementById('add-row-container').classList.toggle('hidden', CURRENT_MODE !== 'plan_edit');
 
+  const thead = document.getElementById('modal-table-header');
+  if (CURRENT_MODE === 'plan_edit') {
+    thead.innerHTML = `
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">Item</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-56">KPC</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>
+      <th class="px-2 py-3 w-10">Action</th>`;
+  } else {
+    thead.innerHTML = `
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">Item</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">KPC</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Meter</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Qty</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-24">Berat (kg)</th>
+      <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>`;
+  }
 
+  const tbody = document.getElementById('modal-table-body');
+  tbody.innerHTML = '';
+  batch.items.forEach(item => { renderModalRow(item); });
+  renderFooterButtons();
+  document.getElementById('modalResult').classList.remove('hidden');
+}
+
+function renderModalRow(item = null) {
+  const tbody = document.getElementById('modal-table-body');
+  const rowIndex = item ? item.rowIndex : 'new';
+  const itemVal = item ? item.item : '';
+  const machineVal = item ? item.machine : '';
+  const kpcVal = item ? item.kpc : '';
+  const meterVal = item ? item.meter : 0;
+  const qtyVal = item ? item.qty : 0;
+  const weightVal = item ? item.weight : 0;
+  const weVal = item ? item.weNumber : '';
+
+  let html = '';
+
+  if (CURRENT_MODE === 'plan_edit') {
+    const machineOpts = [...new Set(OPTIONS.items.map(i => i.machine))].sort();
+    let machineEl = `<select class="input-xs machine-select bg-white" onchange="onMachineChange(this)">
+                        <option value="">Select Machine</option>
+                        ${machineOpts.map(m => `<option value="${m}" ${m === machineVal ? 'selected' : ''}>${m}</option>`).join('')}
+                      </select>`;
+    let itemEl = `<select class="input-xs item-select bg-white" onchange="onItemChange(this)" data-current="${itemVal}"><option value="">Select Machine First</option></select>`;
+    let kpcEl = `<select class="input-xs kpc-select bg-white" onchange="updateRowWE(this)" data-current="${kpcVal}"><option value="">Select Item First</option></select>`;
+    let deleteBtn = `<button onclick="deleteRow(this)" class="text-slate-400 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>`;
+
+    html = `
+      <td class="px-4 py-3">${machineEl}</td>
+      <td class="px-4 py-3">${itemEl}</td>
+      <td class="px-4 py-3">${kpcEl}</td>
+      <td class="px-4 py-3"><input type="text" class="input-xs bg-slate-50 text-slate-500 we-preview font-mono text-xs cursor-not-allowed" value="${weVal}" readonly></td>
+      <td class="px-2 py-3 text-center">${deleteBtn}</td>
+    `;
+  } else {
+    html = `
+      <td class="px-4 py-3"><input type="text" class="input-xs input-readonly machine-select" value="${machineVal}" readonly></td>
+      <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700">${itemVal}</span></td>
+      <td class="px-4 py-3"><input type="text" class="input-xs input-readonly kpc-select" value="${kpcVal}" readonly></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-meter text-center font-mono" value="${meterVal}" min="0"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-qty text-center font-mono" value="${qtyVal}" min="0"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-weight text-center font-mono" value="${weightVal}" min="0"></td>
+      <td class="px-4 py-3"><input type="text" class="input-xs bg-slate-50 text-slate-500 we-preview font-mono text-xs cursor-not-allowed" value="${weVal}" readonly></td>
+    `;
+  }
+
+  const tr = document.createElement('tr');
+  tr.setAttribute('data-row-index', rowIndex);
+  tr.innerHTML = html;
+  tbody.appendChild(tr);
+
+  if (CURRENT_MODE === 'plan_edit' && machineVal) {
+    setTimeout(() => { onMachineChange(tr.querySelector('.machine-select'), false); }, 0);
+  }
+}
+
+function addNewRow() { renderModalRow(); }
+function deleteRow(btn) { btn.closest('tr').remove(); }
+
+function onMachineChange(el, resetValue = true) {
+  if(!el) return;
+  const tr = el.closest('tr');
+  const selectedMachine = el.value;
+  const itemSelect = tr.querySelector('.item-select');
+  const currentItem = itemSelect.getAttribute('data-current');
+  const validItems = OPTIONS.items.filter(i => i.machine === selectedMachine);
+  itemSelect.innerHTML = `<option value="">Select Item</option>` + validItems.map(i => `<option value="${i.name}" ${!resetValue && i.name === currentItem ? 'selected' : ''}>${i.name}</option>`).join('');
+  if(resetValue) { itemSelect.value = ""; onItemChange(itemSelect, true); } else { onItemChange(itemSelect, false); }
+}
+
+function onItemChange(el, resetValue = true) {
+  if(!el) return;
+  const tr = el.closest('tr');
+  const selectedItem = el.value;
+  const kpcSelect = tr.querySelector('.kpc-select');
+  const currentKpc = kpcSelect.getAttribute('data-current');
+  const validKPCs = OPTIONS.kpcs.filter(k => k.relatedItem === selectedItem);
+  kpcSelect.innerHTML = `<option value="">Select KPC</option>` + validKPCs.map(k => {
+        const label = `${k.name} (Sisa: ${new Intl.NumberFormat('id-ID').format(k.sisa)})`;
+        return `<option value="${k.name}" ${!resetValue && k.name === currentKpc ? 'selected' : ''}>${label}</option>`;
+    }).join('');
+  if(resetValue) kpcSelect.value = "";
+  updateRowWE(el);
+}
+
+function updateRowWE(el) {
+  const tr = el.closest('tr');
+  const machine = tr.querySelector('.machine-select').value;
+  const kpc = tr.querySelector('.kpc-select').value;
+  let item = (CURRENT_MODE === 'plan_edit') ? tr.querySelector('.item-select').value : tr.querySelector('span').innerText;
+   
+  if(!machine || !item || !kpc) return;
+
+  let machineCode = "XX";
+  const mUpper = machine.toUpperCase();
+  if(mUpper.includes("RENG")) machineCode = "RG";
+  else if(mUpper.includes("TRUSS")) machineCode = "TS";
+  else machineCode = mUpper.substring(0,2);
+   
+  const machineDigits = machine.match(/\d+/);
+  const machineNum = machineDigits ? machineDigits[0].slice(-2) : "00";
+  const finalMachine = machineCode + machineNum;
+
+  const itemDigitsMatch = item.match(/\d+/g); 
+  let itemSuffix = "00";
+  if(itemDigitsMatch) itemSuffix = itemDigitsMatch[itemDigitsMatch.length - 1].slice(-2);
+
+  tr.querySelector('.we-preview').value = `${finalMachine}_${kpc}_${CURRENT_BATCH_ID}_${itemSuffix}`;
+}
+
+function renderFooterButtons() {
+  const footer = document.getElementById('modal-footer');
+  let btns = '';
+   
+  if (CURRENT_MODE === 'plan_edit') {
+    btns = `<button onclick="submitForm('replaceBatch')" class="bg-amber-400 text-amber-900 px-5 py-2.5 rounded hover:bg-amber-500 font-semibold shadow-sm">Save Changes</button>`;
+  } else if (CURRENT_MODE === 'result_input') {
+    btns = `<button onclick="submitForm('replaceBatch', true)" class="bg-blue-600 text-white px-5 py-2.5 rounded hover:bg-blue-700 font-semibold shadow-sm">Submit & Complete</button>`;
+  } else if (CURRENT_MODE === 'result_revise') {
+    btns = `<button onclick="submitForm('replaceBatch', true)" class="bg-emerald-600 text-white px-5 py-2.5 rounded hover:bg-emerald-700 font-semibold shadow-sm">Simpan Revisi</button>`;
+  }
+   
+  btns += `<button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50 font-medium text-slate-700 shadow-sm ml-2">Cancel</button>`;
+  footer.innerHTML = btns;
+}
+
+function closeModal() { document.getElementById('modalResult').classList.add('hidden'); }
+
+// === FUNGSI NOTIFIKASI MODERN (SweetAlert2) ===
+
+async function submitForm(action, forceComplete = false) {
+  const rows = document.querySelectorAll('#modal-table-body tr');
   const items = [];
-
-  let isValid = true;
-
-
-
-  rows.forEach(r => {
-
-    const mSelect = r.querySelector(".machine-select");
-
-    const iSelect = r.querySelector(".item-select");
-
-    const kSelect = r.querySelector(".kpc-select");
-
-    
-
-    const m = mSelect.choicesInstance ? mSelect.choicesInstance.getValue(true) : mSelect.value;
-
-    const i = iSelect.choicesInstance ? iSelect.choicesInstance.getValue(true) : iSelect.value;
-
-    const k = kSelect.choicesInstance ? kSelect.choicesInstance.getValue(true) : kSelect.value;
-
-    const we = r.querySelector(".we-number").value;
-
-
-
-    if(!m || !i || !k) {
-
-        isValid = false;
-
-        if(!m) mSelect.closest('.choices').style.borderColor = "#ef4444";
-
-        if(!i) iSelect.closest('.choices').style.borderColor = "#ef4444";
-
-        if(!k) kSelect.closest('.choices').style.borderColor = "#ef4444";
-
+  rows.forEach(tr => {
+    let itemVal = "";
+    if (CURRENT_MODE === 'plan_edit') {
+        itemVal = tr.querySelector('.item-select').value;
+    } else {
+        itemVal = tr.querySelector('td:nth-child(2) span').innerText;
     }
 
-
-
-    items.push({ 
-
-        machine: m, 
-
-        item: i, 
-
-        kpc: k, 
-
-        weNumber: we,
-
-        meter: r.querySelector(".meter").value, 
-
-        qty: r.querySelector(".qty").value, 
-
-        total: r.querySelector(".total").value 
-
+    items.push({
+      rowIndex: tr.getAttribute('data-row-index'),
+      item: itemVal,
+      machine: tr.querySelector('.machine-select').value,
+      kpc: tr.querySelector('.kpc-select').value,
+      meter: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-meter').value,
+      qty: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-qty').value,
+      weight: (CURRENT_MODE === 'plan_edit') ? 0 : tr.querySelector('.input-weight').value,
+      weNumber: tr.querySelector('.we-preview').value,
+      date: CURRENT_BATCH_DATE
     });
-
   });
 
-
-
-  // Validation 3: Incomplete fields
-
-  if (!isValid) {
-
-    Swal.fire({
-
-      icon: 'error',
-
-      title: 'Incomplete Data',
-
-      text: 'Please fill all required fields marked in red.',
-
-      confirmButtonColor: '#ef4444'
-
-    });
-
-    return;
-
-  }
-
-
-
-  // MODERN CONFIRMATION POPUP
-
-  Swal.fire({
-
-    title: 'Submit Entry?',
-
-    text: "Are you sure you want to submit this production entry?",
-
+  const result = await Swal.fire({
+    title: 'Simpan Data?',
+    text: "Pastikan data yang diinput sudah benar.",
     icon: 'question',
-
     showCancelButton: true,
+    confirmButtonColor: '#2563eb', 
+    cancelButtonColor: '#64748b',  
+    confirmButtonText: 'Ya, Simpan',
+    cancelButtonText: 'Batal'
+  });
 
-    confirmButtonColor: '#3b82f6',
+  if (!result.isConfirmed) return;
+   
+  closeModal();
+  await postAction(action, { batchId: CURRENT_BATCH_ID, items: items, forceComplete: forceComplete });
+}
 
-    cancelButtonColor: '#ef4444',
-
-    confirmButtonText: 'Yes, Submit!',
-
-    cancelButtonText: 'Cancel',
-
-    reverseButtons: true
-
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      // IF USER CLICKS YES -> SHOW LOADING & FETCH
-
-      document.getElementById("loadingOverlay").style.display = "flex";
-
-
-
-      fetch(SCRIPT_URL, {
-
-        method: "POST",
-
-        body: JSON.stringify({
-
-          productionEntryId: document.getElementById("entryId").value,
-
-          productionDate: dateVal,
-
-          notes: document.getElementById("notes").value,
-
-          items: items
-
-        })
-
-      })
-
-      .then(res => res.json())
-
-      .then(r => {
-
-        document.getElementById("loadingOverlay").style.display = "none";
-
-        
-
-        if(r.status === "success") { 
-
-            // SUCCESS POPUP
-
-            Swal.fire({
-
-              icon: 'success',
-
-              title: 'Submitted!',
-
-              text: 'Data has been saved successfully.',
-
-              confirmButtonColor: '#3b82f6',
-
-              timer: 2000,
-
-              showConfirmButton: false
-
-            }).then(() => {
-
-               window.location.reload(); 
-
-            });
-
-        } else { 
-
-            // SERVER ERROR POPUP
-
-            Swal.fire({
-
-              icon: 'error',
-
-              title: 'Submission Error',
-
-              text: r.message,
-
-              confirmButtonColor: '#ef4444'
-
-            });
-
-        }
-
-      })
-
-      .catch(err => {
-
-          document.getElementById("loadingOverlay").style.display = "none";
-
-          // NETWORK ERROR POPUP
-
-          Swal.fire({
-
-              icon: 'error',
-
-              title: 'Connection Failed',
-
-              text: 'Could not connect to server: ' + err,
-
-              confirmButtonColor: '#ef4444'
-
-          });
-
+async function postAction(action, payload) {
+  document.getElementById('loading').style.display = 'flex';
+  try {
+    const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action, ...payload }) });
+    const result = await res.json();
+    
+    if(result.status === 'success') { 
+      await Swal.fire({
+        title: 'Berhasil!',
+        text: 'Data telah berhasil disimpan.',
+        icon: 'success',
+        confirmButtonColor: '#2563eb',
+        timer: 2000, 
+        timerProgressBar: true
       });
-
+      fetchData(); 
     }
+    else throw new Error(result.message);
 
-  });
-
+  } catch(e) { 
+    Swal.fire({
+      title: 'Gagal!',
+      text: "Terjadi kesalahan: " + e.message,
+      icon: 'error',
+      confirmButtonColor: '#ef4444' 
+    });
+  } 
+  finally { document.getElementById('loading').style.display = 'none'; }
 }
 
-
-
-function setupSortable() {
-
-  const tbody = document.getElementById("tableBody");
-
-  Sortable.create(tbody, { 
-
-      handle: ".row-handle", 
-
-      animation: 150,
-
-      ghostClass: "bg-gray-50"
-
+async function approveBatch(batchId) { 
+  const result = await Swal.fire({
+    title: 'Approve Batch?',
+    text: `Anda akan menyetujui batch ID: ${batchId}`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#059669', 
+    cancelButtonColor: '#64748b',
+    confirmButtonText: 'Ya, Approve!',
+    cancelButtonText: 'Batal'
   });
 
+  if(result.isConfirmed) {
+    await postAction('approve', { batchId }); 
+  }
 }
 
+async function syncXero(batchId) { 
+  const result = await Swal.fire({
+    title: 'Sync ke Xero?',
+    text: `Data batch ${batchId} akan dikirim ke Xero.`,
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonColor: '#4f46e5', 
+    cancelButtonColor: '#64748b',
+    confirmButtonText: 'Ya, Sync Sekarang',
+    cancelButtonText: 'Nanti Saja'
+  });
+
+  if(result.isConfirmed) {
+    await postAction('syncXero', { batchId }); 
+  }
+}
 </script>
-
 </body>
-
 </html>
-
