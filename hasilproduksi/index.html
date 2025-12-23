@@ -162,7 +162,7 @@
 <script>
 // =================================================================
 // URL API ANDA (Sesuaikan jika perlu)
-const API_URL = "https://script.google.com/macros/s/AKfycbx86IpiwJMfC98BMwooKadKVKyu4PtO7tEkEwY9vFPhQ8JrFJoueOku7LL2kZ2oLUUP/exec"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbycec9G9iX-y_X0QZNowHmyTPKRP9JD7NkOsIbZVKX9rC42ZqqR88ceb9JqnSeLv1XV/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
@@ -347,8 +347,9 @@ function renderData() {
       const sisaDisplay = new Intl.NumberFormat('id-ID').format(sisaVal);
       // ==========================================
 
-      // Tampilkan Total
-      const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>M: <b>${item.meter}</b></span><span>Total: <b>${new Intl.NumberFormat('id-ID').format(item.total)}</b></span></div>` : '<div class="ml-auto"></div>';
+      // Tampilkan Total, bukan Weight. NOTE: Di card view saya tetap tampilkan "Weight" jika sudah ada result, 
+      // tapi karena request hanya minta ubah input form, saya sesuaikan agar menampilkan berat di hasil view.
+      const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>Berat: <b>${item.weight} kg</b></span></div>` : '<div class="ml-auto"></div>';
       
       itemRows += `
         <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition px-2 -mx-2 rounded">
@@ -409,15 +410,15 @@ function openInputModal(batchId, mode) {
 
   } else if (CURRENT_MODE === 'result_input' || CURRENT_MODE === 'result_revise') {
       title = (CURRENT_MODE === 'result_revise') ? "Revisi Production Result" : "Input Production Result";
-      warning = "<strong>Mode Input Hasil:</strong> Masukkan angka Meter dan Qty. Total akan terhitung otomatis.";
+      warning = "<strong>Mode Input Hasil:</strong> Masukkan Qty dan Berat Coil (Kg).";
       
+      // MENGHAPUS METER & TOTAL, MENAMBAH BERAT
       thead.innerHTML = `
         <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-40">Machine</th>
         <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-48">Item</th>
         <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase w-32">KPC</th>
-        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-24">Meter</th>
         <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-24">Qty</th>
-        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-32">Total</th>
+        <th class="px-4 py-3 text-center text-xs font-bold text-slate-500 uppercase w-32">Berat (Kg)</th>
         <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase">WE Number</th>`;
   }
 
@@ -441,9 +442,8 @@ function renderModalRow(item = null) {
   const kpcVal = item ? item.kpc : '';
   const weVal = item ? item.weNumber : '';
   
-  const meterVal = item ? (item.meter || 0) : 0;
   const qtyVal = item ? (item.qty || 0) : 0;
-  const totalVal = meterVal * qtyVal; // Hitung awal jika ada data lama
+  const weightVal = item ? (item.weight || 0) : 0; // Mengambil berat dari data
 
   let html = '';
 
@@ -466,14 +466,13 @@ function renderModalRow(item = null) {
       <td class="px-2 py-3 text-center">${deleteBtn}</td>
     `;
   } else {
-    // === MODE INPUT RESULT (TEXT ONLY + INPUT NUMBERS) ===
+    // === MODE INPUT RESULT (QTY & BERAT SAJA) ===
     html = `
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly machine-select" value="${machineVal}" readonly></td>
       <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700 item-text">${itemVal}</span></td>
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly kpc-select" value="${kpcVal}" readonly></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-meter text-center font-mono border-blue-300 focus:ring-blue-200" value="${meterVal}" min="0" oninput="calculateRowTotal(this)"></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-qty text-center font-mono border-blue-300 focus:ring-blue-200" value="${qtyVal}" min="0" oninput="calculateRowTotal(this)"></td>
-      <td class="px-4 py-3"><input type="number" class="input-xs input-total text-center font-mono bg-slate-100 font-bold text-slate-700" value="${totalVal}" readonly></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-qty text-center font-mono border-blue-300 focus:ring-blue-200" value="${qtyVal}" min="0"></td>
+      <td class="px-4 py-3"><input type="number" class="input-xs input-weight text-center font-mono border-blue-300 focus:ring-blue-200" value="${weightVal}" min="0"></td>
       <td class="px-4 py-3"><input type="text" class="input-xs bg-slate-50 text-slate-500 we-preview font-mono text-xs cursor-not-allowed" value="${weVal}" readonly></td>
     `;
   }
@@ -487,14 +486,6 @@ function renderModalRow(item = null) {
   if (CURRENT_MODE === 'plan_edit' && machineVal) {
     setTimeout(() => { onMachineChange(tr.querySelector('.machine-select'), false); }, 0);
   }
-}
-
-function calculateRowTotal(inputElement) {
-    const tr = inputElement.closest('tr');
-    const meter = parseFloat(tr.querySelector('.input-meter').value) || 0;
-    const qty = parseFloat(tr.querySelector('.input-qty').value) || 0;
-    const total = meter * qty;
-    tr.querySelector('.input-total').value = total;
 }
 
 function addNewRow() { renderModalRow(); }
@@ -594,18 +585,17 @@ async function submitForm(action, forceComplete = false) {
          itemVal = tr.querySelector('.item-text').innerText;
     }
 
-    const meter = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-meter').value) || 0;
+    // Hanya ambil Qty dan Berat
     const qty = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-qty').value) || 0;
-    const total = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-total').value) || 0;
+    const weight = (CURRENT_MODE === 'plan_edit') ? 0 : parseFloat(tr.querySelector('.input-weight').value) || 0;
 
     items.push({
       rowIndex: tr.getAttribute('data-row-index'),
       item: itemVal,
       machine: tr.querySelector('.machine-select').value,
       kpc: tr.querySelector('.kpc-select').value,
-      meter: meter,
       qty: qty,
-      total: total,
+      weight: weight, // Kirim parameter berat
       weNumber: tr.querySelector('.we-preview').value,
       date: CURRENT_BATCH_DATE
     });
