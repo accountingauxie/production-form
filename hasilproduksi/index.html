@@ -6,8 +6,11 @@
 <title>Production Management</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
@@ -15,7 +18,7 @@
   .active-tab { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
   .inactive-tab { color: #64748b; border-bottom: 2px solid transparent; }
   .inactive-tab:hover { color: #334155; border-bottom: 2px solid #e2e8f0; }
-    
+  
   /* Style untuk Sub-Menu Pills */
   .sub-pill { padding: 4px 12px; border-radius: 9999px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; }
   .sub-pill-active { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
@@ -37,7 +40,7 @@
 <div id="loading"><div class="spinner"></div></div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    
+  
   <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
     <div>
       <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Production Management</h1>
@@ -111,7 +114,7 @@
     <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" aria-hidden="true"></div>
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
     <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-7xl sm:w-full">
-        
+      
       <div class="bg-white px-6 py-5 border-b border-slate-100 flex justify-between items-start">
         <div>
           <h3 class="text-xl font-bold text-slate-900" id="modal-title">Input Production Result</h3>
@@ -145,20 +148,20 @@
 
 <script>
 // =================================================================
-// GANTI URL API DENGAN DEPLOYMENT TERBARU ANDA
+// GANTI URL API ANDA DI SINI
 const API_URL = "https://script.google.com/macros/s/AKfycbwPW-whqb_3LVdAACDCo1cuYPlamkZ7vdzMZAKKWrH5JQomsKgxskVdpuz4yvlx6Nk/exec"; 
 // =================================================================
 
 let RAW_DATA = [];
 let GROUPED_DATA = {};
-let OPTIONS = { items: [], kpcs: [] }; // Inisialisasi aman
+let OPTIONS = { items: [], kpcs: [] };
 let CURRENT_TAB = 'queue';
 let CURRENT_SUB_TAB = 'all'; 
 let CURRENT_BATCH_ID = null;
 let CURRENT_BATCH_DATE = null;
 let CURRENT_MODE = ''; 
 
-// STATUS BARU
+// STATUS BARU (Disamakan dengan Backend)
 const MONITORING_STATUSES = ['Proses', 'Sukses', 'Gagal'];
 
 window.addEventListener('DOMContentLoaded', () => { fetchData(); });
@@ -176,16 +179,15 @@ async function fetchData() {
     updateCounts();
     renderData();
   } catch (err) { 
-    Swal.fire('Error', 'Gagal memuat data. Periksa koneksi atau Script.', 'error');
+    Swal.fire('Error', err.toString(), 'error');
   } 
   finally { document.getElementById('loading').style.display = 'none'; }
 }
 
 function processData() {
   GROUPED_DATA = {};
-  if (!Array.isArray(RAW_DATA)) return;
-
   RAW_DATA.forEach(row => {
+    // FILTER UTAMA: Memastikan status yang masuk sesuai
     const allowed = ['Siap Untuk Di Produksi', 'Sudah Di Produksi', 'Siap Import', ...MONITORING_STATUSES];
     
     if(!allowed.includes(row.status)) return;
@@ -214,7 +216,7 @@ function updateCounts() {
 
 function switchTab(tabName) {
   CURRENT_TAB = tabName;
-    
+  
   ['queue', 'completed', 'import', 'monitoring'].forEach(t => {
     const el = document.getElementById('tab-' + t);
     t === tabName ? (el.classList.remove('inactive-tab'), el.classList.add('active-tab')) : (el.classList.remove('active-tab'), el.classList.add('inactive-tab'));
@@ -233,12 +235,13 @@ function switchTab(tabName) {
 
 function switchSubTab(subName) {
   CURRENT_SUB_TAB = subName;
-    
+  
   const pills = ['all', 'proses', 'sukses', 'gagal'];
   pills.forEach(p => {
     let id = 'sub-' + p; 
     let el = document.getElementById(id);
     
+    // LOGIC MATCHING BARU
     let isMatch = false;
     if (subName === 'all' && p === 'all') isMatch = true;
     if (subName === 'Proses' && p === 'proses') isMatch = true;
@@ -261,7 +264,7 @@ function renderData() {
   const container = document.getElementById('list-container');
   container.innerHTML = '';
   const search = document.getElementById('searchInput').value.toLowerCase();
-    
+  
   const batches = Object.values(GROUPED_DATA).filter(batch => {
     const st = batch.items[0].status;
     let matchTab = false;
@@ -307,6 +310,7 @@ function renderData() {
     } else if (CURRENT_TAB === 'import') {
        actionBtn = `<button onclick="syncXero('${batch.id}')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-sm transition flex items-center"><i class="fas fa-cloud-upload-alt mr-2"></i> Sync Xero</button>`;
     } else if (CURRENT_TAB === 'monitoring') {
+       // BADGE BARU
        let badgeClass = "bg-gray-100 text-gray-600 border-gray-200";
        let icon = "";
        
@@ -327,25 +331,13 @@ function renderData() {
     let itemRows = '';
     batch.items.forEach(item => {
       const resultDisplay = (CURRENT_TAB !== 'queue') ? `<div class="ml-auto text-xs font-mono text-slate-600 bg-slate-100 px-2 py-1 rounded border border-slate-200 flex gap-3"><span>Qty: <b>${item.qty}</b></span><span>M: <b>${item.meter}</b></span><span>Kg: <b>${item.weight}</b></span></div>` : '<div class="ml-auto"></div>';
-      
-      const matchedKpc = OPTIONS.kpcs ? OPTIONS.kpcs.find(k => k.name === item.kpc) : null;
-      const sisaValue = matchedKpc ? new Intl.NumberFormat('id-ID').format(matchedKpc.sisa) : '-';
-      
       itemRows += `
         <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0 hover:bg-slate-50 transition px-2 -mx-2 rounded">
            <div class="flex items-center flex-1 gap-4">
              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
              <div class="w-32 text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded text-center">${item.machine}</div>
              <div class="text-sm font-medium text-slate-700 w-48">${item.item}</div>
-             
-             <div class="flex items-center gap-2">
-                <div class="text-xs text-slate-600 font-mono font-bold">${item.kpc}</div>
-                <div class="text-xs text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded-md shadow-sm whitespace-nowrap" title="Sisa KPC">
-                    <span class="text-[10px] uppercase text-slate-400 mr-1">Sisa:</span>
-                    <span class="font-bold text-slate-700">${sisaValue}</span>
-                </div>
-             </div>
-             
+             <div class="text-xs text-slate-400 font-mono">${item.kpc}</div>
            </div>
            ${resultDisplay}
         </div>`;
@@ -371,12 +363,12 @@ function openInputModal(batchId, mode) {
   CURRENT_MODE = mode; 
   const batch = GROUPED_DATA[batchId];
   CURRENT_BATCH_DATE = batch.date;
-    
+  
   document.getElementById('modal-batch-id').innerText = batchId;
-    
+  
   let title = "Form";
   let warning = "";
-    
+  
   if (CURRENT_MODE === 'plan_edit') {
       title = "Edit Production Plan";
       warning = "<strong>Mode Edit Plan:</strong> Ubah Mesin/Item/KPC atau tambah baris. Angka hasil produksi belum diinput.";
@@ -418,33 +410,25 @@ function openInputModal(batchId, mode) {
   document.getElementById('modalResult').classList.remove('hidden');
 }
 
-// === BAGIAN YANG DIPERBAIKI UNTUK MENCEGAH BLANK BLUR ===
 function renderModalRow(item = null) {
   const tbody = document.getElementById('modal-table-body');
   const rowIndex = item ? item.rowIndex : 'new';
   const itemVal = item ? item.item : '';
   const machineVal = item ? item.machine : '';
   const kpcVal = item ? item.kpc : '';
-  const meterVal = item ? (item.meter || 0) : 0;
-  const qtyVal = item ? (item.qty || 0) : 0;
-  const weightVal = item ? (item.weight || 0) : 0;
-  const weVal = item ? (item.weNumber || '') : '';
+  const meterVal = item ? item.meter : 0;
+  const qtyVal = item ? item.qty : 0;
+  const weightVal = item ? item.weight : 0;
+  const weVal = item ? item.weNumber : '';
 
   let html = '';
 
-  // SAFE CHECK: Pastikan OPTIONS.items ada
-  const safeItems = (OPTIONS && OPTIONS.items) ? OPTIONS.items : [];
-  const safeKpcs = (OPTIONS && OPTIONS.kpcs) ? OPTIONS.kpcs : [];
-
   if (CURRENT_MODE === 'plan_edit') {
-    // Dropdown Mesin
-    const machineOpts = [...new Set(safeItems.map(i => i.machine))].filter(Boolean).sort();
+    const machineOpts = [...new Set(OPTIONS.items.map(i => i.machine))].sort();
     let machineEl = `<select class="input-xs machine-select bg-white" onchange="onMachineChange(this)">
                         <option value="">Select Machine</option>
                         ${machineOpts.map(m => `<option value="${m}" ${m === machineVal ? 'selected' : ''}>${m}</option>`).join('')}
                       </select>`;
-    
-    // Dropdown Item & KPC awal
     let itemEl = `<select class="input-xs item-select bg-white" onchange="onItemChange(this)" data-current="${itemVal}"><option value="">Select Machine First</option></select>`;
     let kpcEl = `<select class="input-xs kpc-select bg-white" onchange="updateRowWE(this)" data-current="${kpcVal}"><option value="">Select Item First</option></select>`;
     let deleteBtn = `<button onclick="deleteRow(this)" class="text-slate-400 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>`;
@@ -457,7 +441,6 @@ function renderModalRow(item = null) {
       <td class="px-2 py-3 text-center">${deleteBtn}</td>
     `;
   } else {
-    // Mode Input Result / Revisi (Read Only)
     html = `
       <td class="px-4 py-3"><input type="text" class="input-xs input-readonly machine-select" value="${machineVal}" readonly></td>
       <td class="px-4 py-3"><span class="text-sm font-medium text-slate-700">${itemVal}</span></td>
@@ -474,12 +457,8 @@ function renderModalRow(item = null) {
   tr.innerHTML = html;
   tbody.appendChild(tr);
 
-  // Trigger update dropdown setelah row masuk ke DOM
   if (CURRENT_MODE === 'plan_edit' && machineVal) {
-    setTimeout(() => { 
-        const sel = tr.querySelector('.machine-select');
-        if(sel) onMachineChange(sel, false); 
-    }, 0);
+    setTimeout(() => { onMachineChange(tr.querySelector('.machine-select'), false); }, 0);
   }
 }
 
@@ -492,10 +471,7 @@ function onMachineChange(el, resetValue = true) {
   const selectedMachine = el.value;
   const itemSelect = tr.querySelector('.item-select');
   const currentItem = itemSelect.getAttribute('data-current');
-  
-  const safeItems = (OPTIONS && OPTIONS.items) ? OPTIONS.items : [];
-  const validItems = safeItems.filter(i => i.machine === selectedMachine);
-  
+  const validItems = OPTIONS.items.filter(i => i.machine === selectedMachine);
   itemSelect.innerHTML = `<option value="">Select Item</option>` + validItems.map(i => `<option value="${i.name}" ${!resetValue && i.name === currentItem ? 'selected' : ''}>${i.name}</option>`).join('');
   if(resetValue) { itemSelect.value = ""; onItemChange(itemSelect, true); } else { onItemChange(itemSelect, false); }
 }
@@ -506,10 +482,7 @@ function onItemChange(el, resetValue = true) {
   const selectedItem = el.value;
   const kpcSelect = tr.querySelector('.kpc-select');
   const currentKpc = kpcSelect.getAttribute('data-current');
-  
-  const safeKpcs = (OPTIONS && OPTIONS.kpcs) ? OPTIONS.kpcs : [];
-  const validKPCs = safeKpcs.filter(k => k.relatedItem === selectedItem);
-  
+  const validKPCs = OPTIONS.kpcs.filter(k => k.relatedItem === selectedItem);
   kpcSelect.innerHTML = `<option value="">Select KPC</option>` + validKPCs.map(k => {
         const label = `${k.name} (Sisa: ${new Intl.NumberFormat('id-ID').format(k.sisa)})`;
         return `<option value="${k.name}" ${!resetValue && k.name === currentKpc ? 'selected' : ''}>${label}</option>`;
@@ -523,7 +496,7 @@ function updateRowWE(el) {
   const machine = tr.querySelector('.machine-select').value;
   const kpc = tr.querySelector('.kpc-select').value;
   let item = (CURRENT_MODE === 'plan_edit') ? tr.querySelector('.item-select').value : tr.querySelector('span').innerText;
-    
+  
   if(!machine || !item || !kpc) return;
 
   let machineCode = "XX";
@@ -531,7 +504,7 @@ function updateRowWE(el) {
   if(mUpper.includes("RENG")) machineCode = "RG";
   else if(mUpper.includes("TRUSS")) machineCode = "TS";
   else machineCode = mUpper.substring(0,2);
-    
+  
   const machineDigits = machine.match(/\d+/);
   const machineNum = machineDigits ? machineDigits[0].slice(-2) : "00";
   const finalMachine = machineCode + machineNum;
@@ -546,7 +519,7 @@ function updateRowWE(el) {
 function renderFooterButtons() {
   const footer = document.getElementById('modal-footer');
   let btns = '';
-    
+  
   if (CURRENT_MODE === 'plan_edit') {
     btns = `<button onclick="submitForm('replaceBatch')" class="bg-amber-400 text-amber-900 px-5 py-2.5 rounded hover:bg-amber-500 font-semibold shadow-sm">Save Changes</button>`;
   } else if (CURRENT_MODE === 'result_input') {
@@ -554,12 +527,14 @@ function renderFooterButtons() {
   } else if (CURRENT_MODE === 'result_revise') {
     btns = `<button onclick="submitForm('replaceBatch', true)" class="bg-emerald-600 text-white px-5 py-2.5 rounded hover:bg-emerald-700 font-semibold shadow-sm">Simpan Revisi</button>`;
   }
-    
+  
   btns += `<button onclick="closeModal()" class="bg-white border px-5 py-2.5 rounded hover:bg-slate-50 font-medium text-slate-700 shadow-sm ml-2">Cancel</button>`;
   footer.innerHTML = btns;
 }
 
 function closeModal() { document.getElementById('modalResult').classList.add('hidden'); }
+
+// === FUNGSI NOTIFIKASI MODERN (SweetAlert2) ===
 
 async function submitForm(action, forceComplete = false) {
   const rows = document.querySelectorAll('#modal-table-body tr');
@@ -585,6 +560,7 @@ async function submitForm(action, forceComplete = false) {
     });
   });
 
+  // CONFIRMATION POP-UP
   const result = await Swal.fire({
     title: 'Simpan Data?',
     text: "Pastikan data yang diinput sudah benar.",
@@ -597,7 +573,7 @@ async function submitForm(action, forceComplete = false) {
   });
 
   if (!result.isConfirmed) return;
-    
+  
   closeModal();
   await postAction(action, { batchId: CURRENT_BATCH_ID, items: items, forceComplete: forceComplete });
 }
@@ -609,6 +585,7 @@ async function postAction(action, payload) {
     const result = await res.json();
     
     if(result.status === 'success') { 
+      // SUCCESS POP-UP
       await Swal.fire({
         title: 'Berhasil!',
         text: 'Data telah berhasil disimpan.',
@@ -622,6 +599,7 @@ async function postAction(action, payload) {
     else throw new Error(result.message);
 
   } catch(e) { 
+    // ERROR POP-UP
     Swal.fire({
       title: 'Gagal!',
       text: "Terjadi kesalahan: " + e.message,
