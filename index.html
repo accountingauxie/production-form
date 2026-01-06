@@ -7,37 +7,53 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #f4f6f9; font-family: 'Inter', sans-serif; color: #333; }
-        .page-title { font-weight: 700; color: #111; margin-bottom: 0; }
-        .breadcrumb-custom { font-size: 0.85rem; color: #6c757d; }
+        body { background-color: #f4f6f9; font-family: 'Inter', sans-serif; color: #333; font-size: 0.9rem; }
         
-        /* Nav Tabs Custom */
+        /* Nav Tabs */
         .nav-tabs .nav-link { color: #666; font-weight: 500; border: none; padding: 12px 20px; }
         .nav-tabs .nav-link.active { color: #0d6efd; border-bottom: 3px solid #0d6efd; background: transparent; font-weight: 700; }
-        .nav-tabs .nav-link:hover { color: #0d6efd; }
         
-        /* Cards & Tables */
+        /* Main Table */
         .main-card { background: #fff; border-radius: 8px; border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.04); margin-top: 20px; overflow: hidden; }
         .table-custom thead th { background-color: #f8f9fa; color: #555; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; padding: 15px 20px; border-bottom: 2px solid #eee; }
-        .table-custom tbody td { padding: 15px 20px; vertical-align: middle; font-size: 0.9rem; border-bottom: 1px solid #f5f5f5; }
-        .table-custom tbody tr:hover { background-color: #fcfcfc; }
+        .table-custom tbody td { padding: 15px 20px; vertical-align: middle; border-bottom: 1px solid #f5f5f5; }
         
-        /* Badges */
-        .badge-status-pending { background-color: #e9ecef; color: #495057; border: 1px solid #ced4da; font-weight: 500; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; }
-        .badge-status-success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; font-weight: 500; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; }
+        /* Status Badges */
+        .badge-status-pending { background-color: #e9ecef; color: #495057; border: 1px solid #ced4da; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .badge-status-success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
         
-        .action-icon { color: #0d6efd; cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
-        .action-icon:hover { color: #004bb5; }
+        /* --- MODAL STYLING KHUSUS --- */
+        .modal-header { border-bottom: none; padding-bottom: 0; }
+        .modal-title-custom { font-size: 1.25rem; font-weight: 700; color: #212529; }
+        .modal-subtitle { font-size: 0.85rem; color: #6c757d; }
         
-        /* Modal Styles */
-        .detail-label { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 600; display: block; margin-bottom: 4px; }
-        .detail-value { font-size: 1rem; font-weight: 600; color: #333; }
+        .info-label { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+        .info-value { font-size: 1rem; font-weight: 600; color: #212529; }
+        .info-value.blue { color: #0d6efd; }
+        .info-value.green { color: #198754; }
+
+        /* Icon Box di Header Modal */
+        .header-icon-box {
+            width: 40px; height: 40px; 
+            background-color: #0d6efd; color: white; 
+            border-radius: 8px; display: flex; 
+            align-items: center; justify-content: center; 
+            font-size: 1.2rem; margin-right: 15px;
+        }
+
+        /* Table di dalam Modal */
+        .modal-table th { font-size: 0.75rem; text-transform: uppercase; color: #6c757d; font-weight: 700; padding: 12px 15px; border-bottom: 1px solid #dee2e6; }
+        .modal-table td { font-size: 0.9rem; padding: 12px 15px; vertical-align: middle; border-bottom: 1px solid #f0f0f0; }
         
-        /* Highlight khusus untuk Receiving ID (Better Look) */
-        .bg-focus { background-color: #eff6ff !important; color: #0d6efd !important; font-weight: 700 !important; }
+        /* Highlight Kolom This Receipt */
+        .col-highlight-header { background-color: #eef5ff !important; color: #0d6efd !important; }
+        .col-highlight-body { background-color: #f4f9ff !important; font-weight: 700; color: #212529; }
+
+        /* Badge Tipe Produk */
+        .badge-type { background-color: #6c757d; color: white; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -46,12 +62,12 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="page-title">Auxilium Portal</h3>
-            <span class="breadcrumb-custom">Dashboard / Report View</span>
+            <h3 class="fw-bold mb-0">Auxilium Portal</h3>
+            <span class="text-muted small">Dashboard / Report View</span>
         </div>
     </div>
 
-    <ul class="nav nav-tabs mb-3" id="reportTabs">
+    <ul class="nav nav-tabs mb-3">
         <li class="nav-item">
             <a class="nav-link active" href="#" onclick="switchTab('receiving', this)">
                 <i class="bi bi-box-arrow-in-down me-2"></i>Penerimaan
@@ -82,10 +98,8 @@
 
         <div class="table-responsive">
             <table class="table table-custom d-none" id="mainTable">
-                <thead id="tableHead">
-                </thead>
-                <tbody id="tableBody">
-                </tbody>
+                <thead id="tableHead"></thead>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
         
@@ -98,38 +112,33 @@
 <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle">Detail Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-0">
-                <div class="p-4 bg-white border-bottom">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <span class="detail-label" id="labelId">ID</span>
-                            <span class="detail-value text-primary fs-5" id="mId">-</span>
-                        </div>
-                        <div class="col-md-4">
-                            <span class="detail-label" id="labelDate">Date</span>
-                            <span class="detail-value" id="mDate">-</span>
-                        </div>
-                        <div class="col-md-4">
-                            <span class="detail-label" id="labelVendor">Vendor</span>
-                            <span class="detail-value" id="mVendor">-</span>
-                        </div>
+            
+            <div class="modal-header pt-4 px-4">
+                <div class="d-flex align-items-start w-100">
+                    <div class="header-icon-box" id="modalIconBox">
+                        <i class="bi bi-box-seam"></i>
                     </div>
+                    <div>
+                        <h5 class="modal-title-custom mb-0" id="modalTitle">Detail Data</h5>
+                        <p class="modal-subtitle mb-0" id="modalSubtitle">Review detail item</p>
+                    </div>
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal"></button>
                 </div>
+            </div>
+
+            <div class="modal-body p-0">
+                <div class="p-4 bg-white" id="modalInfoSection">
+                    </div>
 
                 <div class="table-responsive">
-                    <table class="table table-striped mb-0 align-middle">
-                        <thead id="modalTableHead" class="bg-light text-secondary small text-uppercase">
-                        </thead>
-                        <tbody id="modalTableBody">
-                        </tbody>
+                    <table class="table modal-table mb-0 w-100">
+                        <thead id="modalTableHead" class="bg-light"></thead>
+                        <tbody id="modalTableBody"></tbody>
                     </table>
                 </div>
             </div>
-            <div class="modal-footer bg-light">
+            
+            <div class="modal-footer bg-light border-top-0">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -138,37 +147,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // --- KONFIGURASI URL APPS SCRIPT ---
+    // --- SETTING URL BACKEND ---
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwjA3tAZnNSwu1Ewl_FWvLdvkUmckgcEWxHyklqLH4658ePmADWETpRtTbjvkDF7H8/exec'; 
 
     let allData = [];
-    let currentTab = 'receiving'; // Default tab
+    let currentTab = 'receiving'; 
 
-    // --- CONFIG STRUKTUR KOLOM ---
+    // --- KONFIGURASI HEADER TABEL & MODAL ---
     const CONFIG = {
         'receiving': {
-            // Tampilan Tabel Utama Penerimaan
+            // Tabel Utama
             tableHeaders: ['Reference', 'Vendor', 'Date', 'Items', 'Total Qty', 'Action'],
-            // Header Modal Penerimaan
-            modalHeaders: ['Item Code', 'Description', 'KPC', 'UoM', 'Ordered', 'Recv Before', 'This Receipt'],
-            idLabel: 'Receiving ID'
+            // Modal Table Headers (Sesuai Gambar 1)
+            modalHeaders: ['Tipe Produk', 'Description', 'KPC', 'UoM', 'Ordered', 'Recv Before', 'This Receipt'],
+            title: 'Detail Penerimaan Barang',
+            subtitle: 'Review detail item dan kuantitas'
         },
         'list_po': {
-            // Tampilan Tabel Utama List PO (Ditambah 'Status')
+            // Tabel Utama
             tableHeaders: ['Inv Number', 'Vendor', 'Inv Date', 'Status', 'Items', 'Total Order', 'Action'],
-            // Header Modal List PO
+            // Modal Table Headers (Sesuai Gambar 2)
             modalHeaders: ['Tipe Produk', 'Item Name', 'Qty Order', 'Qty Arrived', 'Qty Remaining'],
-            idLabel: 'Invoice Number'
+            title: 'Detail Invoice Number',
+            subtitle: 'Review status kelengkapan barang'
         }
     };
 
     function switchTab(tabName, element) {
-        // Update UI Tabs Active State
         document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
         element.classList.add('active');
-        
         currentTab = tabName;
-        fetchData(); // Reload data sesuai tab
+        fetchData();
     }
 
     async function fetchData() {
@@ -183,18 +192,13 @@
         thead.innerHTML = '';
 
         try {
-            // Fetch data dari Apps Script dengan parameter ?type=...
             const response = await fetch(`${WEB_APP_URL}?type=${currentTab}`);
             let data = await response.json();
             
-            if (data.error) {
-                alert("Error: " + data.error);
-                return;
-            }
+            if (data.error) { alert("Error: " + data.error); return; }
 
-            // Sort Data Descending berdasarkan ID
+            // Sort Descending ID
             data.sort((a, b) => b.id.localeCompare(a.id));
-
             allData = data;
             document.getElementById('recordCount').innerText = data.length;
             
@@ -205,7 +209,7 @@
 
         } catch (error) {
             console.error(error);
-            loading.innerHTML = '<p class="text-danger">Gagal koneksi ke server atau data kosong.</p>';
+            loading.innerHTML = '<p class="text-danger">Gagal memuat data.</p>';
         }
     }
 
@@ -216,38 +220,30 @@
 
         // 1. Render Header Table Utama
         let headerHtml = '<tr>';
-        conf.tableHeaders.forEach(h => {
-            headerHtml += `<th>${h}</th>`;
-        });
+        conf.tableHeaders.forEach(h => headerHtml += `<th>${h}</th>`);
         headerHtml += '</tr>';
         thead.innerHTML = headerHtml;
 
-        // 2. Render Body Table Utama
+        // 2. Render Body
         tbody.innerHTML = '';
         data.forEach(row => {
             const itemsCount = row.items ? row.items.length : 0;
             let tr = document.createElement('tr');
             
+            // Render Row Content
             if (currentTab === 'receiving') {
-                // --- RENDER ROW UNTUK PENERIMAAN ---
                 tr.innerHTML = `
                     <td class="fw-bold text-primary">${row.id}</td>
                     <td>${row.vendor}</td>
                     <td>${row.date}</td>
                     <td class="text-center"><span class="badge bg-light text-dark border">${itemsCount}</span></td>
                     <td class="fw-bold">${row.totalQty}</td>
-                    <td class="text-end">
-                        <i class="bi bi-eye action-icon" onclick="showDetail('${row.id}')"></i>
-                    </td>
+                    <td class="text-end"><i class="bi bi-eye text-primary cursor-pointer" style="cursor:pointer" onclick="showDetail('${row.id}')"></i></td>
                 `;
             } else {
-                // --- RENDER ROW UNTUK LIST PO ---
-                
-                // Logic Status: Ambil dari row.status (Column L). Jika kosong -> "Belum Diterima"
+                // Logic Status
                 let statusRaw = row.status ? row.status.toString().trim() : "";
                 let statusText = statusRaw === "" ? "Belum Diterima" : statusRaw;
-                
-                // Logic Warna Badge
                 let badgeClass = statusText === "Belum Diterima" ? "badge-status-pending" : "badge-status-success";
 
                 tr.innerHTML = `
@@ -257,9 +253,7 @@
                     <td><span class="${badgeClass}">${statusText}</span></td>
                     <td class="text-center"><span class="badge bg-light text-dark border">${itemsCount}</span></td>
                     <td class="fw-bold">${row.totalQty}</td>
-                    <td class="text-end">
-                        <i class="bi bi-eye action-icon" onclick="showDetail('${row.id}')"></i>
-                    </td>
+                    <td class="text-end"><i class="bi bi-eye text-primary cursor-pointer" style="cursor:pointer" onclick="showDetail('${row.id}')"></i></td>
                 `;
             }
             tbody.appendChild(tr);
@@ -271,62 +265,114 @@
         if (!data) return;
 
         const conf = CONFIG[currentTab];
-
-        // 1. Set Info Header Modal
-        document.getElementById('modalTitle').innerText = "Detail " + conf.idLabel;
-        document.getElementById('labelId').innerText = conf.idLabel;
         
-        document.getElementById('mId').innerText = data.id;
-        document.getElementById('mDate').innerText = data.date;
-        document.getElementById('mVendor').innerText = data.vendor;
+        // --- 1. SET HEADER & TITLE ---
+        document.getElementById('modalTitle').innerText = conf.title;
+        document.getElementById('modalSubtitle').innerText = conf.subtitle;
+        
+        // --- 2. SET INFO SECTION (DINAMIS SESUAI TAB) ---
+        const infoSection = document.getElementById('modalInfoSection');
+        
+        if (currentTab === 'receiving') {
+            // Layout Khusus Receiving (Ada PO & Invoice)
+            infoSection.innerHTML = `
+                <div class="row g-4 border-bottom pb-4 mb-3">
+                    <div class="col-md-3">
+                        <span class="info-label">Receiving ID</span>
+                        <span class="info-value blue">${data.id}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="info-label">Receive Date</span>
+                        <span class="info-value">${data.date}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="info-label">PO Number</span>
+                        <span class="info-value">${data.poNumber || 'PO-20260105001'}</span> 
+                    </div>
+                    <div class="col-md-3">
+                        <span class="info-label">Invoice Number</span>
+                        <span class="info-value green">${data.invNumber || '3025005503'}</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="info-label">Supplier / Vendor</span>
+                    <span class="info-value fs-5">${data.vendor}</span>
+                </div>
+            `;
+        } else {
+            // Layout List PO (Simpel 3 Kolom)
+            infoSection.innerHTML = `
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <span class="info-label">Invoice Number</span>
+                        <span class="info-value blue">${data.id}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="info-label">Date</span>
+                        <span class="info-value">${data.date}</span>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="info-label">Vendor</span>
+                        <span class="info-value">${data.vendor}</span>
+                    </div>
+                </div>
+            `;
+        }
 
-        // 2. Set Header Tabel Modal
+        // --- 3. SET HEADER TABEL MODAL ---
         const mHead = document.getElementById('modalTableHead');
         let mHeadHtml = '<tr>';
-        conf.modalHeaders.forEach(h => {
-            mHeadHtml += `<th class="py-3 px-3 border-bottom">${h}</th>`;
+        conf.modalHeaders.forEach((h, index) => {
+            // Jika Tab Receiving dan Kolom terakhir (This Receipt), kasih highlight
+            if (currentTab === 'receiving' && index === conf.modalHeaders.length - 1) {
+                mHeadHtml += `<th class="col-highlight-header text-end">${h}</th>`;
+            } else if (index > 1) { 
+                // Kolom angka rata kanan
+                mHeadHtml += `<th class="text-end">${h}</th>`;
+            } else {
+                mHeadHtml += `<th>${h}</th>`;
+            }
         });
         mHeadHtml += '</tr>';
         mHead.innerHTML = mHeadHtml;
 
-        // 3. Set Isi Tabel Modal
+        // --- 4. SET ISI TABEL MODAL ---
         const mBody = document.getElementById('modalTableBody');
         mBody.innerHTML = '';
+
+        // Helper untuk angka 0
+        const safeVal = (val) => (val === "" || val === null || val === undefined) ? "0" : val;
 
         data.items.forEach(item => {
             let rowHtml = '<tr>';
             
             if (currentTab === 'receiving') {
-                // --- MODAL UNTUK PENERIMAAN (Better Look) ---
-                // Menggunakan class 'bg-focus' untuk kolom This Receipt agar biru
+                // --- TABLE RECEIVING (7 Kolom) ---
+                // Mapping: [Tipe, Desc, KPC, UoM, Ordered, RecvBefore, ThisReceipt]
                 rowHtml += `
-                    <td class="px-3"><span class="badge bg-secondary fw-normal">${item.col1}</span></td>
-                    <td class="px-3 fw-bold">${item.col2}</td>
-                    <td class="px-3">${item.col3}</td>
-                    <td class="px-3 small text-muted">${item.col4}</td>
-                    <td class="px-3 text-end text-muted">${item.val1}</td>
-                    <td class="px-3 text-end text-muted">${item.val2}</td>
-                    <td class="px-3 text-end bg-focus">${item.val3}</td>
+                    <td><span class="badge-type">${item.col1 || 'BI'}</span></td>
+                    <td class="fw-bold">${item.col2}</td>
+                    <td>${item.col3 || '-'}</td>
+                    <td>${item.col4 || 'UNIT'}</td>
+                    <td class="text-end text-muted">${safeVal(item.val1)}</td>
+                    <td class="text-end text-muted">${safeVal(item.val2)}</td>
+                    <td class="text-end col-highlight-body">${safeVal(item.val3)}</td>
                 `;
             } else {
-                // --- MODAL UNTUK LIST PO ---
-                // Helper untuk ubah Blank jadi 0
-                const safeVal = (val) => (val === "" || val === null || val === undefined) ? "0" : val;
-
+                // --- TABLE LIST PO (5 Kolom) ---
+                // Mapping: [Tipe, Name, Qty Order, Qty Arrived, Qty Remaining]
                 rowHtml += `
-                    <td class="px-3">${item.col1}</td>
-                    <td class="px-3 fw-bold">${item.col2}</td>
-                    <td class="px-3 text-end">${safeVal(item.val1)}</td>
-                    <td class="px-3 text-end text-success">${safeVal(item.val2)}</td>
-                    <td class="px-3 text-end fw-bold text-danger">${safeVal(item.val3)}</td>
+                    <td><span class="badge-type">${item.col1 || 'BI'}</span></td>
+                    <td class="fw-bold">${item.col2}</td>
+                    <td class="text-end">${safeVal(item.val1)}</td>
+                    <td class="text-end text-success">${safeVal(item.val2)}</td>
+                    <td class="text-end text-danger fw-bold">${safeVal(item.val3)}</td>
                 `;
             }
-            
             rowHtml += '</tr>';
             mBody.innerHTML += rowHtml;
         });
 
-        // Tampilkan Modal
         const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
         myModal.show();
     }
@@ -335,14 +381,11 @@
         const input = document.getElementById('searchInput');
         const filter = input.value.toLowerCase();
         const rows = document.querySelectorAll('#tableBody tr');
-
         rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-            row.style.display = text.includes(filter) ? '' : 'none';
+            row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none';
         });
     }
 
-    // Init Load pertama kali
     fetchData();
 </script>
 
