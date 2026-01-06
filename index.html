@@ -1,351 +1,383 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receiving Dashboard</title>
+<head>
+  <meta charset="UTF-8" />
+  <title>Receiving PO Report - Auxilium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================
+       1. SYSTEM STYLE (Auxilium Theme)
+       ========================================= */
+    :root { 
+        --primary-color: #116999; 
+        --bg-color: #f4f7f6; 
+        --text-color: #333; 
+        --border-color: #eaecf0;
+
+        /* App Specific Vars */
+        --ux-blue: #116999;
+        --ux-bg: #f5f7fa;
+        --ux-text-main: #1f2933;
+        --ux-text-sub: #55627a;
+        --ux-yellow-accent: #fbbf24; /* Warna Kuning Invoice */
+        --ux-blue-accent: #3b82f6;
+    }
+
+    * { box-sizing: border-box; }
+    body { 
+        margin: 0; 
+        font-family: "Inter", sans-serif; 
+        font-size: 14px; 
+        background: var(--bg-color); 
+        color: var(--text-color); 
+        -webkit-font-smoothing: antialiased; 
+    }
+
+    /* --- NAVBAR (Persis HTML Anda) --- */
+    .aux-navbar {
+        background-color: #ffffff; height: 70px; display: flex; align-items: center;
+        justify-content: space-between; padding: 0 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        position: sticky; top: 0; z-index: 1000;
+    }
+    .aux-logo img { height: 45px; width: auto; }
+    .aux-menu { display: flex; gap: 8px; align-items: center; height: 100%; }
+    .aux-link { 
+        text-decoration: none; color: #475467; font-weight: 600; font-size: 14px; 
+        padding: 8px 16px; border-radius: 6px; transition: all 0.2s; cursor: pointer;
+    }
+    .aux-link:hover { background-color: #f2f4f7; color: #101828; }
+    .aux-link.active { background-color: #eff8ff; color: var(--primary-color); font-weight: 700; }
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    .user-panel { display: flex; align-items: center; gap: 12px; padding-left: 20px; border-left: 1px solid var(--border-color); }
+    .user-details { display: flex; flex-direction: column; text-align: right; line-height: 1.3; }
+    .user-name { font-weight: 700; font-size: 13px; color: #101828; }
+    .user-role { font-size: 11px; color: #667085; }
+    .user-avatar { width: 36px; height: 36px; background-color: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+
+    /* =========================================
+       2. REPORT DASHBOARD STYLES
+       ========================================= */
+    .page { max-width: 1000px; margin: 32px auto; padding: 0 20px 60px; }
     
-    <style>
-      /* --- GLOBAL VARIABLES & RESET --- */
-      :root {
-        --primary: #f59e0b; /* Warna Oranye/Kuning seperti di gambar kartu */
-        --accent: #2563eb;  /* Warna Biru untuk link/detail */
-        --bg: #f3f4f6;
-        --text-main: #1f2937;
-        --text-sub: #6b7280;
-      }
+    .dashboard-header { margin-bottom: 25px; }
+    .dashboard-title { font-size: 24px; font-weight: 800; color: #1f2933; margin-bottom: 15px; letter-spacing: -0.5px; }
 
-      * { box-sizing: border-box; }
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--bg);
-        margin: 0;
-        padding: 20px;
-        color: var(--text-main);
-      }
-      
-      .container {
-        max-width: 1000px;
-        margin: 0 auto;
-      }
+    /* LOADER */
+    #loader { display: flex; flex-direction: column; align-items: center; margin-top: 50px; color: #666; }
+    .spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 10px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-      /* --- LOADER --- */
-      #loader {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 60vh;
-        color: var(--text-sub);
-      }
-      .spinner {
-        width: 40px; height: 40px;
-        border: 4px solid #e5e7eb; border-top: 4px solid var(--accent);
-        border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;
-      }
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* --- STYLE 1: LIST VIEW (Card Invoice Style) --- */
+    .cards-list-container { display: flex; flex-direction: column; gap: 16px; }
 
-      /* --- NAVIGATION HEADER --- */
-      .nav-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-      }
-      .nav-title { font-size: 1.5rem; font-weight: 700; color: #111; }
-      .back-btn {
-        display: none; /* Hidden by default */
-        background: #fff; border: 1px solid #ddd;
-        padding: 8px 16px; border-radius: 6px; cursor: pointer;
-        font-weight: 600; color: #444; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      }
-      .back-btn:hover { background: #f9f9f9; }
+    .inv-list-card {
+        background: white; border-radius: 10px; border: 1px solid #eef0f3;
+        border-left: 6px solid var(--ux-yellow-accent); /* Aksen Kuning Default */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.02); cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s; overflow: hidden;
+    }
+    .inv-list-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
 
-      /* =========================================
-         STYLE 1: LIST VIEW (KARTU PIUTANG)
-      ========================================= */
-      .card-list-container {
-        display: flex; flex-direction: column; gap: 20px;
-      }
+    .card-body { padding: 18px 22px; position: relative; }
+    
+    .card-top-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .card-main-title { font-size: 16px; font-weight: 700; color: #1e2933; }
+    
+    /* Badge Status (Kuning/Gold seperti screenshot) */
+    .status-badge {
+        font-size: 11px; font-weight: 700; padding: 5px 12px;
+        border-radius: 20px; white-space: nowrap; background: #fef3c7; color: #b45309;
+    }
 
-      .summary-card {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        border-left: 6px solid var(--primary); /* Aksen Kiri (Oranye) */
-        overflow: hidden;
-        transition: transform 0.2s, box-shadow 0.2s;
-      }
-      
-      .summary-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      }
+    .card-meta { display: flex; gap: 15px; font-size: 13px; color: #556; font-weight: 500; margin-bottom: 12px; }
+    .meta-row { display: flex; align-items: center; gap: 6px; }
+    .meta-row svg { width: 14px; height: 14px; color: #889; }
 
-      .card-body { padding: 20px 24px; }
+    /* Box List Item (Dashed Border) */
+    .item-preview-section {
+        background: #fcfcfc; border-radius: 6px; padding: 10px 12px;
+        font-size: 12px; color: #475569; border: 1px dashed #cbd5e1;
+        line-height: 1.5; margin-top: 8px;
+    }
+    .item-preview-label { font-weight: 700; color: #94a3b8; font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 2px; }
 
-      /* Header Baris 1: ID & Status Badge */
-      .card-top { display: flex; justify-content: space-between; margin-bottom: 10px; align-items: start; }
-      .card-id { font-size: 1.1rem; font-weight: 700; color: #111; }
-      .status-badge {
-        background: #fef3c7; color: #d97706; /* Kuning/Orange */
-        font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; font-weight: 600;
-      }
-
-      /* Info Supplier & Tanggal */
-      .card-meta { display: flex; gap: 15px; font-size: 0.85rem; color: #555; margin-bottom: 15px; }
-      .card-meta div { display: flex; align-items: center; gap: 5px; }
-      
-      /* Kotak List Item (Garis Putus-putus) */
-      .item-preview-box {
-        border: 1px dashed #d1d5db;
-        background-color: #f9fafb;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        color: #4b5563;
-        line-height: 1.5;
-      }
-      .preview-label { font-size: 0.7rem; color: #9ca3af; text-transform: uppercase; display: block; margin-bottom: 4px; }
-
-      /* Footer Tombol View Details */
-      .card-action {
-        background-color: #eff6ff; /* Biru sangat muda */
-        padding: 12px;
-        text-align: center;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--accent);
-        cursor: pointer;
-        border-top: 1px solid #e5e7eb;
+    /* Footer "View Details" */
+    .card-footer-action {
+        background: #f0f7ff; color: var(--ux-blue); font-weight: 600; font-size: 13px;
+        text-align: center; padding: 10px; border-top: 1px solid #e0f0ff;
+        display: flex; align-items: center; justify-content: center; gap: 6px;
         transition: background 0.2s;
-      }
-      .card-action:hover { background-color: #dbeafe; }
+    }
+    .inv-list-card:hover .card-footer-action { background: #e0efff; }
 
-      /* =========================================
-         STYLE 2: DETAIL VIEW (TABEL LENGKAP)
-      ========================================= */
-      #detail-view { display: none; animation: fadeIn 0.3s; }
-      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* --- STYLE 2: DETAIL VIEW (Table Style) --- */
+    #view-detail { display: none; }
+    
+    .detail-header-panel {
+        background: white; padding: 24px; border-radius: 12px; margin-bottom: 20px;
+        border: 1px solid #e2e8f0; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 20px;
+    }
+    .d-info h4 { font-size: 11px; color: #64748b; text-transform: uppercase; margin: 0 0 4px 0; font-weight: 600; }
+    .d-info p { margin: 0; font-weight: 600; color: #0f172a; font-size: 15px; }
 
-      .detail-card {
-        background: white; border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden;
-        border: 1px solid #e5e7eb;
-      }
+    .table-container {
+        background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    
+    /* Table Header (Abu-abu, Uppercase) */
+    thead th {
+        background-color: #f8fafc; color: #64748b; font-size: 11px; font-weight: 700;
+        text-transform: uppercase; padding: 16px 24px; text-align: left; letter-spacing: 0.05em;
+        border-bottom: 1px solid #e2e8f0;
+    }
 
-      /* Detail Header Info Grid */
-      .detail-header {
-        padding: 24px; background: #fff; border-bottom: 1px solid #eee;
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;
-      }
-      .d-info h4 { font-size: 0.75rem; color: #888; text-transform: uppercase; margin: 0 0 5px 0; }
-      .d-info p { margin: 0; font-weight: 600; color: #111; font-size: 1rem; }
-      .text-highlight { color: var(--accent) !important; }
+    /* Table Body */
+    tbody td { padding: 16px 24px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background-color: #f8fafc; }
 
-      /* Detail Table Style (Clean & Modern) */
-      .table-responsive { width: 100%; overflow-x: auto; }
-      table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-      
-      thead th {
-        text-align: left; padding: 15px 20px;
-        background: #f9fafb; color: #6b7280; font-weight: 700;
-        text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em;
-        border-bottom: 1px solid #e5e7eb;
-      }
-      
-      tbody td { padding: 15px 20px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
-      tbody tr:last-child td { border-bottom: none; }
+    /* KPC Number Styling (Bold atas, kecil bawah) */
+    .kpc-cell { display: flex; flex-direction: column; }
+    .kpc-code { font-weight: 700; color: #1e293b; font-size: 14px; margin-bottom: 2px; }
+    .kpc-name { font-size: 12px; color: #64748b; }
 
-      /* Custom Cell Styles */
-      .kpc-main { font-weight: 700; display: block; color: #111; margin-bottom: 3px; }
-      .kpc-sub { font-size: 0.8rem; color: #666; }
-      
-      .badge-machine {
-        background: #e0f2fe; color: #0284c7;
-        padding: 4px 10px; border-radius: 12px;
-        font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
-      }
+    /* Machine Badge (Blue Pill) */
+    .badge-machine {
+        display: inline-block; background-color: #f0f9ff; color: #0284c7;
+        padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
+        letter-spacing: 0.025em; text-transform: uppercase; border: 1px solid #bae6fd;
+    }
 
-      .xero-wrap { font-size: 0.75rem; color: #9ca3af; }
-      .xero-code { display: block; color: #6b7280; font-weight: 500; margin-bottom: 2px; }
+    /* Xero Column */
+    .xero-cell { display: flex; flex-direction: column; font-size: 11px; color: #94a3b8; }
+    .xero-code { font-weight: 600; color: #64748b; margin-bottom: 2px; }
 
-      .error-msg { text-align: center; color: red; padding: 20px; }
+    /* Utility */
+    .text-right { text-align: right; }
+    .back-btn {
+        display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid #d1d5db;
+        padding: 8px 16px; border-radius: 6px; font-weight: 600; color: #374151; cursor: pointer; margin-bottom: 20px;
+        transition: all 0.2s;
+    }
+    .back-btn:hover { background: #f3f4f6; }
+    .hidden { display: none !important; }
 
-    </style>
-  </head>
-  <body>
+  </style>
+</head>
+<body>
 
-    <div class="container">
-      <div class="nav-header">
-        <div class="nav-title" id="page-title">Daftar Penerimaan</div>
-        <button class="back-btn" id="btn-back" onclick="showList()">← Kembali</button>
-      </div>
-
-      <div id="loader">
-        <div class="spinner"></div>
-        <div>Memuat Data...</div>
-      </div>
-
-      <div id="list-view" class="card-list-container">
+  <div class="aux-navbar">
+    <div class="aux-logo">
+        <img src="https://raw.githubusercontent.com/accountingauxie/Auxilium-Portal-Sukses-Jaya/refs/heads/main/assets/auxilium_logo_pure_white_bg.png" alt="Auxilium Logo">
+    </div>
+    <nav class="aux-menu">
+        <a class="aux-link active">Penerimaan PO</a>
+        <a class="aux-link">Inventory</a>
+    </nav>
+    <div class="user-panel">
+        <div class="user-details">
+            <span class="user-name">Admin Gudang</span>
+            <span class="user-role">CV Sukses Jaya</span>
         </div>
+        <div class="user-avatar">AG</div>
+    </div>
+  </div>
 
-      <div id="detail-view">
+  <div class="page">
+
+    <div id="loader">
+      <div class="spinner"></div>
+      <div>Memuat Data Penerimaan...</div>
+    </div>
+
+    <div id="view-dashboard" class="hidden">
+      <div class="dashboard-header">
+        <div class="dashboard-title">Daftar Penerimaan Barang</div>
+        </div>
+      
+      <div id="card-container" class="cards-list-container">
         </div>
     </div>
 
-    <script>
-      // === CONFIGURATION ===
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwLexXPQql694qVSfDDVOQff-d42TH_jswvM4erdJfzLo0_N-j51ysaujx5cvDlbXlD/exec"; 
+    <div id="view-detail" class="hidden">
+      <button class="back-btn" onclick="showDashboard()">
+        <i data-feather="arrow-left" style="width:16px;"></i> Kembali ke List
+      </button>
 
-      // === STATE MANAGEMENT ===
-      let allData = []; // Menyimpan data mentah agar tidak perlu fetch ulang
+      <div id="detail-header-content" class="detail-header-panel">
+        </div>
 
-      window.onload = function() {
-        fetchData();
-      };
+      <div class="table-container">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th width="25%">KPC Number</th>
+                <th width="20%">Item Name</th>
+                <th width="15%">Machine</th>
+                <th width="10%" class="text-right">Qty (Kg)</th>
+                <th width="15%" class="text-right">Price (Unit)</th>
+                <th width="15%">Xero</th>
+              </tr>
+            </thead>
+            <tbody id="detail-table-body">
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-      // 1. FETCH DATA
-      function fetchData() {
-        fetch(WEB_APP_URL)
-          .then(res => res.json())
-          .then(data => {
-            if(data.error) throw new Error(data.error);
-            allData = data; // Simpan ke variable global
-            renderList(allData); // Tampilkan list awal
-          })
-          .catch(err => {
-            document.getElementById('loader').innerHTML = `<div class="error-msg">Error: ${err.message}</div>`;
-          });
+  </div>
+
+  <script>
+    feather.replace();
+
+    // === URL GOOGLE APPS SCRIPT ANDA ===
+    const API_URL = "https://script.google.com/macros/s/AKfycbwLexXPQql694qVSfDDVOQff-d42TH_jswvM4erdJfzLo0_N-j51ysaujx5cvDlbXlD/exec"; 
+    // ^ Gunakan link deploy "Any One" yang sudah Anda buat sebelumnya
+
+    let globalData = [];
+
+    window.onload = function() {
+      fetchData();
+    };
+
+    function fetchData() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+           globalData = data;
+           renderDashboard(data);
+        })
+        .catch(err => {
+           document.getElementById('loader').innerHTML = `<div style="color:red">Error: ${err.message}</div>`;
+        });
+    }
+
+    // --- RENDER LIST VIEW (Gambar 2) ---
+    function renderDashboard(data) {
+      const container = document.getElementById('card-container');
+      const loader = document.getElementById('loader');
+      
+      loader.classList.add('hidden');
+      document.getElementById('view-dashboard').classList.remove('hidden');
+
+      if (!data || data.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:#999">Tidak ada data.</div>';
+        return;
       }
 
-      // 2. RENDER LIST VIEW (Tampilan Awal - Kartu Piutang)
-      function renderList(data) {
-        const listContainer = document.getElementById('list-view');
-        const loader = document.getElementById('loader');
-        
-        loader.style.display = 'none';
-        
-        if (!data || data.length === 0) {
-          listContainer.innerHTML = '<div style="text-align:center; color:#999;">Tidak ada data.</div>';
-          return;
-        }
+      let html = '';
+      data.forEach((group, index) => {
+        // Buat ringkasan item untuk kotak dashed
+        const itemNames = group.items.map(i => i.description);
+        let itemSummary = itemNames.slice(0, 3).join(", ");
+        if (itemNames.length > 3) itemSummary += `, dan ${itemNames.length - 3} lainnya...`;
 
-        let html = '';
-        data.forEach((group, index) => {
-          // Buat Summary Item (Ambil 3 item pertama lalu ...)
-          const itemNames = group.items.map(i => i.description);
-          let itemSummary = itemNames.slice(0, 3).join(", ");
-          if (itemNames.length > 3) itemSummary += `, dan ${itemNames.length - 3} lainnya...`;
-
-          html += `
-            <div class="summary-card">
-              <div class="card-body">
-                <div class="card-top">
-                  <div class="card-id">${group.receivingId}</div>
-                  <div class="status-badge">Received</div>
-                </div>
-                
-                <div class="card-meta">
-                  <div>👤 ${group.supplier}</div>
-                  <div>📅 ${group.date}</div>
-                </div>
-
-                <div class="item-preview-box">
-                  <span class="preview-label">List Items:</span>
-                  ${itemSummary}
-                </div>
-              </div>
+        html += `
+          <div class="inv-list-card" onclick="openDetail(${index})">
+            <div class="card-body">
               
-              <div class="card-action" onclick="showDetail(${index})">
-                View Details →
+              <div class="card-top-row">
+                <div class="card-main-title">${group.invNumber || group.receivingId}</div>
+                <div class="status-badge">Belum Diterima</div>
               </div>
-            </div>
-          `;
-        });
 
-        listContainer.innerHTML = html;
-      }
-
-      // 3. SHOW DETAIL (Tampilan Tabel Lengkap)
-      function showDetail(index) {
-        const group = allData[index]; // Ambil data spesifik berdasarkan index
-        const detailContainer = document.getElementById('detail-view');
-        
-        // Render Detail HTML
-        const totalQtyFormatted = parseFloat(group.totalQty).toLocaleString('id-ID');
-        
-        let html = `
-          <div class="detail-card">
-            <div class="detail-header">
-              <div class="d-info"><h4>Receiving ID</h4><p class="text-highlight">${group.receivingId}</p></div>
-              <div class="d-info"><h4>Date</h4><p>${group.date}</p></div>
-              <div class="d-info"><h4>Inv Number</h4><p>${group.invNumber}</p></div>
-              <div class="d-info"><h4>PO Number</h4><p>${group.poNumber}</p></div>
-              <div class="d-info"><h4>Supplier</h4><p>${group.supplier}</p></div>
-              <div class="d-info"><h4>Total Qty</h4><p>${totalQtyFormatted}</p></div>
-            </div>
-
-            <div class="table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th width="25%">KPC Number / Item</th>
-                    <th width="20%">Item Name</th>
-                    <th width="15%">Machine</th>
-                    <th width="10%" class="text-right">Qty (Kg)</th>
-                    <th width="15%" class="text-right">Price (Unit)</th>
-                    <th width="15%">Xero</th>
-                  </tr>
-                </thead>
-                <tbody>
-        `;
-
-        group.items.forEach(item => {
-          html += `
-            <tr>
-              <td>
-                <span class="kpc-main">${item.kpc || '-'}</span>
-                <span class="kpc-sub">${item.description}</span>
-              </td>
-              <td style="font-weight:500">${item.description}</td>
-              <td><span class="badge-machine">${item.itemCode || 'N/A'}</span></td>
-              <td class="text-right"><strong>${item.ordered}</strong></td>
-              <td class="text-right" style="color:#888;">-</td>
-              <td>
-                <div class="xero-wrap">
-                  <span class="xero-code">ITEM: CL.FG.XXX</span>
-                  <span>XERO: 1-3900</span>
+              <div class="card-meta">
+                <div class="meta-row">
+                  <i data-feather="user"></i> ${group.supplier || 'Unknown Supplier'}
                 </div>
-              </td>
-            </tr>
-          `;
-        });
+                <div class="meta-row">
+                  <i data-feather="calendar"></i> ${group.date || '-'}
+                </div>
+              </div>
 
-        html += `</tbody></table></div></div>`;
+              <div class="item-preview-section">
+                <span class="item-preview-label">LIST ITEMS:</span>
+                ${itemSummary}
+              </div>
 
-        detailContainer.innerHTML = html;
+            </div>
+            
+            <div class="card-footer-action">
+              View Details <i data-feather="arrow-right" style="width:14px;"></i>
+            </div>
+          </div>
+        `;
+      });
 
-        // Switch View Logic
-        document.getElementById('list-view').style.display = 'none';
-        document.getElementById('detail-view').style.display = 'block';
-        document.getElementById('btn-back').style.display = 'block';
-        document.getElementById('page-title').innerText = "Detail Penerimaan";
-        
-        // Scroll to top
-        window.scrollTo(0, 0);
-      }
+      container.innerHTML = html;
+      feather.replace();
+    }
 
-      // 4. BACK TO LIST
-      function showList() {
-        document.getElementById('list-view').style.display = 'flex';
-        document.getElementById('detail-view').style.display = 'none';
-        document.getElementById('btn-back').style.display = 'none';
-        document.getElementById('page-title').innerText = "Daftar Penerimaan";
-      }
+    // --- RENDER DETAIL VIEW (Gambar 1) ---
+    function openDetail(index) {
+      const itemData = globalData[index];
+      
+      // 1. Render Header Info
+      const headerHTML = `
+        <div class="d-info"><h4>Receiving ID</h4><p style="color:#116999">${itemData.receivingId}</p></div>
+        <div class="d-info"><h4>Ref Invoice</h4><p>${itemData.invNumber}</p></div>
+        <div class="d-info"><h4>PO Number</h4><p>${itemData.poNumber}</p></div>
+        <div class="d-info"><h4>Supplier</h4><p>${itemData.supplier}</p></div>
+        <div class="d-info"><h4>Date</h4><p>${itemData.date}</p></div>
+      `;
+      document.getElementById('detail-header-content').innerHTML = headerHTML;
 
-    </script>
-  </body>
+      // 2. Render Table Body (Sesuai Desain Gambar 1)
+      const tbody = document.getElementById('detail-table-body');
+      let tableHTML = '';
+
+      itemData.items.forEach(item => {
+        tableHTML += `
+          <tr>
+            <td>
+              <div class="kpc-cell">
+                <span class="kpc-code">${item.kpc || '-'}</span>
+                <span class="kpc-name">${item.description}</span>
+              </div>
+            </td>
+            <td>
+              <span style="font-weight:600; color:#334155;">${item.description}</span>
+            </td>
+            <td>
+              <span class="badge-machine">${item.itemCode || 'N/A'}</span>
+            </td>
+            <td class="text-right">
+              <span style="font-weight:600; color:#1e293b;">${item.ordered}</span>
+            </td>
+            <td class="text-right" style="color:#64748b;">
+              Rp 22.380,93 </td>
+            <td>
+              <div class="xero-cell">
+                <span class="xero-code">ITEM: CL.FG.XXX</span>
+                <span>XERO: 1-3900</span>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = tableHTML;
+
+      // Switch View
+      document.getElementById('view-dashboard').classList.add('hidden');
+      document.getElementById('view-detail').classList.remove('hidden');
+      window.scrollTo(0,0);
+    }
+
+    function showDashboard() {
+      document.getElementById('view-detail').classList.add('hidden');
+      document.getElementById('view-dashboard').classList.remove('hidden');
+    }
+
+  </script>
+</body>
 </html>
