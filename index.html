@@ -3,173 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Penerimaan Tagihan</title>
+    <title>Auxilium Portal</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Inter', sans-serif;
-            color: #333;
-        }
-
-        /* --- Header & Title --- */
+        body { background-color: #f4f6f9; font-family: 'Inter', sans-serif; color: #333; }
         .page-title { font-weight: 700; color: #111; margin-bottom: 0; }
         .breadcrumb-custom { font-size: 0.85rem; color: #6c757d; }
-
-        /* --- Stat Cards --- */
-        .card-stat {
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            transition: transform 0.2s;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .card-stat:hover { transform: translateY(-3px); }
-        .stat-value { font-size: 2rem; font-weight: 700; color: #333; margin-bottom: 0; }
-        .stat-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #888; letter-spacing: 0.5px; }
-        .text-success-custom { color: #28a745; }
-
-        /* --- Main Content Card --- */
-        .main-card {
-            background: #fff;
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.04);
-            padding: 0; 
-            margin-top: 20px;
-        }
-
-        /* --- Toolbar (Search & Refresh) --- */
-        .toolbar-area { padding: 20px; border-bottom: 1px solid #f0f0f0; }
-        .search-input {
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-            padding: 8px 15px;
-            font-size: 0.9rem;
-            min-width: 300px;
-        }
-        .btn-refresh {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            color: #555;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 4px;
-        }
-        .btn-refresh:hover { background: #f8f9fa; border-color: #ccc; }
-
-        /* --- Table Styling --- */
-        .table-custom { margin-bottom: 0; width: 100%; }
-        .table-custom thead th {
-            background-color: #fff;
-            color: #212529;
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            border-bottom: 2px solid #f0f0f0;
-            padding: 15px 20px;
-        }
-        .table-custom tbody td {
-            padding: 15px 20px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 0.9rem;
-            color: #495057;
-        }
+        
+        /* Nav Tabs Custom */
+        .nav-tabs .nav-link { color: #666; font-weight: 500; border: none; padding: 12px 20px; }
+        .nav-tabs .nav-link.active { color: #0d6efd; border-bottom: 3px solid #0d6efd; background: transparent; font-weight: 700; }
+        .nav-tabs .nav-link:hover { color: #0d6efd; }
+        
+        /* Cards & Tables */
+        .main-card { background: #fff; border-radius: 8px; border: none; box-shadow: 0 2px 15px rgba(0,0,0,0.04); margin-top: 20px; overflow: hidden; }
+        .table-custom thead th { background-color: #f8f9fa; color: #555; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; padding: 15px 20px; border-bottom: 2px solid #eee; }
+        .table-custom tbody td { padding: 15px 20px; vertical-align: middle; font-size: 0.9rem; border-bottom: 1px solid #f5f5f5; }
         .table-custom tbody tr:hover { background-color: #fcfcfc; }
         
-        .col-ref { font-weight: 600; color: #212529; }
-        .col-vendor { color: #555; }
+        .badge-status { background-color: #e6f7ee; color: #0d8a43; font-weight: 600; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; }
+        .action-icon { color: #0d6efd; cursor: pointer; font-size: 1.2rem; }
         
-        /* Badge Status */
-        .badge-status {
-            background-color: #e6f7ee; 
-            color: #0d8a43;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-        }
-
-        /* Action Buttons */
-        .action-icon {
-            color: #00a3e0; 
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: 0.2s;
-        }
-        .action-icon:hover { color: #007bb6; }
-
-        /* --- ADVANCED MODAL STYLING --- */
-        .modal-content {
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .modal-header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #edf2f9;
-            padding: 20px 30px;
-            color: #333; 
-        }
-        .modal-title {
-            color: #1e293b;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-        /* Bagian Info Header di dalam Modal */
-        .detail-section {
-            background-color: #f8fafc;
-            padding: 25px 30px;
-            border-bottom: 1px solid #edf2f9;
-        }
-        .detail-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: block;
-        }
-        .detail-value {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #334155;
-        }
-        .detail-value.highlight {
-            color: #0d6efd;
-            font-size: 1rem;
-        }
-        /* Tabel di dalam Modal */
-        .table-detail-wrapper { padding: 0; }
-        .table-detail { margin-bottom: 0; width: 100%; }
-        .table-detail thead th {
-            background-color: #ffffff;
-            color: #475569;
-            font-weight: 600;
-            border-bottom: 2px solid #e2e8f0;
-            padding: 12px 15px;
-            font-size: 0.85rem;
-        }
-        .table-detail tbody td {
-            padding: 12px 15px;
-            color: #334155;
-            vertical-align: middle;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .bg-focus {
-            background-color: #eff6ff !important; 
-        }
+        /* Modal Styles */
+        .detail-label { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 600; display: block; }
+        .detail-value { font-size: 1rem; font-weight: 600; color: #333; }
+        .bg-focus { background-color: #eff6ff !important; }
     </style>
 </head>
 <body>
@@ -178,37 +40,31 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h3 class="page-title">Daftar Penerimaan Tagihan</h3>
-            <span class="breadcrumb-custom">Dashboard</span>
+            <h3 class="page-title">Auxilium Portal</h3>
+            <span class="breadcrumb-custom">Dashboard / Report View</span>
         </div>
-        <a href="https://accountingauxie.github.io/Auxilium-Portal-Sukses-Jaya/receiving/entry/index.html" class="btn btn-outline-secondary px-3 fw-bold">
-            <i class="bi bi-arrow-left"></i> Kembali
-        </a>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <div class="card card-stat p-4">
-                <h4 class="stat-value text-primary" id="statTotalReceived">0</h4>
-                <p class="stat-label mt-2">TOTAL RECEIVED</p>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card card-stat p-4">
-                <h4 class="stat-value text-success-custom" id="statReceivedToday">0</h4>
-                <p class="stat-label mt-2">RECEIVED TODAY</p>
-            </div>
-        </div>
-    </div>
+    <ul class="nav nav-tabs mb-3" id="reportTabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="#" onclick="switchTab('receiving', this)">
+                <i class="bi bi-box-arrow-in-down me-2"></i>Penerimaan
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="switchTab('list_po', this)">
+                <i class="bi bi-list-check me-2"></i>List PO
+            </a>
+        </li>
+    </ul>
 
     <div class="main-card">
-        
-        <div class="d-flex justify-content-between align-items-center toolbar-area">
-            <div class="position-relative">
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <div class="position-relative w-50">
                 <i class="bi bi-search position-absolute text-muted" style="top: 10px; left: 12px;"></i>
-                <input type="text" id="searchInput" class="search-input ps-5" placeholder="Search Reference, Vendor..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" class="form-control ps-5" placeholder="Search Data..." onkeyup="filterTable()">
             </div>
-            <button class="btn btn-refresh" onclick="fetchData()">
+            <button class="btn btn-light border" onclick="fetchData()">
                 <i class="bi bi-arrow-clockwise"></i> Refresh
             </button>
         </div>
@@ -220,104 +76,55 @@
 
         <div class="table-responsive">
             <table class="table table-custom d-none" id="mainTable">
-                <thead>
-                    <tr>
-                        <th>REFERENCE</th>
-                        <th>VENDOR</th>
-                        <th>RECEIVE DATE</th>
-                        <th class="text-center">ITEMS</th>
-                        <th class="text-center">TOTAL QTY</th>
-                        <th>STATUS</th>
-                        <th class="text-end">ACTION</th>
-                    </tr>
-                </thead>
+                <thead id="tableHead">
+                    </thead>
                 <tbody id="tableBody">
                     </tbody>
             </table>
         </div>
+        
+        <div class="p-3 text-muted small border-top">
+            Total Records: <span id="recordCount" class="fw-bold">0</span>
+        </div>
     </div>
-
 </div>
 
 <div class="modal fade" id="detailModal" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            
             <div class="modal-header">
-                <div class="d-flex align-items-center">
-                    <div class="bg-primary text-white rounded p-2 me-3">
-                        <i class="bi bi-box-seam fs-4"></i>
-                    </div>
-                    <div>
-                        <h5 class="modal-title mb-0">Detail Penerimaan Barang</h5>
-                        <small class="text-muted">Review detail item dan kuantitas</small>
-                    </div>
-                </div>
+                <h5 class="modal-title" id="modalTitle">Detail Data</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
             <div class="modal-body p-0">
-                <div class="detail-section">
+                <div class="p-4 bg-light border-bottom">
                     <div class="row">
-                        <div class="col-md-5 border-end">
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                    <span class="detail-label"><i class="bi bi-hash"></i> Receiving ID</span>
-                                    <span class="detail-value highlight" id="mRecId">-</span>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <span class="detail-label"><i class="bi bi-calendar-event"></i> Receive Date</span>
-                                    <span class="detail-value" id="mDate">-</span>
-                                </div>
-                                <div class="col-12">
-                                    <span class="detail-label"><i class="bi bi-shop"></i> Supplier / Vendor</span>
-                                    <span class="detail-value fs-5" id="mSupplier">-</span>
-                                </div>
-                            </div>
+                        <div class="col-md-4">
+                            <span class="detail-label" id="labelId">ID</span>
+                            <span class="detail-value text-primary" id="mId">-</span>
                         </div>
-
-                        <div class="col-md-7 ps-md-4">
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                    <span class="detail-label"><i class="bi bi-file-earmark-text"></i> PO Number</span>
-                                    <span class="detail-value" id="mPoNum">-</span>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <span class="detail-label"><i class="bi bi-receipt"></i> Invoice Number</span>
-                                    <span class="detail-value text-success" id="mInvNum">-</span> 
-                                </div>
-                                <div class="col-12">
-                                    <div class="alert alert-light border mb-0 p-2 d-flex align-items-center">
-                                        <i class="bi bi-info-circle text-primary me-2"></i>
-                                        <small class="text-muted">Pastikan nomor Invoice sesuai dengan fisik dokumen yang diterima.</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-4">
+                            <span class="detail-label" id="labelDate">Date</span>
+                            <span class="detail-value" id="mDate">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="detail-label" id="labelVendor">Vendor</span>
+                            <span class="detail-value" id="mVendor">-</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="table-detail-wrapper">
-                    <table class="table table-detail mb-0">
-                        <thead>
-                            <tr>
-                                <th>Tipe Produk</th> 
-                                <th>Description</th>
-                                <th>KPC</th>
-                                <th>UoM</th>
-                                <th class="text-end">Ordered</th>
-                                <th class="text-end">Recv Before</th>
-                                <th class="text-end bg-focus text-primary">This Receipt</th>
-                            </tr>
-                        </thead>
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead id="modalTableHead" class="bg-white text-secondary small">
+                            </thead>
                         <tbody id="modalTableBody">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
-            
             <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -325,22 +132,50 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // URL WEB APP ANDA
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwhz1dgoRbrPsOKAU7Vhp-RBHjjX-_iFf_9zlTXQM7NLhjDvJNxvsd-_kzsmLHQKQTK/exec'; 
+    // --- KONFIGURASI ---
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwjA3tAZnNSwu1Ewl_FWvLdvkUmckgcEWxHyklqLH4658ePmADWETpRtTbjvkDF7H8/exec'; 
 
     let allData = [];
+    let currentTab = 'receiving'; // 'receiving' atau 'list_po'
+
+    // --- STRUKTUR KOLOM (CONFIG) ---
+    // Ini memudahkan kita mengatur judul kolom tanpa mengubah banyak logika
+    const CONFIG = {
+        'receiving': {
+            tableHeaders: ['Reference', 'Vendor', 'Date', 'Items', 'Total Qty', 'Action'],
+            modalHeaders: ['Item Code', 'Description', 'KPC', 'UoM', 'Ordered', 'Recv Before', 'This Receipt'],
+            idLabel: 'Receiving ID'
+        },
+        'list_po': {
+            tableHeaders: ['Inv Number', 'Contact', 'Inv Date', 'Items', 'Total Order', 'Action'],
+            modalHeaders: ['Tipe Produk', 'Item Name', 'Qty Order', 'Qty Arrived', 'Qty Remaining'],
+            idLabel: 'Invoice Number'
+        }
+    };
+
+    function switchTab(tabName, element) {
+        // Update UI Tabs
+        document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
+        
+        currentTab = tabName;
+        fetchData();
+    }
 
     async function fetchData() {
         const loading = document.getElementById('loading');
         const table = document.getElementById('mainTable');
         const tbody = document.getElementById('tableBody');
+        const thead = document.getElementById('tableHead');
         
         loading.classList.remove('d-none');
         table.classList.add('d-none');
         tbody.innerHTML = '';
+        thead.innerHTML = '';
 
         try {
-            const response = await fetch(WEB_APP_URL);
+            // Request ke Apps Script dengan parameter type
+            const response = await fetch(`${WEB_APP_URL}?type=${currentTab}`);
             let data = await response.json();
             
             if (data.error) {
@@ -348,63 +183,118 @@
                 return;
             }
 
-            // --- FITUR BARU: SORT NEWEST RECEIVING ID FIRST ---
-            // Mengurutkan data descending (Z-A) berdasarkan receivingId
-            data.sort((a, b) => {
-                return b.receivingId.localeCompare(a.receivingId);
-            });
-            // --------------------------------------------------
+            // Sort Data (Descending by ID)
+            data.sort((a, b) => b.id.localeCompare(a.id));
 
             allData = data;
+            document.getElementById('recordCount').innerText = data.length;
             
             renderTable(data);
-            calculateMetrics(data);
             
             loading.classList.add('d-none');
             table.classList.remove('d-none');
 
         } catch (error) {
             console.error(error);
-            loading.innerHTML = '<p class="text-danger">Gagal mengambil data.</p>';
+            loading.innerHTML = '<p class="text-danger">Gagal koneksi ke server.</p>';
         }
     }
 
-    function calculateMetrics(data) {
-        // 1. Total Received
-        document.getElementById('statTotalReceived').innerText = data.length;
-
-        // 2. Received Today
-        const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); 
-        const yyyy = today.getFullYear();
-        const todayString = `${dd}/${mm}/${yyyy}`;
-        
-        const todayCount = data.filter(r => r.date && r.date.includes(todayString)).length;
-        document.getElementById('statReceivedToday').innerText = todayCount;
-    }
-
     function renderTable(data) {
+        const thead = document.getElementById('tableHead');
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = ''; 
+        const conf = CONFIG[currentTab];
 
+        // 1. Render Header Table Utama
+        let headerHtml = '<tr>';
+        conf.tableHeaders.forEach(h => {
+            headerHtml += `<th>${h}</th>`;
+        });
+        headerHtml += '</tr>';
+        thead.innerHTML = headerHtml;
+
+        // 2. Render Body
+        tbody.innerHTML = '';
         data.forEach(row => {
             const itemsCount = row.items ? row.items.length : 0;
             
-            const tr = document.createElement('tr');
+            let tr = document.createElement('tr');
+            
+            // Kolom berbeda sedikit isinya tergantung tab
+            // Tapi kita sudah standarisasi nama properti di Backend (id, vendor, date, totalQty)
             tr.innerHTML = `
-                <td class="col-ref">${row.receivingId}</td>
-                <td class="col-vendor">${row.supplier}</td>
+                <td class="fw-bold text-primary">${row.id}</td>
+                <td>${row.vendor}</td>
                 <td>${row.date}</td>
                 <td class="text-center"><span class="badge bg-light text-dark border">${itemsCount}</span></td>
-                <td class="text-center fw-bold">${row.totalQty}</td>
-                <td><span class="badge-status">Billed</span></td>
+                <td class="fw-bold">${row.totalQty}</td>
                 <td class="text-end">
-                    <i class="bi bi-eye action-icon" onclick="showDetail('${row.receivingId}')" title="View Detail"></i>
+                    <i class="bi bi-eye action-icon" onclick="showDetail('${row.id}')"></i>
                 </td>
             `;
             tbody.appendChild(tr);
         });
+    }
+
+    function showDetail(id) {
+        const data = allData.find(d => d.id === id);
+        if (!data) return;
+
+        const conf = CONFIG[currentTab];
+
+        // 1. Set Info Header Modal
+        document.getElementById('modalTitle').innerText = "Detail " + conf.idLabel;
+        document.getElementById('labelId').innerText = conf.idLabel;
+        
+        document.getElementById('mId').innerText = data.id;
+        document.getElementById('mDate').innerText = data.date;
+        document.getElementById('mVendor').innerText = data.vendor;
+
+        // 2. Set Header Tabel Modal
+        const mHead = document.getElementById('modalTableHead');
+        let mHeadHtml = '<tr>';
+        conf.modalHeaders.forEach(h => {
+            mHeadHtml += `<th class="py-3 px-3">${h}</th>`;
+        });
+        mHeadHtml += '</tr>';
+        mHead.innerHTML = mHeadHtml;
+
+        // 3. Set Isi Tabel Modal
+        const mBody = document.getElementById('modalTableBody');
+        mBody.innerHTML = '';
+
+        data.items.forEach(item => {
+            let rowHtml = '<tr>';
+            
+            if (currentTab === 'receiving') {
+                // Mapping untuk tab Penerimaan
+                rowHtml += `
+                    <td class="px-3"><span class="badge bg-secondary fw-normal">${item.col1}</span></td>
+                    <td class="px-3 fw-bold">${item.col2}</td>
+                    <td class="px-3">${item.col3}</td>
+                    <td class="px-3">${item.col4}</td>
+                    <td class="px-3 text-end text-muted">${item.val1}</td>
+                    <td class="px-3 text-end text-muted">${item.val2}</td>
+                    <td class="px-3 text-end fw-bold bg-focus text-primary">${item.val3}</td>
+                `;
+            } else {
+                // Mapping untuk tab List PO
+                // col1: Tipe, col2: Name, val1: Order, val2: Arr, val3: Rem
+                rowHtml += `
+                    <td class="px-3">${item.col1}</td>
+                    <td class="px-3 fw-bold">${item.col2}</td>
+                    <td class="px-3 text-end">${item.val1}</td>
+                    <td class="px-3 text-end text-success">${item.val2}</td>
+                    <td class="px-3 text-end fw-bold text-danger">${item.val3}</td>
+                `;
+            }
+            
+            rowHtml += '</tr>';
+            mBody.innerHTML += rowHtml;
+        });
+
+        const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
     }
 
     function filterTable() {
@@ -418,42 +308,7 @@
         });
     }
 
-    function showDetail(recId) {
-        const data = allData.find(d => d.receivingId === recId);
-        if (!data) return;
-
-        // Isi Info Header Modal
-        document.getElementById('mRecId').innerText = data.receivingId;
-        document.getElementById('mDate').innerText = data.date;
-        document.getElementById('mSupplier').innerText = data.supplier;
-        
-        document.getElementById('mPoNum').innerText = data.poNumber;
-        document.getElementById('mInvNum').innerText = data.invNumber || "-"; 
-
-        // Isi Tabel Detail
-        const modalBody = document.getElementById('modalTableBody');
-        modalBody.innerHTML = '';
-
-        data.items.forEach(item => {
-            modalBody.innerHTML += `
-                <tr>
-                    <td><span class="badge bg-secondary fw-normal">${item.itemCode}</span></td>
-                    <td class="fw-bold text-dark">${item.description}</td>
-                    <td>${item.kpc}</td>
-                    <td>${item.uom}</td>
-                    <td class="text-end text-muted">${item.ordered}</td>
-                    <td class="text-end text-muted">${item.receiveBefore}</td>
-                    <td class="text-end fw-bold bg-focus fs-6">${item.thisReceipt}</td>
-                </tr>
-            `;
-        });
-
-        // Tampilkan Modal
-        const myModal = new bootstrap.Modal(document.getElementById('detailModal'));
-        myModal.show();
-    }
-
-    // Init
+    // Init Load
     fetchData();
 </script>
 
